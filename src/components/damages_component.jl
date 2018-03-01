@@ -10,8 +10,11 @@ using Mimi
     a1      = Parameter()               #Damage intercept
     a2      = Parameter()               #Damage quadratic term
     a3      = Parameter()               #Damage exponent
-    damadj  = Parameter()               #Adjustment exponent in damage function
-    usedamadj::Bool = Parameter()       # Only the Excel version uses the damadj parameter
+    
+    TotSLR  = Parameter(index=[time])   # Path of total SLR
+    b1      = Parameter()               # Coefficient on SLR
+    b2      = Parameter()               # Coefficient on quadratic SLR term
+    b3      = Parameter()               # SLR exponent
 end
 
 
@@ -20,14 +23,9 @@ function run_timestep(state::damages, t::Int)
     p = state.Parameters
 
     #Define function for DAMFRAC
-    v.DAMFRAC[t] = p.a1 * p.TATM[t] + p.a2 * p.TATM[t] ^ p.a3
+    v.DAMFRAC[t] = p.a1 * p.TATM[t] + p.a2 * p.TATM[t] ^ p.a3 + p.b1 * p.TotSLR[t] + p.b2 * p.TotSLR[t] ^ p.b3 
 
     #Define function for DAMAGES
-    if p.usedamadj
-        # Excel version
-        v.DAMAGES[t] = p.YGROSS[t] * v.DAMFRAC[t] / (1 + v.DAMFRAC[t] ^ p.damadj)
-    else
-        # GAMS Version
-        v.DAMAGES[t] = p.YGROSS[t] * v.DAMFRAC[t]
-    end
+    v.DAMAGES[t] = p.YGROSS[t] * v.DAMFRAC[t]
+    
 end
