@@ -8,6 +8,7 @@ include("components/emissions_component.jl")
 include("components/co2cycle_component.jl")
 include("components/radiativeforcing_component.jl")
 include("components/climatedynamics_component.jl")
+include("components/sealevelrise_component.jl")
 include("components/damages_component.jl")
 include("components/neteconomy_component.jl")
 include("components/welfare_component.jl")
@@ -15,13 +16,14 @@ include("components/welfare_component.jl")
 function constructdice(p)
     m = Model()
 
-    setindex(m, :time, collect(2010:5:2305))
+    setindex(m, :time, collect(2005:10:2595))
 
     addcomponent(m, grosseconomy)
     addcomponent(m, emissions)
     addcomponent(m, co2cycle)
     addcomponent(m, radiativeforcing)
     addcomponent(m, climatedynamics)
+    addcomponent(m, sealevelrise)
     addcomponent(m, damages)
     addcomponent(m, neteconomy)
     addcomponent(m, welfare)
@@ -81,6 +83,24 @@ function constructdice(p)
     connectparameter(m, :climatedynamics, :FORC, :radiativeforcing, :FORC)
 
 
+    # SEA LEVEL RISE COMPONENT
+    setparameter(m, :sealevelrise, :therm0, p[:therm0])
+    setparameter(m, :sealevelrise, :gsic0, p[:gsic0])
+    setparameter(m, :sealevelrise, :gis0, p[:gis0])
+    setparameter(m, :sealevelrise, :ais0, p[:ais0])
+    setparameter(m, :sealevelrise, :therm_asym, p[:therm_asym])
+    setparameter(m, :sealevelrise, :gsic_asym, p[:gsic_asym])
+    setparameter(m, :sealevelrise, :gis_asym, p[:gis_asym])
+    setparameter(m, :sealevelrise, :ais_asym, p[:ais_asym])
+    setparameter(m, :sealevelrise, :thermrate, p[:thermrate])
+    setparameter(m, :sealevelrise, :gsicrate, p[:gsicrate])
+    setparameter(m, :sealevelrise, :gisrate, p[:gisrate])
+    setparameter(m, :sealevelrise, :aisrate, p[:aisrate])
+    setparameter(m, :sealevelrise, :slrthreshold, p[:slrthreshold])
+
+    connectparameter(m, :sealevelrise, :tempA, :climatedynamics, :TATM)
+
+
     #DAMAGES COMPONENT
     setparameter(m, :damages, :a1, p[:a1])
     setparameter(m, :damages, :a2, p[:a2])
@@ -118,16 +138,8 @@ function constructdice(p)
 end
 
 
-function getdiceexcel(;datafile = joinpath(dirname(@__FILE__), "..", "Data", "DICE_2013_Excel.xlsm"))
-    params = getdice2013excelparameters(datafile)
-
-    m=constructdice(params)
-
-    return m
-end
-
-function getdicegams(;datafile = joinpath(dirname(@__FILE__), "..", "Data", "DICE2013_IAMF_Parameters.xlsx"))
-    params = getdice2013gamsparameters(datafile)
+function getdiceexcel(;datafile = joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsm"))
+    params = getdice2010excelparameters(datafile)
 
     m=constructdice(params)
 
