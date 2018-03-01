@@ -66,7 +66,6 @@ function constructdice(p)
     #RADIATIVE FORCING COMPONENT
     setparameter(m, :radiativeforcing, :forcoth, p[:forcoth])
     setparameter(m, :radiativeforcing, :fco22x, p[:fco22x])
-    setparameter(m, :radiativeforcing, :eqmat, p[:eqmat])
 
     connectparameter(m, :radiativeforcing, :MAT, :co2cycle, :MAT)
 
