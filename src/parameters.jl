@@ -67,8 +67,8 @@ function getdice2010excelparameters(filename)
     p[:expcost2] = 2.8  # Exponent of control cost function 
     p[:pbacktime] = readxl(f, "Base!B42:BI42")  # backstop price
 
-    # Adjusted cost for backstop
-    p[:cost1] = cost1
+    # Adjusted cost for backstop (or: "Abatement cost function coefficient")
+    p[:cost1] = readxl(f, "Base!B37:BI37")
 
     # Participiation parameters
         # ???
@@ -83,7 +83,7 @@ function getdice2010excelparameters(filename)
     p[:optlrsav] = 22.9542700436767/100
 
     # Exogenous forcing for other greenhouse gases
-    p[:forcoth] = forcoth
+    p[:forcoth] = readxl(f, "Base!B70:BI70")
     
     # Fraction of emissions in control regime
     p[:partfract] = [1.0 for i in 1:T]
