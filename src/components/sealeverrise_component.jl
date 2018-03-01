@@ -25,7 +25,7 @@ using Mimi
     gisrate     = Parameter()   # Rate of GIS
     aisrate     = Parameter()   # Rate of AIS
 
-    slrthreshold = Parameter()  # Threshold
+    slrthreshold = Parameter()  # Temperature threshold for AIS
 
 end 
 
@@ -44,10 +44,10 @@ function run_timestep(state::sealevelrise, t::Int)
         v.GISSLR[t]     = v.GISSLR[t-1] + p.gisrate * (p.gis_asym - v.GISSLR[t-1]) * p.tempA[t]
         v.AISSLR[t]     = 0
         if p.tempA[t] > p.slrthreshold
-            v.AISSLR[t] = v.AOSSLR[t-1] 
+            v.AISSLR[t] = v.AISSLR[t-1] + p.aisrate * (p.ais_asym - v.AISSLR[t-1]) * p.tempA[t]
         end 
     end
 
-    v.TotSLR[t] = v.ThermSLR[t] + v.GSICSLR[t] + v.GISSLR[t] + v.aiso[t]
+    v.TotSLR[t] = v.ThermSLR[t] + v.GSICSLR[t] + v.GISSLR[t] + v.AISSLR[t]
 
 end 
