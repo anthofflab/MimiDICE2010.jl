@@ -49,6 +49,7 @@ function constructdice(p)
 
     #CO2 CYCLE COMPONENT
     setparameter(m, :co2cycle, :mat0, p[:mat0])
+    setparameter(m, :co2cycle, :mat1, p[:mat1])
     setparameter(m, :co2cycle, :mu0, p[:mu0])
     setparameter(m, :co2cycle, :ml0, p[:ml0])
     setparameter(m, :co2cycle, :b12, p[:b12])
