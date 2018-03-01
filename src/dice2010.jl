@@ -107,9 +107,13 @@ function constructdice(p)
     setparameter(m, :damages, :a3, p[:a3])
     setparameter(m, :damages, :damadj, p[:damadj])
     setparameter(m, :damages, :usedamadj, p[:usedamadj])
+    setparameter(m, :damages, :b1, p[:slrcoeff])
+    setparameter(m, :damages, :b2, p[:slrcoeffsq])
+    setparameter(m, :damages, :b3, p[:slrexp])
 
     connectparameter(m, :damages, :TATM, :climatedynamics, :TATM)
     connectparameter(m, :damages, :YGROSS, :grosseconomy, :YGROSS)
+    connectparameter(m, :damages, :TotSLR, :sealevelrise, :TotSLR)
 
 
     #NET ECONOMY COMPONENT
