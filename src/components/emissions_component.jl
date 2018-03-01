@@ -9,7 +9,6 @@ using Mimi
     MIU     = Parameter(index=[time])   #Emission control rate GHGs
     sigma   = Parameter(index=[time])   #CO2-equivalent-emissions output ratio
     YGROSS  = Parameter(index=[time])   #Gross world product GROSS of abatement and damages (trillions 2005 USD per year)
-    cca0    = Parameter()               #Initial cumulative industrial emissions
 
 end
 
@@ -26,9 +25,9 @@ function run_timestep(state::emissions, t::Int)
 
     #Define function for CCA
     if t==1
-        v.CCA[t] = p.cca0
+        v.CCA[t] = v.EIND[t] * 10
     else
-        v.CCA[t] = v.CCA[t-1] + v.EIND[t-1] * 5/3.666
+        v.CCA[t] = v.CCA[t-1] + v.EIND[t] * 10
     end
 
 end

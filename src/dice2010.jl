@@ -41,9 +41,8 @@ function constructdice(p)
 
     #EMISSIONS COMPONENT
     setparameter(m, :emissions, :sigma, p[:sigma])
-    setparameter(m, :emissions, :MIU, p[:MIU])
-    setparameter(m, :emissions, :etree, p[:etree])
-    setparameter(m, :emissions, :cca0, p[:cca0])
+    setparameter(m, :emissions, :MIU, p[:miubase])
+    setparameter(m, :emissions, :etree, p[:etree]) 
 
     connectparameter(m, :emissions, :YGROSS, :grosseconomy, :YGROSS)
 
@@ -142,7 +141,7 @@ function constructdice(p)
 end
 
 
-function getdiceexcel(;datafile = joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsm"))
+function getdiceexcel(;datafile = joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
     params = getdice2010excelparameters(datafile)
 
     m=constructdice(params)
