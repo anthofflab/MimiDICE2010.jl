@@ -12,8 +12,8 @@ function getdice2010excelparameters(filename)
     # Preferences
     p[:prstp] = 0.015   # Initial rate of social time preference per year
     p[:elasmu] = 1.5    # Elasticity of marginal utility of consumption
-    rr0 = 1 #Initial Social Time Preference Factor
-    p[:rr] = rr
+    #rr0 = 1 #Initial Social Time Preference Factor
+    #p[:rr] = rr    # Average utility social discount rate??
 
     # Population and technology
     p[:gama] = 0.300    # Capital elasticity in production function
@@ -103,10 +103,10 @@ function getdice2010excelparameters(filename)
     p[:gis0] = readxl(f, "Base!B180:B180")[1]
     p[:ais0] = readxl(f, "Base!B181:B181")[1]
 
-    p[:thermslr] = readxl(f, "Base!B173:B173")[1]
-    p[:gsicslr] = readxl(f, "Base!B174:B174")[1]
-    p[:gisslr] = readxl(f, "Base!B175:B175")[1]
-    p[:aisslr] = readxl(f, "Base!B176:B176")[1]
+    p[:therm_asym] = readxl(f, "Base!B173:B173")[1]
+    p[:gsic_asym] = readxl(f, "Base!B174:B174")[1]
+    p[:gis_asym] = readxl(f, "Base!B175:B175")[1]
+    p[:ais_asym] = readxl(f, "Base!B176:B176")[1]
 
     p[:thermrate] = readxl(f, "Base!C173:C173")[1]
     p[:gsicrate] = readxl(f, "Base!C174:C174")[1]
