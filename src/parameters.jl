@@ -10,108 +10,95 @@ function getdice2010excelparameters(filename)
     f = openxl(filename)
 
     # Preferences
-    p[:prstp] = 0.015   # Initial rate of social time preference per year
-    p[:elasmu] = readxl(f, "Base!B19:B19")[1]    # Elasticity of marginal utility of consumption
-    p[:rr] =  readxl(f, "Base!B18:BI18")   # Social time preference factor
+    p[:elasmu]  = getparams(f, "B19:B19", :single, "Base", 1)   # Elasticity of marginal utility of consumption
+    p[:rr]      = getparams(f, "B18:BI18", :all, "Base", T)     # Social time preference factor
 
     # Population and technology
-    p[:gama] = 0.300    # Capital elasticity in production function
-    p[:l] = readxl(f, "Base!B27:BI27")
-    p[:dk] = 0.100      # Depreciation rate on capital (per year)
-    p[:k0] = 97.3       # Initial capital value (trill 2005 USD)
-    p[:al] = readxl(f, "Base!B21:BI21")     #Level of total factor productivity
+    p[:gama]    = getparams(f, "B9:B9", :single, "Base", 1)     # Capital elasticity in production function
+    p[:l]       = getparams(f, "B27:BI27", :all, "Base", T)     # Population (millions)
+    p[:dk]      = getparams(f, "B10:B10", :single, "Base", 1)   # Depreciation rate on capital (per year)
+    p[:k0]      = getparams(f, "B13:B13", :single, "Base", 1)   # Initial capital value (trill 2005 USD)
+    p[:al]      = getparams(f, "B21:BI21", :all, "Base", T)     # Level of total factor productivity
 
     # Emissions parameters
-    p[:sigma] = readxl(f, "Base!B46:BI46")
-    p[:etree] = readxl(f, "Base!B52:BI52")
-    p[:miubase] = readxl(f, "Base!B133:BI133")  # emissions control rate
-    p[:savebase] = readxl(f, "Base!B132:BI132") / 100   # savings rate
+    p[:sigma]   = getparams(f, "B46:BI46", :all, "Base", T)
+    p[:etree]   = getparams(f, "B52:BI52", :all, "Base", T)
+    p[:miubase] = getparams(f, "B133:BI133", :all, "Base", T)  # emissions control rate
+    p[:savebase]= getparams(f, "B132:BI132", :all, "Base", T) / 100   # savings rate
 
     # Carbon cycle
-    p[:mat0] = 787.0    # Initial Concentration in atmosphere 2010 (GtC)
-    p[:mat1] =  829.0
-    p[:mu0] = 1600.     # Initial Concentration in upper strata 2010 (GtC)
-    p[:ml0] = 10010.    # Initial Concentration in lower strata 2010 (GtC)
+    p[:mat0]    = getparams(f, "B57:B57", :single, "Base", 1)   # Initial Concentration in atmosphere 2000 (GtC)
+    p[:mat1]    = getparams(f, "B58:B58", :single, "Base", 1)   # Initial Concentration in atmosphere 2010 (GtC)
+    p[:mu0]     = getparams(f, "B59:B59", :single, "Base", 1)   # Initial Concentration in biosphere/shallow oceans (GtC)
+    p[:ml0]     = getparams(f, "B60:B60", :single, "Base", 1)   # Initial Concentration in deep oceans (GtC)
 
     # Flow parameters
-    p[:b12] = 12.0/100  # Carbon cycle transition matrix atmosphere to shallow ocean
-    p[:b23] = 0.5/100   # Carbon cycle transition matrix shallow to deep ocean
+    p[:b12] = getparams(f, "B64:B64", :single, "Base", 1) / 100 # Carbon cycle transition matrix atmosphere to shallow ocean
+    p[:b23] = getparams(f, "B67:B67", :single, "Base", 1) / 100 # Carbon cycle transition matrix shallow to deep ocean
 
     # Parameters for long-run consistency of carbon cycle
-    p[:b11] = 88.0/100      # Carbon cycle transition matrix atmosphere to atmosphere 
-    p[:b21] = 4.704/100     # Carbon cycle transition matrix biosphere/shallow oceans to atmosphere        
-    p[:b22] = 94.796/100    # Carbon cycle transition matrix shallow ocean to shallow oceans              
-    p[:b32] = 0.075/100     # Carbon cycle transition matrix deep ocean to shallow ocean                    
-    p[:b33] = 99.925/100    # Carbon cycle transition matrix deep ocean to deep oceans                  
+    p[:b11] = getparams(f, "B62:B62", :single, "Base", 1) / 100 # Carbon cycle transition matrix atmosphere to atmosphere 
+    p[:b21] = getparams(f, "B63:B63", :single, "Base", 1) / 100 # Carbon cycle transition matrix biosphere/shallow oceans to atmosphere        
+    p[:b22] = getparams(f, "B65:B65", :single, "Base", 1) / 100 # Carbon cycle transition matrix shallow ocean to shallow oceans              
+    p[:b32] = getparams(f, "B66:B66", :single, "Base", 1) / 100 # Carbon cycle transition matrix deep ocean to shallow ocean                    
+    p[:b33] = getparams(f, "B68:B68", :single, "Base", 1) / 100 # Carbon cycle transition matrix deep ocean to deep oceans                  
 
     # Climate model parameters
-    p[:t2xco2] = 3.2    # Equilibrium temp impact (oC per doubling CO2)
-    p[:tatm0] = 0.0068  # Initial lower stratum temp change (C from 1900)
-    p[:tatm1] = 0.98    # Initial atmospheric temp change 2015 (C from 1900)
-    p[:tocean0] = .0068 # Initial lower stratum temp change (C from 1900)
+    p[:t2xco2]  = getparams(f, "B76:B76", :single, "Base", 1)   # Equilibrium temp impact (oC per doubling CO2)
+    p[:tatm0]   = getparams(f, "B73:B73", :single, "Base", 1)   # Initial lower stratum temp change (C from 1900)
+    p[:tatm1]   = getparams(f, "C73:C73", :single, "Base", 1)   # Initial atmospheric temp change 2015 (C from 1900)
+    p[:tocean0] = getparams(f, "B74:B74", :single, "Base", 1)   # Initial lower stratum temp change (C from 1900)
 
     # Transient TSC Correction ("Speed of Adjustment Parameter")
-    p[:c1] = 0.208  # Climate equation coefficient for upper level
-    p[:c3] = 0.310  # Transfer coefficient upper to lower stratum
-    p[:c4] = 0.05   # Transfer coefficient for lower level
-    p[:fco22x] = 3.8    # Forcings of equilibrium CO2 doubling (Wm-2)
-    #lam = fco22x/ t2xco2
+    p[:c1]      = getparams(f, "B75:B75", :single, "Base", 1)   # Climate equation coefficient for upper level
+    p[:c3]      = getparams(f, "B78:B78", :single, "Base", 1)   # Transfer coefficient upper to lower stratum
+    p[:c4]      = getparams(f, "B79:B79", :single, "Base", 1)   # Transfer coefficient for lower level
+    p[:fco22x]  = getparams(f, "B77:B77", :single, "Base", 1)   # Forcings of equilibrium CO2 doubling (Wm-2)
 
     # Climate damage parameters
-    p[:a1] = 0.0000816191097385324  # Damage intercept
-    p[:a2] = 0.00204625800317896    # Damage quadratic term 
-    p[:a3] = 2.00                   # Damage exponent  
+    p[:a1] = getparams(f, "B51:B51", :single, "Parameters", 1)   # Damage coefficient
+    p[:a2] = getparams(f, "B52:B52", :single, "Parameters", 1)   # Damage quadratic term 
+    p[:a3] = getparams(f, "B53:B53", :single, "Parameters", 1)   # Damage exponent  
 
     # Abatement cost
-    p[:expcost2] = readxl(f, "Base!B44:B44")[1]  # Exponent of control cost function 
-    p[:pbacktime] = readxl(f, "Base!B42:BI42")  # backstop price
+    p[:expcost2]    = getparams(f, "B44:B44", :single, "Base", 1)   # Exponent of control cost function 
+    p[:pbacktime]   = getparams(f, "B42:BI42", :all, "Base", T)     # backstop price
     # Adjusted cost for backstop (or: "Abatement cost function coefficient")
-    p[:cost1] = readxl(f, "Base!B37:BI37")
+    p[:cost1]       = getparams(f, "B37:BI37", :all, "Base", T)
 
-    # Participiation parameters
-        # ???
-    
-    # Availability of fossil fuels
-    p[:fosslim] = 6000. #        Maximum cumulative extraction fossil fuels (GtC)
-    
     # Scaling and inessential parameters
-    p[:scale1] = readxl(f, "Base!B88:B88")[1] # Multiplicative scaling coefficient
-    p[:scale2] = readxl(f, "Base!B89:B89")[1]  # Additive scaling coefficient
-
-    p[:optlrsav] = 22.9542700436767/100
+    p[:scale1] = getparams(f, "B88:B88", :single, "Base", 1)    # Multiplicative scaling coefficient
+    p[:scale2] = getparams(f, "B89:B89", :single, "Base", 1)    # Additive scaling coefficient
 
     # Exogenous forcing for other greenhouse gases
-    p[:forcoth] = readxl(f, "Base!B70:BI70")
+    p[:forcoth] = getparams(f, "B70:BI70", :all, "Base", T)
     
     # Fraction of emissions in control regime
-    p[:partfract] = readxl(f, "Base!B82:BI82")
-    
-    # ???
-    p[:alpha] = [1.0 for i in 1:T]
-
+    p[:partfract] = getparams(f, "B82:BI82", :all, "Base", T)
+  
 
     #SLR Parameters
 
-    p[:slrcoeff] = readxl(f, "Parameters!B51:B51")[1]
-    p[:slrcoeffsq] = readxl(f, "Parameters!B52:B52")[1]
-    p[:slrexp] = readxl(f, "Parameters!B53:B53")[1]
+    p[:slrcoeff]    = getparams(f, "B51:B51", :single, "Parameters", 1)
+    p[:slrcoeffsq]  = getparams(f, "B52:B52", :single, "Parameters", 1)
+    p[:slrexp]      = getparams(f, "B53:B53", :single, "Parameters", 1)
 
-    p[:therm0] = readxl(f, "Base!B178:B178")[1] #meters above 2000
-    p[:gsic0] = readxl(f, "Base!B179:B179")[1]
-    p[:gis0] = readxl(f, "Base!B180:B180")[1]
-    p[:ais0] = readxl(f, "Base!B181:B181")[1]
+    p[:therm0]      = getparams(f, "B178:B178", :single, "Base", 1) #meters above 2000
+    p[:gsic0]       = getparams(f, "B179:B179", :single, "Base", 1)
+    p[:gis0]        = getparams(f, "B180:B180", :single, "Base", 1)
+    p[:ais0]        = getparams(f, "B181:B181", :single, "Base", 1)
 
-    p[:therm_asym] = readxl(f, "Base!B173:B173")[1]
-    p[:gsic_asym] = readxl(f, "Base!B174:B174")[1]
-    p[:gis_asym] = readxl(f, "Base!B175:B175")[1]
-    p[:ais_asym] = readxl(f, "Base!B176:B176")[1]
+    p[:therm_asym]  = getparams(f, "B173:B173", :single, "Base", 1)
+    p[:gsic_asym]   = getparams(f, "B174:B174", :single, "Base", 1)
+    p[:gis_asym]    = getparams(f, "B175:B175", :single, "Base", 1)
+    p[:ais_asym]    = getparams(f, "B176:B176", :single, "Base", 1)
 
-    p[:thermrate] = readxl(f, "Base!C173:C173")[1]
-    p[:gsicrate] = readxl(f, "Base!C174:C174")[1]
-    p[:gisrate] = readxl(f, "Base!C175:C175")[1]
-    p[:aisrate] = readxl(f, "Base!C176:C176")[1]
+    p[:thermrate]   = getparams(f, "C173:C173", :single, "Base", 1)
+    p[:gsicrate]    = getparams(f, "C174:C174", :single, "Base", 1)
+    p[:gisrate]     = getparams(f, "C175:C175", :single, "Base", 1)
+    p[:aisrate]     = getparams(f, "C176:C176", :single, "Base", 1)
 
-    p[:slrthreshold] = readxl(f, "Base!D176:D176")[1]
+    p[:slrthreshold] = getparams(f, "D176:D176", :single, "Base", 1)
 
     return p
 end

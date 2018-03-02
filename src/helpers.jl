@@ -11,7 +11,7 @@ end
 
 
 
-#Get parameters from DICE2013 excel sheet
+#Get parameters from DICE2010 excel sheet
 #range is the range of cell values on the excel sheet and must be a string, "B56:B77"
 #parameters = :single for just one value, or :all for entire time series
 #sheet is the sheet in the excel file to reference (i.e. "Base")
