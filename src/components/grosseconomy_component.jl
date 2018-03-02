@@ -23,11 +23,11 @@ function run_timestep(state::grosseconomy, t::Int)
     if t==1
         v.K[t] = p.k0
     else
-        v.K[t] = (1 - p.dk)^5 * v.K[t-1] + 5 * p.I[t-1]
+        v.K[t] = v.K[t-1] * (1 - p.dk) ^ 10  + 10 * p.I[t-1]
     end
 
     #Define function for YGROSS
-    v.YGROSS[t] = (p.al[t] * (p.l[t]/1000)^(1-p.gama)) * (v.K[t]^p.gama)
+    v.YGROSS[t] = (p.al[t] * (p.l[t])^(1-p.gama)) * (v.K[t]^p.gama)
 
 end
 
