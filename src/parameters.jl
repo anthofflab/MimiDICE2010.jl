@@ -11,9 +11,8 @@ function getdice2010excelparameters(filename)
 
     # Preferences
     p[:prstp] = 0.015   # Initial rate of social time preference per year
-    p[:elasmu] = 1.5    # Elasticity of marginal utility of consumption
-    #rr0 = 1 #Initial Social Time Preference Factor
-    #p[:rr] = rr    # Average utility social discount rate??
+    p[:elasmu] = readxl(f, "Base!B19:B19")[1]    # Elasticity of marginal utility of consumption
+    p[:rr] =  readxl(f, "Base!B18:BI18")   # Social time preference factor
 
     # Population and technology
     p[:gama] = 0.300    # Capital elasticity in production function
@@ -76,8 +75,8 @@ function getdice2010excelparameters(filename)
     p[:fosslim] = 6000. #        Maximum cumulative extraction fossil fuels (GtC)
     
     # Scaling and inessential parameters
-    p[:scale1] = 0.0165977353994452 # Multiplicative scaling coefficient
-    p[:scale2] = -2941.79815693009  # Additive scaling coefficient
+    p[:scale1] = readxl(f, "Base!B88:B88")[1] # Multiplicative scaling coefficient
+    p[:scale2] = readxl(f, "Base!B89:B89")[1]  # Additive scaling coefficient
 
     p[:optlrsav] = 22.9542700436767/100
 
