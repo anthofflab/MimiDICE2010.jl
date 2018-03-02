@@ -46,7 +46,7 @@ function run_timestep(state::neteconomy, t::Int)
     v.CPC[t] = 1000 * v.C[t] / p.l[t]
 
     #Define function for CPRICE
-    v.CPRICE[t] = p.pbacktime[t] * 1000 * p.MIU ^ (p.expcost2 - 1)
+    v.CPRICE[t] = p.pbacktime[t] * 1000 * p.MIU[t] ^ (p.expcost2 - 1)
 
 end
 
