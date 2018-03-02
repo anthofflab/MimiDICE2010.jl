@@ -1,12 +1,12 @@
 #Timestep conversion function
-function getindexfromyear_dice_2013(year)
-    const baseyear = 2010
+function getindexfromyear_dice_2010(year)
+    const baseyear = 2005
 
-    if rem(year - baseyear, 5) != 0
+    if rem(year - baseyear, 10) != 0
         error("Invalid year")
     end
 
-    return div(year - baseyear, 5) + 1
+    return div(year - baseyear, 10) + 1
 end
 
 
