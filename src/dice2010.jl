@@ -115,11 +115,11 @@ function constructdice(p)
 
     #NET ECONOMY COMPONENT
     setparameter(m, :neteconomy, :cost1, p[:cost1])
-    setparameter(m, :neteconomy, :MIU, p[:MIU])
+    setparameter(m, :neteconomy, :MIU, p[:miubase])
     setparameter(m, :neteconomy, :expcost2, p[:expcost2])
     setparameter(m, :neteconomy, :partfract, p[:partfract])
     setparameter(m, :neteconomy, :pbacktime, p[:pbacktime])
-    setparameter(m, :neteconomy, :S, p[:S])
+    setparameter(m, :neteconomy, :S, p[:savebase])
     setparameter(m, :neteconomy, :l, p[:l])
 
     connectparameter(m, :neteconomy, :YGROSS, :grosseconomy, :YGROSS)

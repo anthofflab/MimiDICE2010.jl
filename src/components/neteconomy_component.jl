@@ -8,7 +8,6 @@ using Mimi
     CPC         = Variable(index=[time])    #Per capita consumption (thousands 2005 USD per year)
     CPRICE      = Variable(index=[time])    #Carbon price (2005$ per ton of CO2)
     I           = Variable(index=[time])    #Investment (trillions 2005 USD per year)
-    MCABATE     = Variable(index=[time])    #Marginal cost of abatement (2005$ per ton CO2)
     Y           = Variable(index=[time])    #Gross world product net of abatement and damages (trillions 2005 USD per year)
     YNET        = Variable(index=[time])    #Output net of damages equation (trillions 2005 USD per year)
 
@@ -34,9 +33,6 @@ function run_timestep(state::neteconomy, t::Int)
     #Define function for ABATECOST
     v.ABATECOST[t] = p.YGROSS[t] * p.cost1[t] * (p.MIU[t]^p.expcost2) * (p.partfract[t]^(1 - p.expcost2))
 
-    #Define function for MCABATE (equation from GAMS version)
-    v.MCABATE[t] = p.pbacktime[t] * p.MIU[t]^(p.expcost2 - 1)
-
     #Define function for Y
     v.Y[t] = v.YNET[t] - v.ABATECOST[t]
 
@@ -49,8 +45,8 @@ function run_timestep(state::neteconomy, t::Int)
     #Define function for CPC
     v.CPC[t] = 1000 * v.C[t] / p.l[t]
 
-    #Define function for CPRICE (equation from GAMS version of DICE2013)
-    v.CPRICE[t] = p.pbacktime[t] * (p.MIU[t] / p.partfract[t])^(p.expcost2 - 1)
+    #Define function for CPRICE
+    v.CPRICE[t] = p.pbacktime[t] * 1000 * p.MIU ^ (p.expcost2 - 1)
 
 end
 

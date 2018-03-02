@@ -64,9 +64,8 @@ function getdice2010excelparameters(filename)
     p[:a3] = 2.00                   # Damage exponent  
 
     # Abatement cost
-    p[:expcost2] = 2.8  # Exponent of control cost function 
+    p[:expcost2] = readxl(f, "Base!B44:B44")[1]  # Exponent of control cost function 
     p[:pbacktime] = readxl(f, "Base!B42:BI42")  # backstop price
-
     # Adjusted cost for backstop (or: "Abatement cost function coefficient")
     p[:cost1] = readxl(f, "Base!B37:BI37")
 
@@ -86,7 +85,7 @@ function getdice2010excelparameters(filename)
     p[:forcoth] = readxl(f, "Base!B70:BI70")
     
     # Fraction of emissions in control regime
-    p[:partfract] = [1.0 for i in 1:T]
+    p[:partfract] = readxl(f, "Base!B82:BI82")
     
     # ???
     p[:alpha] = [1.0 for i in 1:T]
