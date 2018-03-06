@@ -47,7 +47,6 @@ GISSLR      = m[:sealevelrise, :GISSLR]
 AISSLR      = m[:sealevelrise, :AISSLR]
 TotSLR      = m[:sealevelrise, :TotSLR]
 
-
 # Extract the true values
 True_ThermSLR    = getparams(f, "B178:BI178", :all, "Base", T)
 True_GSICSLR    = getparams(f, "B179:BI179", :all, "Base", T)
