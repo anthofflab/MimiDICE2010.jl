@@ -20,13 +20,13 @@ function run_timestep(state::welfare, t::Int)
     p = state.Parameters
 
     #Define function for PERIODU
-    v.PERIODU[t] = (p.CPC[t] ^ (1 - p.elasmu)) / (1 - p.elasmu) + 1
+    v.PERIODU[t] = (1 / (1 - p.elasmu)) * (p.CPC[t] ^ (1 - p.elasmu)) + 1
 
     #Define function for CEMUTOTPER
     v.CEMUTOTPER[t] = v.PERIODU[t] * p.l[t] * p.rr[t]
 
     #Define function for UTILITY
-    if t==60
-        v.UTILITY = 10 * p.scale1 * sum([v.CEMUTOTPER[i] for i in 1:60]) + p.scale2
+    if t==40
+        v.UTILITY = 10 * p.scale1 * sum([v.CEMUTOTPER[i] for i in 1:40]) + p.scale2
     end
 end
