@@ -6,6 +6,8 @@ include("../src/helpers.jl")
 include("../src/parameters.jl")
 include("../src/components/grosseconomy_component.jl")
 
+@testset "grosseconomy" begin
+
 Precision = 1.0e-11
 T = 60
 f = openxl("../Data/DICE2010_082710d.xlsx")
@@ -41,3 +43,5 @@ True_YGROSS = getparams(f, "B92:BI92", :all, "Base", T)
 # Test that the values are the same
 @test maximum(abs, K .- True_K) ≈ 0. atol = Precision
 @test maximum(abs, YGROSS .- True_YGROSS) ≈ 0. atol = Precision
+
+end

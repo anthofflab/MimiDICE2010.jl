@@ -6,6 +6,8 @@ include("../src/helpers.jl")
 include("../src/parameters.jl")
 include("../src/components/emissions_component.jl")
 
+@testset "emissions" begin
+
 Precision = 1.0e-11
 T = 60
 f = openxl("../Data/DICE2010_082710d.xlsx")
@@ -41,3 +43,5 @@ True_EIND   = getparams(f, "B110:BI110", :all, "Base", T)
 # Test that the values are the same
 @test maximum(abs, E .- True_E) ≈ 0. atol = Precision
 @test maximum(abs, EIND .- True_EIND) ≈ 0. atol = Precision
+
+end

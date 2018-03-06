@@ -6,6 +6,8 @@ include("../src/helpers.jl")
 include("../src/parameters.jl")
 include("../src/components/climatedynamics_component.jl")
 
+@testset "climatedynamics" begin
+
 Precision = 1.0e-11
 T = 60
 f = openxl("../Data/DICE2010_082710d.xlsx")
@@ -44,3 +46,5 @@ True_TOCEAN = getparams(f, "B123:BI123", :all, "Base", T)
 # Test that the values are the same
 @test maximum(abs, TATM .- True_TATM) ≈ 0. atol = Precision
 @test maximum(abs, TOCEAN .- True_TOCEAN) ≈ 0. atol = Precision
+
+end

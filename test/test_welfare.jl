@@ -6,6 +6,8 @@ include("../src/helpers.jl")
 include("../src/parameters.jl")
 include("../src/components/welfare_component.jl")
 
+@testset "welfare" begin
+
 Precision = 1.0e-11
 T = 60
 f = openxl("../Data/DICE2010_082710d.xlsx")
@@ -44,3 +46,5 @@ True_UTILITY    = getparams(f, "B130:B130", :single, "Base", 1)
 @test maximum(abs, CEMUTOTPER .- True_CEMUTOTPER) ≈ 0. atol = Precision
 @test maximum(abs, PERIODU .- True_PERIODU) ≈ 0. atol = Precision
 @test abs(UTILITY - True_UTILITY) ≈ 0. atol = Precision
+
+end

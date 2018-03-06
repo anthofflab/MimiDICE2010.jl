@@ -6,6 +6,8 @@ include("../src/helpers.jl")
 include("../src/parameters.jl")
 include("../src/components/sealevelrise_component.jl")
 
+@testset "sealevelrise" begin
+
 Precision = 1.0e-11
 T = 60
 f = openxl("../Data/DICE2010_082710d.xlsx")
@@ -59,3 +61,5 @@ True_TotSLR    = getparams(f, "B182:BI182", :all, "Base", T)
 @test maximum(abs, GISSLR .- True_GISSLR) ≈ 0. atol = Precision
 @test maximum(abs, AISSLR .- True_AISSLR) ≈ 0. atol = Precision
 @test maximum(abs, TotSLR .- True_TotSLR) ≈ 0. atol = Precision
+
+end

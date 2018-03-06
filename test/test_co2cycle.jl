@@ -6,6 +6,8 @@ include("../src/helpers.jl")
 include("../src/parameters.jl")
 include("../src/components/co2cycle_component.jl")
 
+@testset "co2cycle" begin
+
 Precision = 1.0e-11
 T = 60
 f = openxl("../Data/DICE2010_082710d.xlsx")
@@ -51,3 +53,4 @@ True_MU     = getparams(f, "B114:BI114", :all, "Base", T)
 @test maximum(abs, ML .- True_ML) ≈ 0. atol = Precision
 @test maximum(abs, MU .- True_MU) ≈ 0. atol = Precision
 
+end

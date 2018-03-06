@@ -6,6 +6,8 @@ include("../src/helpers.jl")
 include("../src/parameters.jl")
 include("../src/components/radiativeforcing_component.jl")
 
+@testset "radiativeforcing" begin
+
 Precision = 1.0e-11
 T = 60
 f = openxl("../Data/DICE2010_082710d.xlsx")
@@ -35,3 +37,5 @@ True_FORC    = getparams(f, "B122:BI122", :all, "Base", T)
 
 # Test that the values are the same
 @test maximum(abs, FORC .- True_FORC) ≈ 0. atol = Precision
+
+end

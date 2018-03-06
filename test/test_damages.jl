@@ -6,6 +6,8 @@ include("../src/helpers.jl")
 include("../src/parameters.jl")
 include("../src/components/damages_component.jl")
 
+@testset "damages" begin
+
 Precision = 1.0e-11
 T = 60
 f = openxl("../Data/DICE2010_082710d.xlsx")
@@ -44,3 +46,5 @@ True_DAMFRAC    = getparams(f, "B93:BI93", :all, "Base", T)
 # Test that the values are the same
 #@test maximum(abs, DAMAGES .- True_DAMAGES) ≈ 0. atol = Precision
 @test maximum(abs, DAMFRAC .- True_DAMFRAC) ≈ 0. atol = Precision
+
+end

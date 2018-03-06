@@ -6,6 +6,8 @@ include("../src/helpers.jl")
 include("../src/parameters.jl")
 include("../src/components/neteconomy_component.jl")
 
+@testset "neteconomy" begin
+
 Precision = 1.0e-11
 T = 60
 f = openxl("../Data/DICE2010_082710d.xlsx")
@@ -59,3 +61,5 @@ True_YNET       = getparams(f, "B95:BI95", :all, "Base", T)
 @test maximum(abs, I .- True_I) ≈ 0. atol = Precision
 @test maximum(abs, Y .- True_Y) ≈ 0. atol = Precision
 @test maximum(abs, YNET .- True_YNET) ≈ 0. atol = Precision
+
+end
