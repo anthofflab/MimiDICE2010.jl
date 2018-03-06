@@ -1,0 +1,32 @@
+using Mimi
+
+
+@defcomp welfare begin
+    CEMUTOTPER      = Variable(index=[time])    #Period utility
+    PERIODU         = Variable(index=[time])    #One period utility function
+    UTILITY         = Variable()                #Welfare Function
+
+    CPC             = Parameter(index=[time])   #Per capita consumption (thousands 2005 USD per year)
+    l               = Parameter(index=[time])   #Level of population and labor
+    rr              = Parameter(index=[time])   #Average utility social discount rate
+    elasmu          = Parameter()               #Elasticity of marginal utility of consumption
+    scale1          = Parameter()               #Multiplicative scaling coefficient
+    scale2          = Parameter()               #Additive scaling coefficient
+end
+
+
+function run_timestep(state::welfare, t::Int)
+    v = state.Variables
+    p = state.Parameters
+
+    #Define function for PERIODU
+    v.PERIODU[t] = (1 / (1 - p.elasmu)) * (p.CPC[t] ^ (1 - p.elasmu)) + 1
+
+    #Define function for CEMUTOTPER
+    v.CEMUTOTPER[t] = v.PERIODU[t] * p.l[t] * p.rr[t]
+
+    #Define function for UTILITY
+    if t==40
+        v.UTILITY = 10 * p.scale1 * sum([v.CEMUTOTPER[i] for i in 1:40]) + p.scale2
+    end
+end
