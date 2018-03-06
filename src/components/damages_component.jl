@@ -2,8 +2,7 @@ using Mimi
 
 
 @defcomp damages begin
-    DAMAGES = Variable(index=[time])    #Damages (trillions 2005 USD per year)
-    DAMFRAC = Variable(index=[time])    #Increase in temperature of atmosphere (degrees C from 1900)
+    DAMFRAC = Variable(index=[time])    #Damages (fraction of gross output)
 
     TATM    = Parameter(index=[time])   #Increase temperature of atmosphere (degrees C from 1900)
     YGROSS  = Parameter(index=[time])   #Gross world product GROSS of abatement and damages (trillions 2005 USD per year)
@@ -24,8 +23,5 @@ function run_timestep(state::damages, t::Int)
 
     #Define function for DAMFRAC
     v.DAMFRAC[t] = p.a1 * p.TATM[t] + p.a2 * p.TATM[t] ^ p.a3 + p.b1 * p.TotSLR[t] + p.b2 * p.TotSLR[t] ^ p.b3 
-
-    #Define function for DAMAGES
-    v.DAMAGES[t] = p.YGROSS[t] * v.DAMFRAC[t]
     
 end

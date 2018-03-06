@@ -20,7 +20,7 @@ addcomponent(m, neteconomy)
 
 # Set the parameters that would normally be internal connection from their Excel values
 setparameter(m, :neteconomy, :YGROSS, getparams(f, "B92:BI92", :all, "Base", T))
-setparameter(m, :neteconomy, :DAMAGES, getparams(f, "", :all, "Base", T))
+setparameter(m, :neteconomy, :DAMFRAC, getparams(f, "B93:BI93", :all, "Base", T))
 
 # Load the rest of the external parameters
 p = getdice2010excelparameters("../Data/DICE2010_082710d.xlsx")

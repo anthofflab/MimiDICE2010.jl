@@ -125,7 +125,8 @@ function constructdice(p)
     setparameter(m, :neteconomy, :l, p[:l])
 
     connectparameter(m, :neteconomy, :YGROSS, :grosseconomy, :YGROSS)
-    connectparameter(m, :neteconomy, :DAMAGES, :damages, :DAMAGES)
+    #connectparameter(m, :neteconomy, :DAMAGES, :damages, :DAMAGES)
+    connectparameter(m, :neteconomy, :DAMFRAC, :damages, :DAMFRAC)
 
 
     #WELFARE COMPONENT

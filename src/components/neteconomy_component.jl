@@ -12,7 +12,8 @@ using Mimi
     YNET        = Variable(index=[time])    #Output net of damages equation (trillions 2005 USD per year)
 
     cost1       = Parameter(index=[time])   #Abatement cost function coefficient
-    DAMAGES     = Parameter(index=[time])   #Damages (Trillion $)
+    #DAMAGES     = Parameter(index=[time])   #Damages (Trillion $)
+    DAMFRAC     = Parameter(index=[time])   #Damages (fraction of gross output)
     l           = Parameter(index=[time])   #Level of population and labor
     MIU         = Parameter(index=[time])   #Emission control rate GHGs
     partfract   = Parameter(index=[time])   #Fraction of emissions in control regime
@@ -28,7 +29,8 @@ function run_timestep(state::neteconomy, t::Int)
     p = state.Parameters
 
     #Define function for YNET
-    v.YNET[t] = p.YGROSS[t] - p.DAMAGES[t]
+    #v.YNET[t] = p.YGROSS[t] - p.DAMAGES[t]
+    v.YNET[t] = p.YGROSS[t] / (1 + p.DAMFRAC[t])
 
     #Define function for ABATECOST
     v.ABATECOST[t] = p.YGROSS[t] * p.cost1[t] * (p.MIU[t]^p.expcost2) * (p.partfract[t]^(1 - p.expcost2))
@@ -40,13 +42,23 @@ function run_timestep(state::neteconomy, t::Int)
     v.I[t] = p.S[t] * v.Y[t]
 
     #Define function for C
-    v.C[t] = v.Y[t] - v.I[t]
+    if t==1
+        v.C[t] = v.Y[t] - v.I[t] + 0.1
+    elseif t<60
+        v.C[t] = v.Y[t] - v.I[t]
+    elseif t==60
+        v.C[t] = v.C[t-1]
+    end
 
     #Define function for CPC
     v.CPC[t] = 1000 * v.C[t] / p.l[t]
 
     #Define function for CPRICE
-    v.CPRICE[t] = p.pbacktime[t] * 1000 * p.MIU[t] ^ (p.expcost2 - 1)
+    if t==26
+        v.CPRICE[t] = v.CPRICE[t-1]
+    else
+        v.CPRICE[t] = p.pbacktime[t] * 1000 * p.MIU[t] ^ (p.expcost2 - 1)
+    end
 
 end
 
