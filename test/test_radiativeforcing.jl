@@ -20,6 +20,7 @@ addcomponent(m, radiativeforcing)
 
 # Set the parameters that would normally be internal connection from their Excel values
 setparameter(m, :radiativeforcing, :MAT, getparams(f, "B112:BI112", :all, "Base", T))
+setparameter(m, :radiativeforcing, :MAT61, getparams(f, "BJ112:BJ112", :single, "Base", 1))
 
 # Load the rest of the external parameters
 p = getdice2010excelparameters("../Data/DICE2010_082710d.xlsx")

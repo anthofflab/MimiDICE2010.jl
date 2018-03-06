@@ -39,17 +39,20 @@ setparameter(m, :co2cycle, :b33, p[:b33])
 run(m)
 
 # Extract the generated variables
-MAT = m[:co2cycle, :MAT]
-ML  = m[:co2cycle, :ML]
-MU  = m[:co2cycle, :MU]
+MAT     = m[:co2cycle, :MAT]
+MAT61   = m[:co2cycle, :MAT61]
+ML      = m[:co2cycle, :ML]
+MU      = m[:co2cycle, :MU]
 
 # Extract the true values
 True_MAT    = getparams(f, "B112:BI112", :all, "Base", T)
+True_MAT61  = getparams(f, "BJ112:BJ112", :single, "Base", 1)
 True_ML     = getparams(f, "B115:BI115", :all, "Base", T)
 True_MU     = getparams(f, "B114:BI114", :all, "Base", T)
 
 # Test that the values are the same
 @test maximum(abs, MAT .- True_MAT) ≈ 0. atol = Precision
+@test abs(MAT61 - True_MAT61) ≈ 0. atol = Precision
 @test maximum(abs, ML .- True_ML) ≈ 0. atol = Precision
 @test maximum(abs, MU .- True_MU) ≈ 0. atol = Precision
 

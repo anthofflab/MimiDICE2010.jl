@@ -68,6 +68,7 @@ function constructdice(p)
     setparameter(m, :radiativeforcing, :fco22x, p[:fco22x])
 
     connectparameter(m, :radiativeforcing, :MAT, :co2cycle, :MAT)
+    connectparameter(m, :radiativeforcing, :MAT61, :co2cycle, :MAT61)
 
 
     #CLIMATE DYNAMICS COMPONENT
