@@ -2,6 +2,29 @@ using Base.Test
 using Mimi
 using ExcelReaders
 
+#------------------------------------------------------------------------------
+#   1. Run the component-specific tests
+#------------------------------------------------------------------------------
+
+@testset "dice2010-components" begin
+
+include("test_climatedynamics.jl")
+include("test_co2cycle.jl")
+include("test_damages.jl")
+include("test_emissions.jl")
+include("test_grosseconomy.jl")
+include("test_neteconomy.jl")
+include("test_radiativeforcing.jl")
+include("test_sealevelrise.jl")
+include("test_welfare.jl")
+
+end 
+
+
+#------------------------------------------------------------------------------
+#   2. Run tests on the whole model
+#------------------------------------------------------------------------------
+
 include("../src/dice2010.jl")
 
 @testset "DICE2010" begin
@@ -28,10 +51,6 @@ True_MAT = getparams(f, "B112:BI112", :all, "Base", T);
 #DAMFRAC Test (damages fraction)
 True_DAMFRAC = getparams(f, "B93:BI93", :all, "Base", T);
 @test maximum(abs, m[:damages, :DAMFRAC] .- True_DAMFRAC) ≈ 0. atol = Precision
-
-#DAMAGES Test (damages $)
-# True_DAMAGES = getparams(f, "B106:BI106", :all, "Base", T);
-# @test maximum(abs, m[:damages, :DAMAGES] .- True_DAMAGES) ≈ 0. atol = Precision
 
 #E Test (emissions)
 True_E = getparams(f, "B109:BI109", :all, "Base", T);
