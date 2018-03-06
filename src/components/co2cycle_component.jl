@@ -44,13 +44,6 @@ function run_timestep(state::co2cycle, t::Int)
     end
 
     #Define function for MAT
-    # if t==1
-    #     v.MAT[t] = p.mat0
-    # elseif t==2
-    #     v.MAT[t] = p.mat1
-    # else
-    #     v.MAT[t] = v.MAT[t-1] * p.b11 + v.MU[t-1] * p.b21 + (p.E[t-1]*10)
-    # end
     if t==1
         v.MAT[1] = p.mat0
         v.MAT[2] = p.mat1

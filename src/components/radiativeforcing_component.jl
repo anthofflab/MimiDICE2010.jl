@@ -17,9 +17,8 @@ function run_timestep(state::radiativeforcing, t::Int)
     #Define function for FORC
     if t != 60
         v.FORC[t] = p.fco22x * (log((((p.MAT[t] + p.MAT[t+1]) / 2) + 0.000001)/596.4)/log(2)) + p.forcoth[t]
-    else 
-        # but what about during the final timestep when there is no p.MAT[t+1] ?
-        # use zero? looks like that's what Excel does for the final one
+    elseif t==60
+        # need to use MAT61, calculated one step further 
         v.FORC[t] = p.fco22x * (log((((p.MAT[t] + p.MAT61) / 2) + 0.000001)/596.4)/log(2)) + p.forcoth[t]
     end
 end

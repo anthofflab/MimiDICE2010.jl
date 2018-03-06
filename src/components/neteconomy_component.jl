@@ -12,7 +12,6 @@ using Mimi
     YNET        = Variable(index=[time])    #Output net of damages equation (trillions 2005 USD per year)
 
     cost1       = Parameter(index=[time])   #Abatement cost function coefficient
-    #DAMAGES     = Parameter(index=[time])   #Damages (Trillion $)
     DAMFRAC     = Parameter(index=[time])   #Damages (fraction of gross output)
     l           = Parameter(index=[time])   #Level of population and labor
     MIU         = Parameter(index=[time])   #Emission control rate GHGs
@@ -29,7 +28,6 @@ function run_timestep(state::neteconomy, t::Int)
     p = state.Parameters
 
     #Define function for YNET
-    #v.YNET[t] = p.YGROSS[t] - p.DAMAGES[t]
     v.YNET[t] = p.YGROSS[t] / (1 + p.DAMFRAC[t])
 
     #Define function for ABATECOST
