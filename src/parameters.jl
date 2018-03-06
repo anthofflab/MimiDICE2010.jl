@@ -56,9 +56,9 @@ function getdice2010excelparameters(filename)
     p[:fco22x]  = getparams(f, "B77:B77", :single, "Base", 1)   # Forcings of equilibrium CO2 doubling (Wm-2)
 
     # Climate damage parameters
-    p[:a1] = getparams(f, "B51:B51", :single, "Parameters", 1)   # Damage coefficient
-    p[:a2] = getparams(f, "B52:B52", :single, "Parameters", 1)   # Damage quadratic term 
-    p[:a3] = getparams(f, "B53:B53", :single, "Parameters", 1)   # Damage exponent  
+    p[:a1] = getparams(f, "B33:B33", :single, "Base", 1)   # Damage coefficient
+    p[:a2] = getparams(f, "B34:B34", :single, "Base", 1)   # Damage quadratic term 
+    p[:a3] = getparams(f, "B35:B35", :single, "Base", 1)   # Damage exponent  
 
     # Abatement cost
     p[:expcost2]    = getparams(f, "B44:B44", :single, "Base", 1)   # Exponent of control cost function 
