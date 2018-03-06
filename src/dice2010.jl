@@ -97,7 +97,7 @@ function constructdice(p)
     setparameter(m, :sealevelrise, :aisrate, p[:aisrate])
     setparameter(m, :sealevelrise, :slrthreshold, p[:slrthreshold])
 
-    connectparameter(m, :sealevelrise, :tempA, :climatedynamics, :TATM)
+    connectparameter(m, :sealevelrise, :TATM, :climatedynamics, :TATM)
 
 
     #DAMAGES COMPONENT
