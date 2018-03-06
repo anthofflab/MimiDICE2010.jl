@@ -31,16 +31,17 @@ setparameter(m, :emissions, :etree, p[:etree])
 run(m)
 
 # Extract the generated variables
-#CCA     = m[:emissions, :CCA]
+CCA     = m[:emissions, :CCA]
 E       = m[:emissions, :E]
 EIND    = m[:emissions, :EIND]
 
 # Extract the true values
-#True_CCA    = getparams(f, "", :all, "Base", T)
+True_CCA    = getparams(f, "B117:BI117", :all, "Base", T)
 True_E      = getparams(f, "B109:BI109", :all, "Base", T)
 True_EIND   = getparams(f, "B110:BI110", :all, "Base", T)
 
 # Test that the values are the same
+@test maximum(abs, CCA .- True_CCA) ≈ 0. atol = Precision
 @test maximum(abs, E .- True_E) ≈ 0. atol = Precision
 @test maximum(abs, EIND .- True_EIND) ≈ 0. atol = Precision
 
