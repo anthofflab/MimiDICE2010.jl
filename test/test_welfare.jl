@@ -10,7 +10,7 @@ include("../src/components/welfare_component.jl")
 
 Precision = 1.0e-11
 T = 60
-f = openxl("../Data/DICE2010_082710d.xlsx")
+f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
@@ -22,7 +22,7 @@ addcomponent(m, welfare)
 setparameter(m, :welfare, :CPC, getparams(f, "B126:BI126", :all, "Base", T))
 
 # Load the rest of the external parameters
-p = getdice2010excelparameters("../Data/DICE2010_082710d.xlsx")
+p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 setparameter(m, :welfare, :l, p[:l])
 setparameter(m, :welfare, :elasmu, p[:elasmu])
 setparameter(m, :welfare, :rr, p[:rr])

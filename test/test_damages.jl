@@ -10,7 +10,7 @@ include("../src/components/damages_component.jl")
 
 Precision = 1.0e-11
 T = 60
-f = openxl("../Data/DICE2010_082710d.xlsx")
+f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
@@ -24,7 +24,7 @@ setparameter(m, :damages, :YGROSS, getparams(f, "B92:BI92", :all, "Base", T))
 setparameter(m, :damages, :TotSLR, getparams(f, "B182:BI182", :all, "Base", T))
 
 # Load the rest of the external parameters
-p = getdice2010excelparameters("../Data/DICE2010_082710d.xlsx")
+p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 setparameter(m, :damages, :a1, p[:a1])
 setparameter(m, :damages, :a2, p[:a2])
 setparameter(m, :damages, :a3, p[:a3])

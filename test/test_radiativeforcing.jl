@@ -10,7 +10,7 @@ include("../src/components/radiativeforcing_component.jl")
 
 Precision = 1.0e-11
 T = 60
-f = openxl("../Data/DICE2010_082710d.xlsx")
+f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
@@ -23,7 +23,7 @@ setparameter(m, :radiativeforcing, :MAT, getparams(f, "B112:BI112", :all, "Base"
 setparameter(m, :radiativeforcing, :MAT61, getparams(f, "BJ112:BJ112", :single, "Base", 1))
 
 # Load the rest of the external parameters
-p = getdice2010excelparameters("../Data/DICE2010_082710d.xlsx")
+p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 setparameter(m, :radiativeforcing, :forcoth, p[:forcoth])
 setparameter(m, :radiativeforcing, :fco22x, p[:fco22x])
 
