@@ -10,7 +10,7 @@ include("../src/components/co2cycle_component.jl")
 
 Precision = 1.0e-11
 T = 60
-f = openxl("../Data/DICE2010_082710d.xlsx")
+f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
@@ -22,7 +22,7 @@ addcomponent(m, co2cycle)
 setparameter(m, :co2cycle, :E, getparams(f, "B109:BI109", :all, "Base", T))
 
 # Load the rest of the external parameters
-p = getdice2010excelparameters("../Data/DICE2010_082710d.xlsx")
+p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 setparameter(m, :co2cycle, :mat0, p[:mat0])
 setparameter(m, :co2cycle, :mat1, p[:mat1])
 setparameter(m, :co2cycle, :mu0, p[:mu0])

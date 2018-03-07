@@ -10,7 +10,7 @@ include("../src/components/climatedynamics_component.jl")
 
 Precision = 1.0e-11
 T = 60
-f = openxl("../Data/DICE2010_082710d.xlsx")
+f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
@@ -22,7 +22,7 @@ addcomponent(m, climatedynamics)
 setparameter(m, :climatedynamics, :FORC, getparams(f, "B122:BI122", :all, "Base", T))
 
 # Load the rest of the external parameters
-p = getdice2010excelparameters("../Data/DICE2010_082710d.xlsx")
+p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 setparameter(m, :climatedynamics, :fco22x, p[:fco22x])
 setparameter(m, :climatedynamics, :t2xco2, p[:t2xco2])
 setparameter(m, :climatedynamics, :tatm0, p[:tatm0])
