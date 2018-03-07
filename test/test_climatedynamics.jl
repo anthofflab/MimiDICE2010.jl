@@ -23,7 +23,6 @@ setparameter(m, :climatedynamics, :FORC, getparams(f, "B122:BI122", :all, "Base"
 
 # Load the rest of the external parameters
 p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-#setleftoverparameters(m, p)
 setparameter(m, :climatedynamics, :fco22x, p[:fco22x])
 setparameter(m, :climatedynamics, :t2xco2, p[:t2xco2])
 setparameter(m, :climatedynamics, :tatm0, p[:tatm0])
