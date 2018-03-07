@@ -10,7 +10,7 @@ include("../src/components/grosseconomy_component.jl")
 
 Precision = 1.0e-11
 T = 60
-f = openxl("../Data/DICE2010_082710d.xlsx")
+f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
@@ -22,7 +22,7 @@ addcomponent(m, grosseconomy)
 setparameter(m, :grosseconomy, :I, getparams(f, "B101:BI101", :all, "Base", T))
 
 # Load the rest of the external parameters
-p = getdice2010excelparameters("../Data/DICE2010_082710d.xlsx")
+p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 setparameter(m, :grosseconomy, :al, p[:al])
 setparameter(m, :grosseconomy, :l, p[:l])
 setparameter(m, :grosseconomy, :gama, p[:gama])
