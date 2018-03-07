@@ -2,6 +2,8 @@ using Base.Test
 using Mimi
 using ExcelReaders
 
+@testset "mimi-dice-2010" begin
+
 #------------------------------------------------------------------------------
 #   1. Run the independent component tests
 #------------------------------------------------------------------------------
@@ -27,7 +29,7 @@ end
 
 include("../src/dice2010.jl")
 
-@testset "DICE2010" begin
+@testset "dice2010-model" begin
 
 Precision = 1.0e-11
 T=60
@@ -169,5 +171,7 @@ True_UTILITY    = getparams(f, "B130:B130", :single, "Base", 1)
 @test maximum(abs, CEMUTOTPER .- True_CEMUTOTPER) ≈ 0. atol = Precision
 @test maximum(abs, PERIODU .- True_PERIODU) ≈ 0. atol = Precision
 @test abs(UTILITY - True_UTILITY) ≈ 0. atol = Precision
+
+end
 
 end
