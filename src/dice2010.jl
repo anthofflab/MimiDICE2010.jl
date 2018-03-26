@@ -1,8 +1,10 @@
+module dice 2010
+
 using Mimi
 using ExcelReaders
 
+include("helpers.jl")
 include("parameters.jl")
-
 include("components/grosseconomy_component.jl")
 include("components/emissions_component.jl")
 include("components/co2cycle_component.jl")
@@ -13,139 +15,138 @@ include("components/damages_component.jl")
 include("components/neteconomy_component.jl")
 include("components/welfare_component.jl")
 
-function constructdice(p)
-    m = Model()
+export getparams, DICE
 
-    setindex(m, :time, collect(2005:10:2595))
+#
+# N.B. See dice2010-defmodel.jl for the @defmodel version of the following
+#
 
-    addcomponent(m, grosseconomy)
-    addcomponent(m, emissions)
-    addcomponent(m, co2cycle)
-    addcomponent(m, radiativeforcing)
-    addcomponent(m, climatedynamics)
-    addcomponent(m, sealevelrise)
-    addcomponent(m, damages)
-    addcomponent(m, neteconomy)
-    addcomponent(m, welfare)
+const global datafile = joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx")
+p = getdice2010excelparameters(datafile)
 
+DICE = Model()
+set_dimension!(DICE, :time, 2010:10:2595)
 
-    #GROSS ECONOMY COMPONENT
-    setparameter(m, :grosseconomy, :al, p[:al])
-    setparameter(m, :grosseconomy, :l, p[:l])
-    setparameter(m, :grosseconomy, :gama, p[:gama])
-    setparameter(m, :grosseconomy, :dk, p[:dk])
-    setparameter(m, :grosseconomy, :k0, p[:k0])
+addcomponent(DICE,grosseconomy, :grosseconomy)
+addcomponent(DICE,emissions, :emissions)
+addcomponent(DICE,co2cycle, :co2cycle)
+addcomponent(DICE,radiativeforcing, :radiativeforcing)
+addcomponent(DICE,climatedynamics, :climatedynamics)
+addcomponent(DICE,sealevelrise, :sealevelrise)
+addcomponent(DICE,damages, :damages)
+addcomponent(DICE,neteconomy, :neteconomy)
+addcomponent(DICE,welfare, :welfare)
 
-    connectparameter(m, :grosseconomy, :I, :neteconomy, :I)
+#GROSS ECONOMY COMPONENT
+set_parameter!(DICE, :grosseconomy, :al, p[:al])
+set_parameter!(DICE, :grosseconomy, :l, p[:l])
+set_parameter!(DICE, :grosseconomy, :gama, p[:gama])
+set_parameter!(DICE, :grosseconomy, :dk, p[:dk])
+set_parameter!(DICE, :grosseconomy, :k0, p[:k0])
 
-
-    #EMISSIONS COMPONENT
-    setparameter(m, :emissions, :sigma, p[:sigma])
-    setparameter(m, :emissions, :MIU, p[:miubase])
-    setparameter(m, :emissions, :etree, p[:etree]) 
-
-    connectparameter(m, :emissions, :YGROSS, :grosseconomy, :YGROSS)
-
-
-    #CO2 CYCLE COMPONENT
-    setparameter(m, :co2cycle, :mat0, p[:mat0])
-    setparameter(m, :co2cycle, :mat1, p[:mat1])
-    setparameter(m, :co2cycle, :mu0, p[:mu0])
-    setparameter(m, :co2cycle, :ml0, p[:ml0])
-    setparameter(m, :co2cycle, :b12, p[:b12])
-    setparameter(m, :co2cycle, :b23, p[:b23])
-    setparameter(m, :co2cycle, :b11, p[:b11])
-    setparameter(m, :co2cycle, :b21, p[:b21])
-    setparameter(m, :co2cycle, :b22, p[:b22])
-    setparameter(m, :co2cycle, :b32, p[:b32])
-    setparameter(m, :co2cycle, :b33, p[:b33])
-
-    connectparameter(m, :co2cycle, :E, :emissions, :E)
+# Note: offset=1 => dependence is on on prior timestep, i.e., not a cycle
+connect_parameter(DICE, :grosseconomy, :I, :neteconomy, :I, offset=1)
 
 
-    #RADIATIVE FORCING COMPONENT
-    setparameter(m, :radiativeforcing, :forcoth, p[:forcoth])
-    setparameter(m, :radiativeforcing, :fco22x, p[:fco22x])
+#EMISSIONS COMPONENT
+set_parameter!(DICE, :emissions, :sigma, p[:sigma])
+set_parameter!(DICE, :emissions, :MIU, p[:miubase])
+set_parameter!(DICE, :emissions, :etree, p[:etree]) 
 
-    connectparameter(m, :radiativeforcing, :MAT, :co2cycle, :MAT)
-    connectparameter(m, :radiativeforcing, :MAT61, :co2cycle, :MAT61)
-
-
-    #CLIMATE DYNAMICS COMPONENT
-    setparameter(m, :climatedynamics, :fco22x, p[:fco22x])
-    setparameter(m, :climatedynamics, :t2xco2, p[:t2xco2])
-    setparameter(m, :climatedynamics, :tatm0, p[:tatm0])
-    setparameter(m, :climatedynamics, :tatm1, p[:tatm1])
-    setparameter(m, :climatedynamics, :tocean0, p[:tocean0])
-    setparameter(m, :climatedynamics, :c1, p[:c1])
-    setparameter(m, :climatedynamics, :c3, p[:c3])
-    setparameter(m, :climatedynamics, :c4, p[:c4])
-
-    connectparameter(m, :climatedynamics, :FORC, :radiativeforcing, :FORC)
+connect_parameter(DICE, :emissions, :YGROSS, :grosseconomy, :YGROSS, offset=0)
 
 
-    # SEA LEVEL RISE COMPONENT
-    setparameter(m, :sealevelrise, :therm0, p[:therm0])
-    setparameter(m, :sealevelrise, :gsic0, p[:gsic0])
-    setparameter(m, :sealevelrise, :gis0, p[:gis0])
-    setparameter(m, :sealevelrise, :ais0, p[:ais0])
-    setparameter(m, :sealevelrise, :therm_asym, p[:therm_asym])
-    setparameter(m, :sealevelrise, :gsic_asym, p[:gsic_asym])
-    setparameter(m, :sealevelrise, :gis_asym, p[:gis_asym])
-    setparameter(m, :sealevelrise, :ais_asym, p[:ais_asym])
-    setparameter(m, :sealevelrise, :thermrate, p[:thermrate])
-    setparameter(m, :sealevelrise, :gsicrate, p[:gsicrate])
-    setparameter(m, :sealevelrise, :gisrate, p[:gisrate])
-    setparameter(m, :sealevelrise, :aisrate, p[:aisrate])
-    setparameter(m, :sealevelrise, :slrthreshold, p[:slrthreshold])
+#CO2 CYCLE COMPONENT
+set_parameter!(DICE, :co2cycle, :mat0, p[:mat0])
+set_parameter!(DICE, :co2cycle, :mat1, p[:mat1])
+set_parameter!(DICE, :co2cycle, :mu0, p[:mu0])
+set_parameter!(DICE, :co2cycle, :ml0, p[:ml0])
+set_parameter!(DICE, :co2cycle, :b12, p[:b12])
+set_parameter!(DICE, :co2cycle, :b23, p[:b23])
+set_parameter!(DICE, :co2cycle, :b11, p[:b11])
+set_parameter!(DICE, :co2cycle, :b21, p[:b21])
+set_parameter!(DICE, :co2cycle, :b22, p[:b22])
+set_parameter!(DICE, :co2cycle, :b32, p[:b32])
+set_parameter!(DICE, :co2cycle, :b33, p[:b33])
 
-    connectparameter(m, :sealevelrise, :TATM, :climatedynamics, :TATM)
+connect_parameter(DICE, :co2cycle, :E, :emissions, :E, offset=0)
 
 
-    #DAMAGES COMPONENT
-    setparameter(m, :damages, :a1, p[:a1])
-    setparameter(m, :damages, :a2, p[:a2])
-    setparameter(m, :damages, :a3, p[:a3])
-    setparameter(m, :damages, :b1, p[:slrcoeff])
-    setparameter(m, :damages, :b2, p[:slrcoeffsq])
-    setparameter(m, :damages, :b3, p[:slrexp])
+#RADIATIVE FORCING COMPONENT
+set_parameter!(DICE, :radiativeforcing, :forcoth, p[:forcoth])
+set_parameter!(DICE, :radiativeforcing, :fco22x, p[:fco22x])
 
-    connectparameter(m, :damages, :TATM, :climatedynamics, :TATM)
-    connectparameter(m, :damages, :YGROSS, :grosseconomy, :YGROSS)
-    connectparameter(m, :damages, :TotSLR, :sealevelrise, :TotSLR)
+connect_parameter(DICE, :radiativeforcing, :MAT, :co2cycle, :MAT, offset=0)
+connect_parameter(DICE, :radiativeforcing, :MAT61, :co2cycle, :MAT61, offset=0)
 
 
-    #NET ECONOMY COMPONENT
-    setparameter(m, :neteconomy, :cost1, p[:cost1])
-    setparameter(m, :neteconomy, :MIU, p[:miubase])
-    setparameter(m, :neteconomy, :expcost2, p[:expcost2])
-    setparameter(m, :neteconomy, :partfract, p[:partfract])
-    setparameter(m, :neteconomy, :pbacktime, p[:pbacktime])
-    setparameter(m, :neteconomy, :S, p[:savebase])
-    setparameter(m, :neteconomy, :l, p[:l])
+#CLIMATE DYNAMICS COMPONENT
+set_parameter!(DICE, :climatedynamics, :fco22x, p[:fco22x])
+set_parameter!(DICE, :climatedynamics, :t2xco2, p[:t2xco2])
+set_parameter!(DICE, :climatedynamics, :tatm0, p[:tatm0])
+set_parameter!(DICE, :climatedynamics, :tatm1, p[:tatm1])
+set_parameter!(DICE, :climatedynamics, :tocean0, p[:tocean0])
+set_parameter!(DICE, :climatedynamics, :c1, p[:c1])
+set_parameter!(DICE, :climatedynamics, :c3, p[:c3])
+set_parameter!(DICE, :climatedynamics, :c4, p[:c4])
 
-    connectparameter(m, :neteconomy, :YGROSS, :grosseconomy, :YGROSS)
-    #connectparameter(m, :neteconomy, :DAMAGES, :damages, :DAMAGES)
-    connectparameter(m, :neteconomy, :DAMFRAC, :damages, :DAMFRAC)
-
-
-    #WELFARE COMPONENT
-    setparameter(m, :welfare, :l, p[:l])
-    setparameter(m, :welfare, :elasmu, p[:elasmu])
-    setparameter(m, :welfare, :rr, p[:rr])
-    setparameter(m, :welfare, :scale1, p[:scale1])
-    setparameter(m, :welfare, :scale2, p[:scale2])
-
-    connectparameter(m, :welfare, :CPC, :neteconomy, :CPC)
-
-    return m
-end
+connect_parameter(DICE, :climatedynamics, :FORC, :radiativeforcing, :FORC, offset=0)
 
 
-function getdiceexcel(;datafile = joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-    params = getdice2010excelparameters(datafile)
+# SEA LEVEL RISE COMPONENT
+set_parameter!(DICE, :sealevelrise, :therm0, p[:therm0])
+set_parameter!(DICE, :sealevelrise, :gsic0, p[:gsic0])
+set_parameter!(DICE, :sealevelrise, :gis0, p[:gis0])
+set_parameter!(DICE, :sealevelrise, :ais0, p[:ais0])
+set_parameter!(DICE, :sealevelrise, :therm_asyDICE, p[:therm_asym])
+set_parameter!(DICE, :sealevelrise, :gsic_asyDICE, p[:gsic_asym])
+set_parameter!(DICE, :sealevelrise, :gis_asyDICE, p[:gis_asym])
+set_parameter!(DICE, :sealevelrise, :ais_asyDICE, p[:ais_asym])
+set_parameter!(DICE, :sealevelrise, :thermrate, p[:thermrate])
+set_parameter!(DICE, :sealevelrise, :gsicrate, p[:gsicrate])
+set_parameter!(DICE, :sealevelrise, :gisrate, p[:gisrate])
+set_parameter!(DICE, :sealevelrise, :aisrate, p[:aisrate])
+set_parameter!(DICE, :sealevelrise, :slrthreshold, p[:slrthreshold])
 
-    m=constructdice(params)
+connect_parameter(DICE, :sealevelrise, :TATDICE, :climatedynamics, :TATM, offset=0)
 
-    return m
-end
+
+#DAMAGES COMPONENT
+set_parameter!(DICE, :damages, :a1, p[:a1])
+set_parameter!(DICE, :damages, :a2, p[:a2])
+set_parameter!(DICE, :damages, :a3, p[:a3])
+set_parameter!(DICE, :damages, :b1, p[:slrcoeff])
+set_parameter!(DICE, :damages, :b2, p[:slrcoeffsq])
+set_parameter!(DICE, :damages, :b3, p[:slrexp])
+
+connect_parameter(DICE, :damages, :TATDICE, :climatedynamics, :TATM)
+connect_parameter(DICE, :damages, :YGROSS, :grosseconomy, :YGROSS)
+connect_parameter(DICE, :damages, :TotSLR, :sealevelrise, :TotSLR)
+
+
+#NET ECONOMY COMPONENT
+set_parameter!(DICE, :neteconomy, :cost1, p[:cost1])
+set_parameter!(DICE, :neteconomy, :MIU, p[:miubase])
+set_parameter!(DICE, :neteconomy, :expcost2, p[:expcost2])
+set_parameter!(DICE, :neteconomy, :partfract, p[:partfract])
+set_parameter!(DICE, :neteconomy, :pbacktime, p[:pbacktime])
+set_parameter!(DICE, :neteconomy, :S, p[:savebase])
+set_parameter!(DICE, :neteconomy, :l, p[:l])
+
+connect_parameter(DICE, :neteconomy, :YGROSS, :grosseconomy, :YGROSS, offset=0)
+#connect_parameter(DICE, :neteconomy, :DAMAGES, :damages, :DAMAGES)
+connect_parameter(DICE, :neteconomy, :DAMFRAC, :damages, :DAMFRAC, offset=0)
+
+
+#WELFARE COMPONENT
+set_parameter!(DICE, :welfare, :l, p[:l])
+set_parameter!(DICE, :welfare, :elasmu, p[:elasmu])
+set_parameter!(DICE, :welfare, :rr, p[:rr])
+set_parameter!(DICE, :welfare, :scale1, p[:scale1])
+set_parameter!(DICE, :welfare, :scale2, p[:scale2])
+
+connect_parameter(DICE, :welfare, :CPC, :neteconomy, :CPC, offset=0)
+
+add_connector_comps(DICE)
+
+end #module

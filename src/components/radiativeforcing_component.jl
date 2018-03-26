@@ -1,5 +1,6 @@
 using Mimi
 
+
 @defcomp radiativeforcing begin
     FORC      = Variable(index=[time])   #Increase in radiative forcing (watts per m2 from 1900)
 
@@ -8,17 +9,13 @@ using Mimi
     MAT61     = Parameter()              #MAT calculation one timestep further than the model's index   
     fco22x    = Parameter()              #Forcings of equilibrium CO2 doubling (Wm-2)
 
-end
-
-function run_timestep(state::radiativeforcing, t::Int)
-    v = state.Variables
-    p = state.Parameters
-
-    #Define function for FORC
-    if t != 60
-        v.FORC[t] = p.fco22x * (log((((p.MAT[t] + p.MAT[t+1]) / 2) + 0.000001)/596.4)/log(2)) + p.forcoth[t]
-    elseif t==60
-        # need to use MAT61, calculated one step further 
-        v.FORC[t] = p.fco22x * (log((((p.MAT[t] + p.MAT61) / 2) + 0.000001)/596.4)/log(2)) + p.forcoth[t]
+    function run_timestep(p, v, d, t)
+        #Define function for FORC
+        if t != 60
+            v.FORC[t] = p.fco22x * (log((((p.MAT[t] + p.MAT[t+1]) / 2) + 0.000001)/596.4)/log(2)) + p.forcoth[t]
+        elseif t==60
+            # need to use MAT61, calculated one step further 
+            v.FORC[t] = p.fco22x * (log((((p.MAT[t] + p.MAT61) / 2) + 0.000001)/596.4)/log(2)) + p.forcoth[t]
+        end
     end
 end
