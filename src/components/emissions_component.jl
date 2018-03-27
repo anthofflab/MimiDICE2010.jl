@@ -11,20 +11,17 @@ using Mimi
     sigma   = Parameter(index=[time])   #CO2-equivalent-emissions output ratio
     YGROSS  = Parameter(index=[time])   #Gross world product GROSS of abatement and damages (trillions 2005 USD per year)
 
-    function init(p, v, d)
-        t = 1
-        v.CCA[t] = v.EIND[t] * 10        
-    end
-
     function run_timestep(p, v, d, t)
-        if t > 1
-            #Define function for EIND
-            v.EIND[t] = p.sigma[t] * p.YGROSS[t] * (1-p.MIU[t])
-
-            #Define function for E
-            v.E[t] = v.EIND[t] + p.etree[t]
-
-            #Define function for CCA
+        #Define function for EIND
+        v.EIND[t] = p.sigma[t] * p.YGROSS[t] * (1-p.MIU[t])
+        
+        #Define function for E
+        v.E[t] = v.EIND[t] + p.etree[t]
+        
+        #Define function for CCA
+        if t == 1
+            v.CCA[t] = v.EIND[t] * 10                    
+        else
             v.CCA[t] = v.CCA[t-1] + v.EIND[t] * 10
         end
     end

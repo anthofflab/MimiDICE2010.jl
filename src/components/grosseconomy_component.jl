@@ -21,9 +21,8 @@ using Mimi
         if t > 1
             #Define function for K
             v.K[t] = v.K[t-1] * (1 - p.dk) ^ 10  + 10 * p.I[t-1]
-
-            #Define function for YGROSS
-            v.YGROSS[t] = (p.al[t] * (p.l[t])^(1-p.gama)) * (v.K[t]^p.gama)
         end
+        #Define function for YGROSS
+        v.YGROSS[t] = (p.al[t] * (p.l[t])^(1-p.gama)) * (v.K[t]^p.gama)
     end
 end

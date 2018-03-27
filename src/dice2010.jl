@@ -1,10 +1,10 @@
-module dice 2010
+module dice2010
 
 using Mimi
 using ExcelReaders
 
-include("helpers.jl")
 include("parameters.jl")
+
 include("components/grosseconomy_component.jl")
 include("components/emissions_component.jl")
 include("components/co2cycle_component.jl")
@@ -25,7 +25,7 @@ const global datafile = joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082
 p = getdice2010excelparameters(datafile)
 
 DICE = Model()
-set_dimension!(DICE, :time, 2010:10:2595)
+set_dimension!(DICE, :time, 2010:10:2605)
 
 addcomponent(DICE,grosseconomy, :grosseconomy)
 addcomponent(DICE,emissions, :emissions)
@@ -98,17 +98,17 @@ set_parameter!(DICE, :sealevelrise, :therm0, p[:therm0])
 set_parameter!(DICE, :sealevelrise, :gsic0, p[:gsic0])
 set_parameter!(DICE, :sealevelrise, :gis0, p[:gis0])
 set_parameter!(DICE, :sealevelrise, :ais0, p[:ais0])
-set_parameter!(DICE, :sealevelrise, :therm_asyDICE, p[:therm_asym])
-set_parameter!(DICE, :sealevelrise, :gsic_asyDICE, p[:gsic_asym])
-set_parameter!(DICE, :sealevelrise, :gis_asyDICE, p[:gis_asym])
-set_parameter!(DICE, :sealevelrise, :ais_asyDICE, p[:ais_asym])
+set_parameter!(DICE, :sealevelrise, :therm_asym, p[:therm_asym])
+set_parameter!(DICE, :sealevelrise, :gsic_asym, p[:gsic_asym])
+set_parameter!(DICE, :sealevelrise, :gis_asym, p[:gis_asym])
+set_parameter!(DICE, :sealevelrise, :ais_asym, p[:ais_asym])
 set_parameter!(DICE, :sealevelrise, :thermrate, p[:thermrate])
 set_parameter!(DICE, :sealevelrise, :gsicrate, p[:gsicrate])
 set_parameter!(DICE, :sealevelrise, :gisrate, p[:gisrate])
 set_parameter!(DICE, :sealevelrise, :aisrate, p[:aisrate])
 set_parameter!(DICE, :sealevelrise, :slrthreshold, p[:slrthreshold])
 
-connect_parameter(DICE, :sealevelrise, :TATDICE, :climatedynamics, :TATM, offset=0)
+connect_parameter(DICE, :sealevelrise, :TATM, :climatedynamics, :TATM, offset=0)
 
 
 #DAMAGES COMPONENT
@@ -119,7 +119,7 @@ set_parameter!(DICE, :damages, :b1, p[:slrcoeff])
 set_parameter!(DICE, :damages, :b2, p[:slrcoeffsq])
 set_parameter!(DICE, :damages, :b3, p[:slrexp])
 
-connect_parameter(DICE, :damages, :TATDICE, :climatedynamics, :TATM)
+connect_parameter(DICE, :damages, :TATM, :climatedynamics, :TATM)
 connect_parameter(DICE, :damages, :YGROSS, :grosseconomy, :YGROSS)
 connect_parameter(DICE, :damages, :TotSLR, :sealevelrise, :TotSLR)
 
