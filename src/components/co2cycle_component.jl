@@ -21,29 +21,30 @@ using Mimi
     b23     = Parameter()               #Carbon cycle transition matrix shallow to deep ocean
     b32     = Parameter()               #Carbon cycle transition matrix deep ocean to shallow ocean
     b33     = Parameter()               #Carbon cycle transition matrix deep ocean to deep oceans
-    
-    function init(p, v, d)
-        t = 1
-        v.MAT[1] = p.mat0
-        v.MAT[2] = p.mat1
-        v.MU[t]  = p.mu0
-        v.ML[t]  = p.ml0
-    end
 
     function run_timestep(p, v, d, t)
-        if t > 1
-            #Define function for MU
+        #Define function for MU
+        if t==1
+            v.MU[t] = p.mu0
+        else
             v.MU[t] = v.MAT[t-1] * p.b12 + v.MU[t-1] * p.b22 + v.ML[t-1] * p.b32
+        end
 
-            #Define function for ML
+        #Define function for ML
+        if t==1
+            v.ML[t] = p.ml0
+        else
             v.ML[t] = v.ML[t-1] * p.b33 + v.MU[t-1] * p.b23
+        end
 
-            #Define function for MAT
-            if t < 60
-                v.MAT[t+1] = v.MAT[t] * p.b11 + v.MU[t] * p.b21 + p.E[t] * 10
-            elseif t==60
-                v.MAT61 = v.MAT[t] * p.b11 + v.MU[t] * p.b21 + p.E[t] * 10
-            end
+        #Define function for MAT
+        if t==1
+            v.MAT[1] = p.mat0
+            v.MAT[2] = p.mat1
+        elseif t < 60
+            v.MAT[t+1] = v.MAT[t] * p.b11 + v.MU[t] * p.b21 + p.E[t] * 10
+        elseif t==60
+            v.MAT61 = v.MAT[t] * p.b11 + v.MU[t] * p.b21 + p.E[t] * 10
         end
     end
 end

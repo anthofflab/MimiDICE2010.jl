@@ -21,13 +21,7 @@ using Mimi
     YGROSS      = Parameter(index=[time])   #Gross world product GROSS of abatement and damages (trillions 2005 USD per year)
     expcost2    = Parameter()               #Exponent of control cost function
 
-    function init(p, v, d)
-        t = 1
-        v.C[t] = v.Y[t] - v.I[t] + 0.1
-    end
-
     function run_timestep(p, v, d, t)
-
         #Define function for YNET
         v.YNET[t] = p.YGROSS[t] / (1 + p.DAMFRAC[t])
 
@@ -41,12 +35,12 @@ using Mimi
         v.I[t] = p.S[t] * v.Y[t]
 
         #Define function for C
-        if t > 1
-            if t<60
-                v.C[t] = v.Y[t] - v.I[t]
-            elseif t==60
-                v.C[t] = v.C[t-1]
-            end
+        if t==1
+            v.C[t] = v.Y[t] - v.I[t] + 0.1
+        elseif t<60
+            v.C[t] = v.Y[t] - v.I[t]
+        elseif t==60
+            v.C[t] = v.C[t-1]
         end
 
         #Define function for CPC
