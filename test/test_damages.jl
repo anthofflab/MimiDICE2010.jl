@@ -14,23 +14,23 @@ f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-setindex(m, :time, collect(2005:10:2595))
+set_dimension!(m, :time, collect(2005:10:2595))
 
-addcomponent(m, damages)
+addcomponent(m, damages, :damages)
 
 # Set the parameters that would normally be internal connection from their Excel values
-setparameter(m, :damages, :TATM, getparams(f, "B121:BI121", :all, "Base", T))
-setparameter(m, :damages, :YGROSS, getparams(f, "B92:BI92", :all, "Base", T))
-setparameter(m, :damages, :TotSLR, getparams(f, "B182:BI182", :all, "Base", T))
+set_parameter!(m, :damages, :TATM, getparams(f, "B121:BI121", :all, "Base", T))
+set_parameter!(m, :damages, :YGROSS, getparams(f, "B92:BI92", :all, "Base", T))
+set_parameter!(m, :damages, :TotSLR, getparams(f, "B182:BI182", :all, "Base", T))
 
 # Load the rest of the external parameters
 p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-setparameter(m, :damages, :a1, p[:a1])
-setparameter(m, :damages, :a2, p[:a2])
-setparameter(m, :damages, :a3, p[:a3])
-setparameter(m, :damages, :b1, p[:slrcoeff])
-setparameter(m, :damages, :b2, p[:slrcoeffsq])
-setparameter(m, :damages, :b3, p[:slrexp])
+set_parameter!(m, :damages, :a1, p[:a1])
+set_parameter!(m, :damages, :a2, p[:a2])
+set_parameter!(m, :damages, :a3, p[:a3])
+set_parameter!(m, :damages, :b1, p[:slrcoeff])
+set_parameter!(m, :damages, :b2, p[:slrcoeffsq])
+set_parameter!(m, :damages, :b3, p[:slrexp])
 
 # Run the one-component model
 run(m)

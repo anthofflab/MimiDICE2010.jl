@@ -14,23 +14,23 @@ f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-setindex(m, :time, collect(2005:10:2595))
+set_dimension!(m, :time, collect(2005:10:2595))
 
-addcomponent(m, neteconomy)
+addcomponent(m, neteconomy, :neteconomy)
 
 # Set the parameters that would normally be internal connection from their Excel values
-setparameter(m, :neteconomy, :YGROSS, getparams(f, "B92:BI92", :all, "Base", T))
-setparameter(m, :neteconomy, :DAMFRAC, getparams(f, "B93:BI93", :all, "Base", T))
+set_parameter!(m, :neteconomy, :YGROSS, getparams(f, "B92:BI92", :all, "Base", T))
+set_parameter!(m, :neteconomy, :DAMFRAC, getparams(f, "B93:BI93", :all, "Base", T))
 
 # Load the rest of the external parameters
 p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-setparameter(m, :neteconomy, :cost1, p[:cost1])
-setparameter(m, :neteconomy, :MIU, p[:miubase])
-setparameter(m, :neteconomy, :expcost2, p[:expcost2])
-setparameter(m, :neteconomy, :partfract, p[:partfract])
-setparameter(m, :neteconomy, :pbacktime, p[:pbacktime])
-setparameter(m, :neteconomy, :S, p[:savebase])
-setparameter(m, :neteconomy, :l, p[:l])
+set_parameter!(m, :neteconomy, :cost1, p[:cost1])
+set_parameter!(m, :neteconomy, :MIU, p[:miubase])
+set_parameter!(m, :neteconomy, :expcost2, p[:expcost2])
+set_parameter!(m, :neteconomy, :partfract, p[:partfract])
+set_parameter!(m, :neteconomy, :pbacktime, p[:pbacktime])
+set_parameter!(m, :neteconomy, :S, p[:savebase])
+set_parameter!(m, :neteconomy, :l, p[:l])
 
 # Run the one-component model
 run(m)

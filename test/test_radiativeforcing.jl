@@ -14,18 +14,18 @@ f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-setindex(m, :time, collect(2005:10:2595))
+set_dimension!(m, :time, collect(2005:10:2595))
 
-addcomponent(m, radiativeforcing)
+addcomponent(m, radiativeforcing, :radiativeforcing)
 
 # Set the parameters that would normally be internal connection from their Excel values
-setparameter(m, :radiativeforcing, :MAT, getparams(f, "B112:BI112", :all, "Base", T))
-setparameter(m, :radiativeforcing, :MAT61, getparams(f, "BJ112:BJ112", :single, "Base", 1))
+set_parameter!(m, :radiativeforcing, :MAT, getparams(f, "B112:BI112", :all, "Base", T))
+set_parameter!(m, :radiativeforcing, :MAT61, getparams(f, "BJ112:BJ112", :single, "Base", 1))
 
 # Load the rest of the external parameters
 p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-setparameter(m, :radiativeforcing, :forcoth, p[:forcoth])
-setparameter(m, :radiativeforcing, :fco22x, p[:fco22x])
+set_parameter!(m, :radiativeforcing, :forcoth, p[:forcoth])
+set_parameter!(m, :radiativeforcing, :fco22x, p[:fco22x])
 
 # Run the one-component model
 run(m)

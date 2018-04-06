@@ -14,20 +14,20 @@ f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-setindex(m, :time, collect(2005:10:2595))
+set_dimension!(m, :time, collect(2005:10:2595))
 
-addcomponent(m, grosseconomy)
+addcomponent(m, grosseconomy, :grosseconomy)
 
 # Set the parameters that would normally be internal connection from their Excel values
-setparameter(m, :grosseconomy, :I, getparams(f, "B101:BI101", :all, "Base", T))
+set_parameter!(m, :grosseconomy, :I, getparams(f, "B101:BI101", :all, "Base", T))
 
 # Load the rest of the external parameters
 p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-setparameter(m, :grosseconomy, :al, p[:al])
-setparameter(m, :grosseconomy, :l, p[:l])
-setparameter(m, :grosseconomy, :gama, p[:gama])
-setparameter(m, :grosseconomy, :dk, p[:dk])
-setparameter(m, :grosseconomy, :k0, p[:k0])
+set_parameter!(m, :grosseconomy, :al, p[:al])
+set_parameter!(m, :grosseconomy, :l, p[:l])
+set_parameter!(m, :grosseconomy, :gama, p[:gama])
+set_parameter!(m, :grosseconomy, :dk, p[:dk])
+set_parameter!(m, :grosseconomy, :k0, p[:k0])
 
 # Run the one-component model
 run(m)

@@ -14,23 +14,23 @@ f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-setindex(m, :time, collect(2005:10:2595))
+set_dimension!(m, :time, collect(2005:10:2595))
 
-addcomponent(m, climatedynamics)
+addcomponent(m, climatedynamics, :climatedynamics)
 
 # Set the parameters that would normally be internal connection from their Excel values
-setparameter(m, :climatedynamics, :FORC, getparams(f, "B122:BI122", :all, "Base", T))
+set_parameter!(m, :climatedynamics, :FORC, getparams(f, "B122:BI122", :all, "Base", T))
 
 # Load the rest of the external parameters
 p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-setparameter(m, :climatedynamics, :fco22x, p[:fco22x])
-setparameter(m, :climatedynamics, :t2xco2, p[:t2xco2])
-setparameter(m, :climatedynamics, :tatm0, p[:tatm0])
-setparameter(m, :climatedynamics, :tatm1, p[:tatm1])
-setparameter(m, :climatedynamics, :tocean0, p[:tocean0])
-setparameter(m, :climatedynamics, :c1, p[:c1])
-setparameter(m, :climatedynamics, :c3, p[:c3])
-setparameter(m, :climatedynamics, :c4, p[:c4])
+set_parameter!(m, :climatedynamics, :fco22x, p[:fco22x])
+set_parameter!(m, :climatedynamics, :t2xco2, p[:t2xco2])
+set_parameter!(m, :climatedynamics, :tatm0, p[:tatm0])
+set_parameter!(m, :climatedynamics, :tatm1, p[:tatm1])
+set_parameter!(m, :climatedynamics, :tocean0, p[:tocean0])
+set_parameter!(m, :climatedynamics, :c1, p[:c1])
+set_parameter!(m, :climatedynamics, :c3, p[:c3])
+set_parameter!(m, :climatedynamics, :c4, p[:c4])
 
 # Run the one-component model
 run(m)

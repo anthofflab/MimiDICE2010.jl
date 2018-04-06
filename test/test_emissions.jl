@@ -14,18 +14,18 @@ f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-setindex(m, :time, collect(2005:10:2595))
+set_dimension!(m, :time, collect(2005:10:2595))
 
-addcomponent(m, emissions)
+addcomponent(m, emissions, :emissions)
 
 # Set the parameters that would normally be internal connection from their Excel values
-setparameter(m, :emissions, :YGROSS, getparams(f, "B92:BI92", :all, "Base", T))
+set_parameter!(m, :emissions, :YGROSS, getparams(f, "B92:BI92", :all, "Base", T))
 
 # Load the rest of the external parameters
 p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-setparameter(m, :emissions, :sigma, p[:sigma])
-setparameter(m, :emissions, :MIU, p[:miubase])
-setparameter(m, :emissions, :etree, p[:etree])
+set_parameter!(m, :emissions, :sigma, p[:sigma])
+set_parameter!(m, :emissions, :MIU, p[:miubase])
+set_parameter!(m, :emissions, :etree, p[:etree])
 
 # Run the one-component model
 run(m)

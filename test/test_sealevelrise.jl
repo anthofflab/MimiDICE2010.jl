@@ -14,28 +14,28 @@ f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-setindex(m, :time, collect(2005:10:2595))
+set_dimension!(m, :time, collect(2005:10:2595))
 
-addcomponent(m, sealevelrise)
+addcomponent(m, sealevelrise, :sealevelrise)
 
 # Set the parameters that would normally be internal connection from their Excel values
-setparameter(m, :sealevelrise, :TATM, getparams(f, "B121:BI121", :all, "Base", T))
+set_parameter!(m, :sealevelrise, :TATM, getparams(f, "B121:BI121", :all, "Base", T))
 
 # Load the rest of the external parameters
 p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-setparameter(m, :sealevelrise, :therm0, p[:therm0])
-setparameter(m, :sealevelrise, :gsic0, p[:gsic0])
-setparameter(m, :sealevelrise, :gis0, p[:gis0])
-setparameter(m, :sealevelrise, :ais0, p[:ais0])
-setparameter(m, :sealevelrise, :therm_asym, p[:therm_asym])
-setparameter(m, :sealevelrise, :gsic_asym, p[:gsic_asym])
-setparameter(m, :sealevelrise, :gis_asym, p[:gis_asym])
-setparameter(m, :sealevelrise, :ais_asym, p[:ais_asym])
-setparameter(m, :sealevelrise, :thermrate, p[:thermrate])
-setparameter(m, :sealevelrise, :gsicrate, p[:gsicrate])
-setparameter(m, :sealevelrise, :gisrate, p[:gisrate])
-setparameter(m, :sealevelrise, :aisrate, p[:aisrate])
-setparameter(m, :sealevelrise, :slrthreshold, p[:slrthreshold])
+set_parameter!(m, :sealevelrise, :therm0, p[:therm0])
+set_parameter!(m, :sealevelrise, :gsic0, p[:gsic0])
+set_parameter!(m, :sealevelrise, :gis0, p[:gis0])
+set_parameter!(m, :sealevelrise, :ais0, p[:ais0])
+set_parameter!(m, :sealevelrise, :therm_asym, p[:therm_asym])
+set_parameter!(m, :sealevelrise, :gsic_asym, p[:gsic_asym])
+set_parameter!(m, :sealevelrise, :gis_asym, p[:gis_asym])
+set_parameter!(m, :sealevelrise, :ais_asym, p[:ais_asym])
+set_parameter!(m, :sealevelrise, :thermrate, p[:thermrate])
+set_parameter!(m, :sealevelrise, :gsicrate, p[:gsicrate])
+set_parameter!(m, :sealevelrise, :gisrate, p[:gisrate])
+set_parameter!(m, :sealevelrise, :aisrate, p[:aisrate])
+set_parameter!(m, :sealevelrise, :slrthreshold, p[:slrthreshold])
 
 # Run the one-component model
 run(m)

@@ -14,26 +14,26 @@ f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-setindex(m, :time, collect(2005:10:2595))
+set_dimension!(m, :time, collect(2005:10:2595))
 
-addcomponent(m, co2cycle)
+addcomponent(m, co2cycle, :co2cycle)
 
 # Set the parameters that would normally be internal connection from their Excel values
-setparameter(m, :co2cycle, :E, getparams(f, "B109:BI109", :all, "Base", T))
+set_parameter!(m, :co2cycle, :E, getparams(f, "B109:BI109", :all, "Base", T))
 
 # Load the rest of the external parameters
 p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-setparameter(m, :co2cycle, :mat0, p[:mat0])
-setparameter(m, :co2cycle, :mat1, p[:mat1])
-setparameter(m, :co2cycle, :mu0, p[:mu0])
-setparameter(m, :co2cycle, :ml0, p[:ml0])
-setparameter(m, :co2cycle, :b12, p[:b12])
-setparameter(m, :co2cycle, :b23, p[:b23])
-setparameter(m, :co2cycle, :b11, p[:b11])
-setparameter(m, :co2cycle, :b21, p[:b21])
-setparameter(m, :co2cycle, :b22, p[:b22])
-setparameter(m, :co2cycle, :b32, p[:b32])
-setparameter(m, :co2cycle, :b33, p[:b33])
+set_parameter!(m, :co2cycle, :mat0, p[:mat0])
+set_parameter!(m, :co2cycle, :mat1, p[:mat1])
+set_parameter!(m, :co2cycle, :mu0, p[:mu0])
+set_parameter!(m, :co2cycle, :ml0, p[:ml0])
+set_parameter!(m, :co2cycle, :b12, p[:b12])
+set_parameter!(m, :co2cycle, :b23, p[:b23])
+set_parameter!(m, :co2cycle, :b11, p[:b11])
+set_parameter!(m, :co2cycle, :b21, p[:b21])
+set_parameter!(m, :co2cycle, :b22, p[:b22])
+set_parameter!(m, :co2cycle, :b32, p[:b32])
+set_parameter!(m, :co2cycle, :b33, p[:b33])
 
 # Run the one-component model
 run(m)
