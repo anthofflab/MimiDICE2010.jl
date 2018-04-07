@@ -36,12 +36,13 @@ T=60
 f=openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 using dice2010
-run(DICE)
+m = dice2010.DICE
+run(m)
 
 # Climate dynamics tests
 
-TATM    = DICE[:climatedynamics, :TATM]
-TOCEAN  = DICE[:climatedynamics, :TOCEAN]
+TATM    = m[:climatedynamics, :TATM]
+TOCEAN  = m[:climatedynamics, :TOCEAN]
 
 True_TATM   = getparams(f, "B121:BI121", :all, "Base", T)
 True_TOCEAN = getparams(f, "B123:BI123", :all, "Base", T)
@@ -52,10 +53,10 @@ True_TOCEAN = getparams(f, "B123:BI123", :all, "Base", T)
 
 # CO2 Cycle tests
 
-MAT     = DICE[:co2cycle, :MAT]
-MAT61   = DICE[:co2cycle, :MAT61]
-ML      = DICE[:co2cycle, :ML]
-MU      = DICE[:co2cycle, :MU]
+MAT     = m[:co2cycle, :MAT]
+MAT61   = m[:co2cycle, :MAT61]
+ML      = m[:co2cycle, :ML]
+MU      = m[:co2cycle, :MU]
 
 True_MAT    = getparams(f, "B112:BI112", :all, "Base", T)
 True_MAT61  = getparams(f, "BJ112:BJ112", :single, "Base", 1)
@@ -70,16 +71,16 @@ True_MU     = getparams(f, "B114:BI114", :all, "Base", T)
 
 # Damages test
 
-DAMFRAC = DICE[:damages, :DAMFRAC]
+DAMFRAC = m[:damages, :DAMFRAC]
 True_DAMFRAC    = getparams(f, "B93:BI93", :all, "Base", T)
 @test maximum(abs, DAMFRAC .- True_DAMFRAC) ≈ 0. atol = Precision
 
 
 # Emissions tests
 
-CCA     = DICE[:emissions, :CCA]
-E       = DICE[:emissions, :E]
-EIND    = DICE[:emissions, :EIND]
+CCA     = m[:emissions, :CCA]
+E       = m[:emissions, :E]
+EIND    = m[:emissions, :EIND]
 
 True_CCA    = getparams(f, "B117:BI117", :all, "Base", T)
 True_E      = getparams(f, "B109:BI109", :all, "Base", T)
@@ -92,8 +93,8 @@ True_EIND   = getparams(f, "B110:BI110", :all, "Base", T)
 
 # Gross Economy tests
 
-K       = DICE[:grosseconomy, :K]
-YGROSS  = DICE[:grosseconomy, :YGROSS]
+K       = m[:grosseconomy, :K]
+YGROSS  = m[:grosseconomy, :YGROSS]
 
 True_K      = getparams(f, "B102:BI102", :all, "Base", T)
 True_YGROSS = getparams(f, "B92:BI92", :all, "Base", T)
@@ -104,13 +105,13 @@ True_YGROSS = getparams(f, "B92:BI92", :all, "Base", T)
 
 # Net Economy tests
 
-ABATECOST   = DICE[:neteconomy, :ABATECOST]
-C           = DICE[:neteconomy, :C]
-CPC         = DICE[:neteconomy, :CPC]
-CPRICE      = DICE[:neteconomy, :CPRICE]
-I           = DICE[:neteconomy, :I] 
-Y           = DICE[:neteconomy, :Y]
-YNET        = DICE[:neteconomy, :YNET]
+ABATECOST   = m[:neteconomy, :ABATECOST]
+C           = m[:neteconomy, :C]
+CPC         = m[:neteconomy, :CPC]
+CPRICE      = m[:neteconomy, :CPRICE]
+I           = m[:neteconomy, :I] 
+Y           = m[:neteconomy, :Y]
+YNET        = m[:neteconomy, :YNET]
 
 True_ABATECOST  = getparams(f, "B97:BI97", :all, "Base", T)
 True_C          = getparams(f, "B125:BI125", :all, "Base", T)
@@ -131,18 +132,18 @@ True_YNET       = getparams(f, "B95:BI95", :all, "Base", T)
 
 # Radiative Forcing test
 
-FORC = DICE[:radiativeforcing, :FORC]
+FORC = m[:radiativeforcing, :FORC]
 True_FORC    = getparams(f, "B122:BI122", :all, "Base", T)
 @test maximum(abs, FORC .- True_FORC) ≈ 0. atol = Precision
 
 
 # Sea Level Rise tests
 
-ThermSLR    = DICE[:sealevelrise, :ThermSLR]
-GSICSLR     = DICE[:sealevelrise, :GSICSLR]
-GISSLR      = DICE[:sealevelrise, :GISSLR]
-AISSLR      = DICE[:sealevelrise, :AISSLR]
-TotSLR      = DICE[:sealevelrise, :TotSLR]
+ThermSLR    = m[:sealevelrise, :ThermSLR]
+GSICSLR     = m[:sealevelrise, :GSICSLR]
+GISSLR      = m[:sealevelrise, :GISSLR]
+AISSLR      = m[:sealevelrise, :AISSLR]
+TotSLR      = m[:sealevelrise, :TotSLR]
 
 True_ThermSLR    = getparams(f, "B178:BI178", :all, "Base", T)
 True_GSICSLR    = getparams(f, "B179:BI179", :all, "Base", T)
@@ -159,9 +160,9 @@ True_TotSLR    = getparams(f, "B182:BI182", :all, "Base", T)
 
 # Welfare tests
 
-CEMUTOTPER  = DICE[:welfare, :CEMUTOTPER]
-PERIODU     = DICE[:welfare, :PERIODU]
-UTILITY     = DICE[:welfare, :UTILITY]
+CEMUTOTPER  = m[:welfare, :CEMUTOTPER]
+PERIODU     = m[:welfare, :PERIODU]
+UTILITY     = m[:welfare, :UTILITY]
 
 True_CEMUTOTPER    = getparams(f, "B129:BI129", :all, "Base", T)
 True_PERIODU    = getparams(f, "B128:BI128", :all, "Base", T)
