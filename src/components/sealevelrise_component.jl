@@ -28,14 +28,6 @@ using Mimi
 
     slrthreshold = Parameter()  # Temperature threshold for AIS
 
-    function init(p, v, d)
-        t = 1
-        v.ThermSLR[t]   = p.therm0
-        v.GSICSLR[t]    = p.gsic0 
-        v.GISSLR[t]     = p.gis0
-        v.AISSLR[t]      = p.ais0
-    end
-
     function run_timestep(p, v, d, t)
         if t==1
             v.ThermSLR[t]   = p.therm0
@@ -53,5 +45,5 @@ using Mimi
         end
     
         v.TotSLR[t] = v.ThermSLR[t] + v.GSICSLR[t] + v.GISSLR[t] + v.AISSLR[t]
-    end 
+    end
 end
