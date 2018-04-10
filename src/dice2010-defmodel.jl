@@ -23,7 +23,7 @@ const global datafile = joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082
     p = getdice2010excelparameters(datafile)
     
     DICE = Model()
-    index[time] = 2010:10:2605
+    index[time] = 2005:10:2595
 
     component(grosseconomy)
     component(emissions)

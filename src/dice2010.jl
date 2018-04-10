@@ -25,7 +25,7 @@ const global datafile = joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082
 p = getdice2010excelparameters(datafile)
 
 DICE = Model()
-set_dimension!(DICE, :time, 2010:10:2605)
+set_dimension!(DICE, :time, 2005:10:2595)
 
 addcomponent(DICE,grosseconomy, :grosseconomy)
 addcomponent(DICE,emissions, :emissions)
