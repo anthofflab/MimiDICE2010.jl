@@ -2,7 +2,6 @@ using Mimi
 using Base.Test
 using ExcelReaders
 
-include("../src/helpers.jl")
 include("../src/parameters.jl")
 include("../src/components/welfare_component.jl")
 
@@ -14,15 +13,15 @@ f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-set_dimension!(m, :time, collect(2005:10:2595))
+set_dimension!(m, :time, dice2010.model_years)
 
 addcomponent(m, welfare, :welfare)
 
 # Set the parameters that would normally be internal connection from their Excel values
-set_parameter!(m, :welfare, :CPC, getparams(f, "B126:BI126", :all, "Base", T))
+set_parameter!(m, :welfare, :CPC, read_params(f, "B126:BI126", T))
 
 # Load the rest of the external parameters
-p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
+p = dice2010_excel_parameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 set_parameter!(m, :welfare, :l, p[:l])
 set_parameter!(m, :welfare, :elasmu, p[:elasmu])
 set_parameter!(m, :welfare, :rr, p[:rr])
@@ -38,9 +37,9 @@ PERIODU     = m[:welfare, :PERIODU]
 UTILITY     = m[:welfare, :UTILITY]
 
 # Extract the true values
-True_CEMUTOTPER    = getparams(f, "B129:BI129", :all, "Base", T)
-True_PERIODU    = getparams(f, "B128:BI128", :all, "Base", T)
-True_UTILITY    = getparams(f, "B130:B130", :single, "Base", 1)
+True_CEMUTOTPER = read_params(f, "B129:BI129", T)
+True_PERIODU    = read_params(f, "B128:BI128", T)
+True_UTILITY    = read_params(f, "B130")
 
 # Test that the values are the same
 @test maximum(abs, CEMUTOTPER .- True_CEMUTOTPER) ≈ 0. atol = Precision

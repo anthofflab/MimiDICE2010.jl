@@ -2,27 +2,26 @@ using Mimi
 using Base.Test
 using ExcelReaders
 
-include("../src/helpers.jl")
 include("../src/parameters.jl")
 include("../src/components/co2cycle_component.jl")
 
 @testset "co2cycle" begin
 
 Precision = 1.0e-11
-T = 60
+T = length(dice2010.model_years)
 f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-set_dimension!(m, :time, collect(2005:10:2595))
+set_dimension!(m, :time, dice2010.model_years)
 
 addcomponent(m, co2cycle, :co2cycle)
 
 # Set the parameters that would normally be internal connection from their Excel values
-set_parameter!(m, :co2cycle, :E, getparams(f, "B109:BI109", :all, "Base", T))
+set_parameter!(m, :co2cycle, :E, read_params(f, "B109:BI109", T))
 
 # Load the rest of the external parameters
-p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
+p = dice2010_excel_parameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 set_parameter!(m, :co2cycle, :mat0, p[:mat0])
 set_parameter!(m, :co2cycle, :mat1, p[:mat1])
 set_parameter!(m, :co2cycle, :mu0, p[:mu0])
@@ -45,10 +44,10 @@ ML      = m[:co2cycle, :ML]
 MU      = m[:co2cycle, :MU]
 
 # Extract the true values
-True_MAT    = getparams(f, "B112:BI112", :all, "Base", T)
-True_MAT61  = getparams(f, "BJ112:BJ112", :single, "Base", 1)
-True_ML     = getparams(f, "B115:BI115", :all, "Base", T)
-True_MU     = getparams(f, "B114:BI114", :all, "Base", T)
+True_MAT    = read_params(f, "B112:BI112", T)
+True_MAT61  = read_params(f, "BJ112")
+True_ML     = read_params(f, "B115:BI115", T)
+True_MU     = read_params(f, "B114:BI114", T)
 
 # Test that the values are the same
 @test maximum(abs, MAT .- True_MAT) ≈ 0. atol = Precision

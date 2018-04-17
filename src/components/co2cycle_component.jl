@@ -23,28 +23,29 @@ using Mimi
     b33     = Parameter()               #Carbon cycle transition matrix deep ocean to deep oceans
 
     function run_timestep(p, v, d, t)
-        #Define function for MU
+        # Define functions for MU, ML, and MAT
         if t==1
             v.MU[t] = p.mu0
-        else
-            v.MU[t] = v.MAT[t-1] * p.b12 + v.MU[t-1] * p.b22 + v.ML[t-1] * p.b32
-        end
 
-        #Define function for ML
-        if t==1
             v.ML[t] = p.ml0
-        else
-            v.ML[t] = v.ML[t-1] * p.b33 + v.MU[t-1] * p.b23
-        end
 
-        #Define function for MAT
-        if t==1
             v.MAT[1] = p.mat0
             v.MAT[2] = p.mat1
-        elseif t < 60
-            v.MAT[t+1] = v.MAT[t] * p.b11 + v.MU[t] * p.b21 + p.E[t] * 10
-        elseif t==60
-            v.MAT61 = v.MAT[t] * p.b11 + v.MU[t] * p.b21 + p.E[t] * 10
+
+        else          
+            prior_mu = v.MU[t-1]
+            prior_ml = v.ML[t-1]
+
+            v.MU[t] = mu = v.MAT[t-1] * p.b12 + prior_mu * p.b22 + prior_ml * p.b32
+
+            v.ML[t] = prior_ml * p.b33 + prior_mu * p.b23
+
+            if t < 60
+                v.MAT[t+1] = v.MAT[t] * p.b11 + mu * p.b21 + p.E[t] * 10
+
+            elseif t == 60
+                v.MAT61 = v.MAT[t] * p.b11 + mu * p.b21 + p.E[t] * 10
+            end
         end
     end
 end

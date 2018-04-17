@@ -2,27 +2,26 @@ using Mimi
 using Base.Test
 using ExcelReaders
 
-include("../src/helpers.jl")
 include("../src/parameters.jl")
 include("../src/components/climatedynamics_component.jl")
 
 @testset "climatedynamics" begin
 
 Precision = 1.0e-11
-T = 60
+T = length(dice2010.model_years)
 f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-set_dimension!(m, :time, collect(2005:10:2595))
+set_dimension!(m, :time, dice2010.model_years)
 
 addcomponent(m, climatedynamics, :climatedynamics)
 
 # Set the parameters that would normally be internal connection from their Excel values
-set_parameter!(m, :climatedynamics, :FORC, getparams(f, "B122:BI122", :all, "Base", T))
+set_parameter!(m, :climatedynamics, :FORC, read_params(f, "B122:BI122", T))
 
 # Load the rest of the external parameters
-p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
+p = dice2010_excel_parameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 set_parameter!(m, :climatedynamics, :fco22x, p[:fco22x])
 set_parameter!(m, :climatedynamics, :t2xco2, p[:t2xco2])
 set_parameter!(m, :climatedynamics, :tatm0, p[:tatm0])
@@ -40,8 +39,8 @@ TATM    = m[:climatedynamics, :TATM]
 TOCEAN  = m[:climatedynamics, :TOCEAN]
 
 # Extract the true values
-True_TATM   = getparams(f, "B121:BI121", :all, "Base", T)
-True_TOCEAN = getparams(f, "B123:BI123", :all, "Base", T)
+True_TATM   = read_params(f, "B121:BI121", T)
+True_TOCEAN = read_params(f, "B123:BI123", T)
 
 # Test that the values are the same
 @test maximum(abs, TATM .- True_TATM) ≈ 0. atol = Precision

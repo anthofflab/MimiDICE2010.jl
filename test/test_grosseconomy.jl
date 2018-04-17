@@ -2,27 +2,26 @@ using Mimi
 using Base.Test
 using ExcelReaders
 
-include("../src/helpers.jl")
 include("../src/parameters.jl")
 include("../src/components/grosseconomy_component.jl")
 
 @testset "grosseconomy" begin
 
 Precision = 1.0e-11
-T = 60
+T = length(dice2010.model_years)
 f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-set_dimension!(m, :time, collect(2005:10:2595))
+set_dimension!(m, :time, dice2010.model_years)
 
 addcomponent(m, grosseconomy, :grosseconomy)
 
 # Set the parameters that would normally be internal connection from their Excel values
-set_parameter!(m, :grosseconomy, :I, getparams(f, "B101:BI101", :all, "Base", T))
+set_parameter!(m, :grosseconomy, :I, read_params(f, "B101:BI101", T))
 
 # Load the rest of the external parameters
-p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
+p = dice2010_excel_parameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 set_parameter!(m, :grosseconomy, :al, p[:al])
 set_parameter!(m, :grosseconomy, :l, p[:l])
 set_parameter!(m, :grosseconomy, :gama, p[:gama])
@@ -37,8 +36,8 @@ K       = m[:grosseconomy, :K]
 YGROSS  = m[:grosseconomy, :YGROSS]
 
 # Extract the true values
-True_K      = getparams(f, "B102:BI102", :all, "Base", T)
-True_YGROSS = getparams(f, "B92:BI92", :all, "Base", T)
+True_K      = read_params(f, "B102:BI102", T)
+True_YGROSS = read_params(f, "B92:BI92", T)
 
 # Test that the values are the same
 @test maximum(abs, K .- True_K) ≈ 0. atol = Precision

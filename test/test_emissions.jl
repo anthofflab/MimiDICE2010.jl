@@ -2,27 +2,26 @@ using Mimi
 using Base.Test
 using ExcelReaders
 
-include("../src/helpers.jl")
 include("../src/parameters.jl")
 include("../src/components/emissions_component.jl")
 
 @testset "emissions" begin
 
 Precision = 1.0e-11
-T = 60
+T = length(dice2010.model_years)
 f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-set_dimension!(m, :time, collect(2005:10:2595))
+set_dimension!(m, :time, dice2010.model_years)
 
 addcomponent(m, emissions, :emissions)
 
 # Set the parameters that would normally be internal connection from their Excel values
-set_parameter!(m, :emissions, :YGROSS, getparams(f, "B92:BI92", :all, "Base", T))
+set_parameter!(m, :emissions, :YGROSS, read_params(f, "B92:BI92", T))
 
 # Load the rest of the external parameters
-p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
+p = dice2010_excel_parameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 set_parameter!(m, :emissions, :sigma, p[:sigma])
 set_parameter!(m, :emissions, :MIU, p[:miubase])
 set_parameter!(m, :emissions, :etree, p[:etree])
@@ -36,9 +35,9 @@ E       = m[:emissions, :E]
 EIND    = m[:emissions, :EIND]
 
 # Extract the true values
-True_CCA    = getparams(f, "B117:BI117", :all, "Base", T)
-True_E      = getparams(f, "B109:BI109", :all, "Base", T)
-True_EIND   = getparams(f, "B110:BI110", :all, "Base", T)
+True_CCA    = read_params(f, "B117:BI117", T)
+True_E      = read_params(f, "B109:BI109", T)
+True_EIND   = read_params(f, "B110:BI110", T)
 
 # Test that the values are the same
 @test maximum(abs, CCA .- True_CCA) ≈ 0. atol = Precision

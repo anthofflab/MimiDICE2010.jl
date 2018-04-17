@@ -1,9 +1,8 @@
 module dice2010
 
 using Mimi
-using ExcelReaders
+import Mimi.read_params
 
-include("helpers.jl")
 include("parameters.jl")
 include("components/grosseconomy_component.jl")
 include("components/emissions_component.jl")
@@ -15,12 +14,10 @@ include("components/damages_component.jl")
 include("components/neteconomy_component.jl")
 include("components/welfare_component.jl")
 
-export getparams, DICE
-
-const global datafile = joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx")
+export read_params, DICE
 
 @defmodel DICE begin
-    p = getdice2010excelparameters(datafile)
+    p = dice2010_excel_parameters()
     
     DICE = Model()
     index[time] = 2005:10:2595
