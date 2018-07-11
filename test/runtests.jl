@@ -1,6 +1,7 @@
 using Base.Test
 using Mimi
 using ExcelReaders
+using DataFrames
 
 import Mimi.read_params
 
@@ -25,7 +26,7 @@ include("test_radiativeforcing.jl")
 include("test_sealevelrise.jl")
 include("test_welfare.jl") 
 
-end 
+end #dice2010-components testset
 
 
 #------------------------------------------------------------------------------
@@ -33,6 +34,8 @@ end
 #------------------------------------------------------------------------------
 
 @testset "dice2010-model" begin
+
+Mimi.reset_compdefs
 
 Precision = 1.0e-11
 T = 60
@@ -174,8 +177,50 @@ True_UTILITY    = read_params(f, "B130")
 @test maximum(abs, PERIODU .- True_PERIODU) ≈ 0. atol = Precision
 @test abs(UTILITY - True_UTILITY) ≈ 0. atol = Precision
 
-end
+end #dice-2010 testset
 
-end
+#------------------------------------------------------------------------------
+#   3. Run tests to make sure integration version (Mimi v0.5.0)
+#   values match Mimi 0.4.0 values
+#------------------------------------------------------------------------------
+
+@testset "dice2010-integration" begin
+
+Precision = 1.0e-11
+nullvalue = -999.999
+T = 60
+
+m = construct_dice()
+run(m)
+
+for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
+    
+    #load data for comparison
+    filepath = "../data/validation_data_v040/$c-$v.csv"        
+    results = m[c, v]
+
+    if typeof(results) <: Number
+        validation_results = readtable(filepath)[1,1]
+        
+    else
+        validation_results = convert(Array, readtable(filepath))
+
+        #match dimensions
+        if size(validation_results,1) == 1
+            validation_results = validation_results'
+        end
+
+        #remove NaNs
+        results[isnan.(results)] = nullvalue
+        validation_results[isnan.(validation_results)] = nullvalue
+        
+    end
+    @test results ≈ validation_results atol = Precision
+    
+end #for loop
+
+end #dice2010-integration testset
+
+end #mimi-dice-2010 testset
 
 nothing
