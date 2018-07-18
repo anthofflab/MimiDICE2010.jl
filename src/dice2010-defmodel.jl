@@ -1,7 +1,7 @@
 module dice2010
 
 using Mimi
-import Mimi.read_params
+import Mimi.@defmodel
 
 include("parameters.jl")
 include("components/grosseconomy_component.jl")
@@ -94,17 +94,17 @@ export read_params, DICE
     sealevelrise.gsic0          = p[:gsic0]
     sealevelrise.gis0           = p[:gis0]
     sealevelrise.ais0           = p[:ais0]
-    sealevelrise.therm_asyDICE  = p[:therm_asym]
-    sealevelrise.gsic_asyDICE   = p[:gsic_asym]
-    sealevelrise.gis_asyDICE    = p[:gis_asym]
-    sealevelrise.ais_asyDICE    = p[:ais_asym]
+    sealevelrise.therm_asym     = p[:therm_asym]
+    sealevelrise.gsic_asym      = p[:gsic_asym]
+    sealevelrise.gis_asym       = p[:gis_asym]
+    sealevelrise.ais_asym       = p[:ais_asym]
     sealevelrise.thermrate      = p[:thermrate]
     sealevelrise.gsicrate       = p[:gsicrate]
     sealevelrise.gisrate        = p[:gisrate]
     sealevelrise.aisrate        = p[:aisrate]
     sealevelrise.slrthreshold   = p[:slrthreshold]
 
-    climatedynamics.TATM => sealevelrise.TATDICE
+    climatedynamics.TATM => sealevelrise.TATM
 
 
     #DAMAGES COMPONENT
@@ -115,7 +115,7 @@ export read_params, DICE
     damages.b2  = p[:slrcoeffsq]
     damages.b3  = p[:slrexp]
 
-    climatedynamics.TATM    => damages.TATDICE
+    climatedynamics.TATM    => damages.TATM
     grosseconomy.YGROSS     => damages.YGROSS
     sealevelrise.TotSLR     => damages.TotSLR
 
