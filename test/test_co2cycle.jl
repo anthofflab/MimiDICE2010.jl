@@ -2,7 +2,6 @@ using Mimi
 using Base.Test
 using ExcelReaders
 
-include("../src/parameters.jl")
 include("../src/components/co2cycle_component.jl")
 
 @testset "co2cycle" begin

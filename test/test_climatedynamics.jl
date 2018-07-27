@@ -2,7 +2,6 @@ using Mimi
 using Base.Test
 using ExcelReaders
 
-include("../src/parameters.jl")
 include("../src/components/climatedynamics_component.jl")
 
 @testset "climatedynamics" begin

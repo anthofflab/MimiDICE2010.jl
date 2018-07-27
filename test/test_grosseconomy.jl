@@ -2,7 +2,6 @@ using Mimi
 using Base.Test
 using ExcelReaders
 
-include("../src/parameters.jl")
 include("../src/components/grosseconomy_component.jl")
 
 @testset "grosseconomy" begin
