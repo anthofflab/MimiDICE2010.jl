@@ -14,7 +14,7 @@ using Mimi
 
     function run_timestep(p, v, d, t)
         #Define function for K
-        if t==1
+        if is_first(t)
             v.K[t] = p.k0
         else
             v.K[t] = v.K[t-1] * (1 - p.dk) ^ 10  + 10 * p.I[t-1]

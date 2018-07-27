@@ -35,11 +35,11 @@ using Mimi
         v.I[t] = p.S[t] * v.Y[t]
 
         #Define function for C
-        if t==1
+        if is_first(t)
             v.C[t] = v.Y[t] - v.I[t] + 0.1
-        elseif t<60
+        elseif t.t < 60
             v.C[t] = v.Y[t] - v.I[t]
-        elseif t==60
+        elseif t.t == 60
             v.C[t] = v.C[t-1]
         end
 
@@ -47,7 +47,7 @@ using Mimi
         v.CPC[t] = 1000 * v.C[t] / p.l[t]
 
         #Define function for CPRICE
-        if t==26
+        if t.t == 26
             v.CPRICE[t] = v.CPRICE[t-1]
         else
             v.CPRICE[t] = p.pbacktime[t] * 1000 * p.MIU[t] ^ (p.expcost2 - 1)

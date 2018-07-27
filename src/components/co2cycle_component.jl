@@ -24,7 +24,7 @@ using Mimi
 
     function run_timestep(p, v, d, t)
         # Define functions for MU, ML, and MAT
-        if t==1
+        if is_first(t)
             v.MU[t] = p.mu0
 
             v.ML[t] = p.ml0
@@ -40,10 +40,10 @@ using Mimi
 
             v.ML[t] = prior_ml * p.b33 + prior_mu * p.b23
 
-            if t < 60
+            if t.t < 60
                 v.MAT[t+1] = v.MAT[t] * p.b11 + mu * p.b21 + p.E[t] * 10
 
-            elseif t == 60
+            elseif t.t == 60
                 v.MAT61 = v.MAT[t] * p.b11 + mu * p.b21 + p.E[t] * 10
             end
         end

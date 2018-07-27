@@ -3,8 +3,6 @@ using Mimi
 using ExcelReaders
 using DataFrames
 
-import Mimi.read_params
-
 include("../src/dice2010.jl")
 using dice2010
 
@@ -17,12 +15,12 @@ using dice2010
 @testset "dice2010-components" begin
 
 include("test_climatedynamics.jl")
-include("test_co2cycle.jl")
+include("test_co2cycle.jl") #stack overflow!
 include("test_damages.jl")
 include("test_emissions.jl")
 include("test_grosseconomy.jl")
 include("test_neteconomy.jl")
-include("test_radiativeforcing.jl")
+include("test_radiativeforcing.jl") #stack overflow!
 include("test_sealevelrise.jl")
 include("test_welfare.jl") 
 
@@ -196,7 +194,7 @@ run(m)
 for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
     
     #load data for comparison
-    filepath = "../data/validation_data_v040/$c-$v.csv"        
+    filepath = joinpath(@__DIR__, "../data/validation_data_v040/$c-$v.csv")        
     results = m[c, v]
 
     if typeof(results) <: Number

@@ -11,9 +11,9 @@ using Mimi
 
     function run_timestep(p, v, d, t)
         #Define function for FORC
-        if t != 60
+        if t.t != 60
             v.FORC[t] = p.fco22x * (log((((p.MAT[t] + p.MAT[t+1]) / 2) + 0.000001)/596.4)/log(2)) + p.forcoth[t]
-        elseif t==60
+        elseif t.t == 60
             # need to use MAT61, calculated one step further 
             v.FORC[t] = p.fco22x * (log((((p.MAT[t] + p.MAT61) / 2) + 0.000001)/596.4)/log(2)) + p.forcoth[t]
         end
