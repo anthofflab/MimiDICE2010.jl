@@ -150,7 +150,6 @@ function construct_dice(params=nothing)
 
     connect_param!(m, :welfare, :CPC, :neteconomy, :CPC, offset=0)
 
-    add_connector_comps(m)
     return m
 end
 
