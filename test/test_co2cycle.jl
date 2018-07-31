@@ -14,24 +14,24 @@ m = Model()
 
 set_dimension!(m, :time, dice2010.model_years)
 
-addcomponent(m, co2cycle, :co2cycle)
+add_comp!(m, co2cycle, :co2cycle)
 
 # Set the parameters that would normally be internal connection from their Excel values
-set_parameter!(m, :co2cycle, :E, read_params(f, "B109:BI109", T))
+set_param!(m, :co2cycle, :E, read_params(f, "B109:BI109", T))
 
 # Load the rest of the external parameters
 p = dice2010_excel_parameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-set_parameter!(m, :co2cycle, :mat0, p[:mat0])
-set_parameter!(m, :co2cycle, :mat1, p[:mat1])
-set_parameter!(m, :co2cycle, :mu0, p[:mu0])
-set_parameter!(m, :co2cycle, :ml0, p[:ml0])
-set_parameter!(m, :co2cycle, :b12, p[:b12])
-set_parameter!(m, :co2cycle, :b23, p[:b23])
-set_parameter!(m, :co2cycle, :b11, p[:b11])
-set_parameter!(m, :co2cycle, :b21, p[:b21])
-set_parameter!(m, :co2cycle, :b22, p[:b22])
-set_parameter!(m, :co2cycle, :b32, p[:b32])
-set_parameter!(m, :co2cycle, :b33, p[:b33])
+set_param!(m, :co2cycle, :mat0, p[:mat0])
+set_param!(m, :co2cycle, :mat1, p[:mat1])
+set_param!(m, :co2cycle, :mu0, p[:mu0])
+set_param!(m, :co2cycle, :ml0, p[:ml0])
+set_param!(m, :co2cycle, :b12, p[:b12])
+set_param!(m, :co2cycle, :b23, p[:b23])
+set_param!(m, :co2cycle, :b11, p[:b11])
+set_param!(m, :co2cycle, :b21, p[:b21])
+set_param!(m, :co2cycle, :b22, p[:b22])
+set_param!(m, :co2cycle, :b32, p[:b32])
+set_param!(m, :co2cycle, :b33, p[:b33])
 
 # Run the one-component model
 run(m)

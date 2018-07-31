@@ -14,18 +14,18 @@ m = Model()
 
 set_dimension!(m, :time, dice2010.model_years)
 
-addcomponent(m, grosseconomy, :grosseconomy)
+add_comp!(m, grosseconomy, :grosseconomy)
 
 # Set the parameters that would normally be internal connection from their Excel values
-set_parameter!(m, :grosseconomy, :I, read_params(f, "B101:BI101", T))
+set_param!(m, :grosseconomy, :I, read_params(f, "B101:BI101", T))
 
 # Load the rest of the external parameters
 p = dice2010_excel_parameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-set_parameter!(m, :grosseconomy, :al, p[:al])
-set_parameter!(m, :grosseconomy, :l, p[:l])
-set_parameter!(m, :grosseconomy, :gama, p[:gama])
-set_parameter!(m, :grosseconomy, :dk, p[:dk])
-set_parameter!(m, :grosseconomy, :k0, p[:k0])
+set_param!(m, :grosseconomy, :al, p[:al])
+set_param!(m, :grosseconomy, :l, p[:l])
+set_param!(m, :grosseconomy, :gama, p[:gama])
+set_param!(m, :grosseconomy, :dk, p[:dk])
+set_param!(m, :grosseconomy, :k0, p[:k0])
 
 # Run the one-component model
 run(m)

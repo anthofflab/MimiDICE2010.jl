@@ -14,21 +14,21 @@ m = Model()
 
 set_dimension!(m, :time, dice2010.model_years)
 
-addcomponent(m, damages, :damages)
+add_comp!(m, damages, :damages)
 
 # Set the parameters that would normally be internal connection from their Excel values
-set_parameter!(m, :damages, :TATM, read_params(f, "B121:BI121", T))
-set_parameter!(m, :damages, :YGROSS, read_params(f, "B92:BI92", T))
-set_parameter!(m, :damages, :TotSLR, read_params(f, "B182:BI182", T))
+set_param!(m, :damages, :TATM, read_params(f, "B121:BI121", T))
+set_param!(m, :damages, :YGROSS, read_params(f, "B92:BI92", T))
+set_param!(m, :damages, :TotSLR, read_params(f, "B182:BI182", T))
 
 # Load the rest of the external parameters
 p = dice2010_excel_parameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-set_parameter!(m, :damages, :a1, p[:a1])
-set_parameter!(m, :damages, :a2, p[:a2])
-set_parameter!(m, :damages, :a3, p[:a3])
-set_parameter!(m, :damages, :b1, p[:slrcoeff])
-set_parameter!(m, :damages, :b2, p[:slrcoeffsq])
-set_parameter!(m, :damages, :b3, p[:slrexp])
+set_param!(m, :damages, :a1, p[:a1])
+set_param!(m, :damages, :a2, p[:a2])
+set_param!(m, :damages, :a3, p[:a3])
+set_param!(m, :damages, :b1, p[:slrcoeff])
+set_param!(m, :damages, :b2, p[:slrcoeffsq])
+set_param!(m, :damages, :b3, p[:slrexp])
 
 # Run the one-component model
 run(m)

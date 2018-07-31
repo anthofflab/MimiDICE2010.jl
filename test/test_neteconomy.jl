@@ -14,21 +14,21 @@ m = Model()
 
 set_dimension!(m, :time, dice2010.model_years)
 
-addcomponent(m, neteconomy, :neteconomy)
+add_comp!(m, neteconomy, :neteconomy)
 
 # Set the parameters that would normally be internal connection from their Excel values
-set_parameter!(m, :neteconomy, :YGROSS, read_params(f, "B92:BI92", T))
-set_parameter!(m, :neteconomy, :DAMFRAC, read_params(f, "B93:BI93", T))
+set_param!(m, :neteconomy, :YGROSS, read_params(f, "B92:BI92", T))
+set_param!(m, :neteconomy, :DAMFRAC, read_params(f, "B93:BI93", T))
 
 # Load the rest of the external parameters
 p = dice2010_excel_parameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-set_parameter!(m, :neteconomy, :cost1, p[:cost1])
-set_parameter!(m, :neteconomy, :MIU, p[:miubase])
-set_parameter!(m, :neteconomy, :expcost2, p[:expcost2])
-set_parameter!(m, :neteconomy, :partfract, p[:partfract])
-set_parameter!(m, :neteconomy, :pbacktime, p[:pbacktime])
-set_parameter!(m, :neteconomy, :S, p[:savebase])
-set_parameter!(m, :neteconomy, :l, p[:l])
+set_param!(m, :neteconomy, :cost1, p[:cost1])
+set_param!(m, :neteconomy, :MIU, p[:miubase])
+set_param!(m, :neteconomy, :expcost2, p[:expcost2])
+set_param!(m, :neteconomy, :partfract, p[:partfract])
+set_param!(m, :neteconomy, :pbacktime, p[:pbacktime])
+set_param!(m, :neteconomy, :S, p[:savebase])
+set_param!(m, :neteconomy, :l, p[:l])
 
 # Run the one-component model
 run(m)

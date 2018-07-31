@@ -14,26 +14,26 @@ m = Model()
 
 set_dimension!(m, :time, dice2010.model_years)
 
-addcomponent(m, sealevelrise, :sealevelrise)
+add_comp!(m, sealevelrise, :sealevelrise)
 
 # Set the parameters that would normally be internal connection from their Excel values
-set_parameter!(m, :sealevelrise, :TATM, read_params(f, "B121:BI121", T))
+set_param!(m, :sealevelrise, :TATM, read_params(f, "B121:BI121", T))
 
 # Load the rest of the external parameters
 p = dice2010_excel_parameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-set_parameter!(m, :sealevelrise, :therm0, p[:therm0])
-set_parameter!(m, :sealevelrise, :gsic0, p[:gsic0])
-set_parameter!(m, :sealevelrise, :gis0, p[:gis0])
-set_parameter!(m, :sealevelrise, :ais0, p[:ais0])
-set_parameter!(m, :sealevelrise, :therm_asym, p[:therm_asym])
-set_parameter!(m, :sealevelrise, :gsic_asym, p[:gsic_asym])
-set_parameter!(m, :sealevelrise, :gis_asym, p[:gis_asym])
-set_parameter!(m, :sealevelrise, :ais_asym, p[:ais_asym])
-set_parameter!(m, :sealevelrise, :thermrate, p[:thermrate])
-set_parameter!(m, :sealevelrise, :gsicrate, p[:gsicrate])
-set_parameter!(m, :sealevelrise, :gisrate, p[:gisrate])
-set_parameter!(m, :sealevelrise, :aisrate, p[:aisrate])
-set_parameter!(m, :sealevelrise, :slrthreshold, p[:slrthreshold])
+set_param!(m, :sealevelrise, :therm0, p[:therm0])
+set_param!(m, :sealevelrise, :gsic0, p[:gsic0])
+set_param!(m, :sealevelrise, :gis0, p[:gis0])
+set_param!(m, :sealevelrise, :ais0, p[:ais0])
+set_param!(m, :sealevelrise, :therm_asym, p[:therm_asym])
+set_param!(m, :sealevelrise, :gsic_asym, p[:gsic_asym])
+set_param!(m, :sealevelrise, :gis_asym, p[:gis_asym])
+set_param!(m, :sealevelrise, :ais_asym, p[:ais_asym])
+set_param!(m, :sealevelrise, :thermrate, p[:thermrate])
+set_param!(m, :sealevelrise, :gsicrate, p[:gsicrate])
+set_param!(m, :sealevelrise, :gisrate, p[:gisrate])
+set_param!(m, :sealevelrise, :aisrate, p[:aisrate])
+set_param!(m, :sealevelrise, :slrthreshold, p[:slrthreshold])
 
 # Run the one-component model
 run(m)
