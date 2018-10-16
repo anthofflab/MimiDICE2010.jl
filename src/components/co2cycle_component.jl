@@ -32,13 +32,14 @@ using Mimi
             v.MAT[1] = p.mat0
             v.MAT[2] = p.mat1
 
-        else          
-            prior_mu = v.MU[t-1]
-            prior_ml = v.ML[t-1]
+        else      
+            #TODO: benchmark if using the local vars below would improve performance significantly
+            # prior_mu = v.MU[t-1]
+            # prior_ml = v.ML[t-1]
 
-            v.MU[t] = v.MAT[t-1] * p.b12 + prior_mu * p.b22 + prior_ml * p.b32
+            v.MU[t] = v.MAT[t-1] * p.b12 + v.MU[t-1] * p.b22 + v.ML[t-1] * p.b32
 
-            v.ML[t] = prior_ml * p.b33 + prior_mu * p.b23
+            v.ML[t] = v.ML[t-1] * p.b33 + v.MU[t-1] * p.b23
 
             #TODO: change to a non-t.t access when porting to 1.0
             if t.t < 60

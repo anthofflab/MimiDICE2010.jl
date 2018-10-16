@@ -8,7 +8,7 @@ include("../src/components/neteconomy_component.jl")
 
 Precision = 1.0e-11
 T = 60
-f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
+f = openxl(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
@@ -21,7 +21,7 @@ set_param!(m, :neteconomy, :YGROSS, read_params(f, "B92:BI92", T))
 set_param!(m, :neteconomy, :DAMFRAC, read_params(f, "B93:BI93", T))
 
 # Load the rest of the external parameters
-p = dice2010_excel_parameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
+p = dice2010_excel_parameters(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
 set_param!(m, :neteconomy, :cost1, p[:cost1])
 set_param!(m, :neteconomy, :MIU, p[:miubase])
 set_param!(m, :neteconomy, :expcost2, p[:expcost2])

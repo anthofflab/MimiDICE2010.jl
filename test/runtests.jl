@@ -36,7 +36,7 @@ end #dice2010-components testset
 
 Precision = 1.0e-11
 T = 60
-f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
+f = openxl(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = construct_dice()
 run(m)

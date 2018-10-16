@@ -8,7 +8,7 @@ include("../src/components/emissions_component.jl")
 
 Precision = 1.0e-11
 T = length(model_years)
-f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
+f = openxl(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
@@ -20,7 +20,7 @@ add_comp!(m, emissions, :emissions)
 set_param!(m, :emissions, :YGROSS, read_params(f, "B92:BI92", T))
 
 # Load the rest of the external parameters
-p = dice2010_excel_parameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
+p = dice2010_excel_parameters(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
 set_param!(m, :emissions, :sigma, p[:sigma])
 set_param!(m, :emissions, :MIU, p[:miubase])
 set_param!(m, :emissions, :etree, p[:etree])

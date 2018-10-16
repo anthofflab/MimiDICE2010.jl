@@ -8,7 +8,7 @@ include("../src/components/sealevelrise_component.jl")
 
 Precision = 1.0e-11
 T = length(model_years)
-f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
+f = openxl(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
@@ -20,7 +20,7 @@ add_comp!(m, sealevelrise, :sealevelrise)
 set_param!(m, :sealevelrise, :TATM, read_params(f, "B121:BI121", T))
 
 # Load the rest of the external parameters
-p = dice2010_excel_parameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
+p = dice2010_excel_parameters(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
 set_param!(m, :sealevelrise, :therm0, p[:therm0])
 set_param!(m, :sealevelrise, :gsic0, p[:gsic0])
 set_param!(m, :sealevelrise, :gis0, p[:gis0])

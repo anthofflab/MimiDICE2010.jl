@@ -23,16 +23,18 @@ using Mimi
             v.TATM[t] = p.tatm0
             v.TOCEAN[t] = p.tocean0
         else
-            prior_tatm = v.TATM[t-1]
-            prior_tocean = v.TOCEAN[t-1]
+
+            #TODO: benchmark if using the local vars below would improve performance significantly
+            # prior_tatm = v.TATM[t-1]
+            # prior_tocean = v.TOCEAN[t-1]
             #TODO: change to is_timestep(t, 2) when porting to 1.0
             if t.t == 2
                 v.TATM[t] = p.tatm1
             else
-                v.TATM[t] = prior_tatm + p.c1 * ((p.FORC[t] - (p.fco22x/p.t2xco2) * prior_tatm) - (p.c3 * (prior_tatm - prior_tocean)))
+                v.TATM[t] = v.TATM[t-1] + p.c1 * ((p.FORC[t] - (p.fco22x/p.t2xco2) * v.TATM[t-1]) - (p.c3 * (v.TATM[t-1] - v.TOCEAN[t-1])))
             end
 
-            v.TOCEAN[t] = prior_tocean + p.c4 * (prior_tatm - prior_tocean)
+            v.TOCEAN[t] = v.TOCEAN[t-1] + p.c4 * (v.TATM[t-1] - v.TOCEAN[t-1])
         end
     end
 end
