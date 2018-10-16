@@ -29,6 +29,8 @@ using Mimi
     slrthreshold = Parameter()  # Temperature threshold for AIS
 
     function run_timestep(p, v, d, t)
+        #TODO: several local variables could be used here if benchmarking shows that
+        # avoiding repeated function calls makes a big performance difference
         if is_first(t)
             v.ThermSLR[t] = p.therm0
             v.GSICSLR[t]  = p.gsic0 
