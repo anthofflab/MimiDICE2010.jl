@@ -18,11 +18,7 @@ include("components/welfare_component.jl")
 export getparams, construct_dice, dice2010_excel_parameters
 
 # Allow these to be accessed by, e.g., EPA DICE model
-model_years = 2005:10:2595
-
-#
-# N.B. See dice2010-defmodel.jl for the @defmodel version of the following
-#
+const model_years = 2005:10:2595
 
 function construct_dice(params=nothing)
     p = params == nothing ? dice2010_excel_parameters() : params
@@ -30,15 +26,15 @@ function construct_dice(params=nothing)
     m = Model()
     set_dimension!(m, :time, model_years)
 
-    add_comp!(m, grosseconomy, :grosseconomy)
-    add_comp!(m, emissions, :emissions)
-    add_comp!(m, co2cycle, :co2cycle)
-    add_comp!(m, radiativeforcing, :radiativeforcing)
-    add_comp!(m, climatedynamics, :climatedynamics)
-    add_comp!(m, sealevelrise, :sealevelrise)
-    add_comp!(m, damages, :damages)
-    add_comp!(m, neteconomy, :neteconomy)
-    add_comp!(m, welfare, :welfare)
+    add_comp!(m, grosseconomy)
+    add_comp!(m, emissions)
+    add_comp!(m, co2cycle)
+    add_comp!(m, radiativeforcing)
+    add_comp!(m, climatedynamics)
+    add_comp!(m, sealevelrise)
+    add_comp!(m, damages)
+    add_comp!(m, neteconomy)
+    add_comp!(m, welfare)
 
     #GROSS ECONOMY COMPONENT
     set_param!(m, :grosseconomy, :al, p[:al])
@@ -56,7 +52,7 @@ function construct_dice(params=nothing)
     set_param!(m, :emissions, :MIU, p[:miubase])
     set_param!(m, :emissions, :etree, p[:etree]) 
 
-    connect_param!(m, :emissions, :YGROSS, :grosseconomy, :YGROSS, offset=0)
+    connect_param!(m, :emissions, :YGROSS, :grosseconomy, :YGROSS)
 
 
     #CO2 CYCLE COMPONENT
@@ -72,15 +68,15 @@ function construct_dice(params=nothing)
     set_param!(m, :co2cycle, :b32, p[:b32])
     set_param!(m, :co2cycle, :b33, p[:b33])
 
-    connect_param!(m, :co2cycle, :E, :emissions, :E, offset=0)
+    connect_param!(m, :co2cycle, :E, :emissions, :E)
 
 
     #RADIATIVE FORCING COMPONENT
     set_param!(m, :radiativeforcing, :forcoth, p[:forcoth])
     set_param!(m, :radiativeforcing, :fco22x, p[:fco22x])
 
-    connect_param!(m, :radiativeforcing, :MAT, :co2cycle, :MAT, offset=0)
-    connect_param!(m, :radiativeforcing, :MAT61, :co2cycle, :MAT61, offset=0)
+    connect_param!(m, :radiativeforcing, :MAT, :co2cycle, :MAT)
+    connect_param!(m, :radiativeforcing, :MAT61, :co2cycle, :MAT61)
 
 
     #CLIMATE DYNAMICS COMPONENT
@@ -93,7 +89,7 @@ function construct_dice(params=nothing)
     set_param!(m, :climatedynamics, :c3, p[:c3])
     set_param!(m, :climatedynamics, :c4, p[:c4])
 
-    connect_param!(m, :climatedynamics, :FORC, :radiativeforcing, :FORC, offset=0)
+    connect_param!(m, :climatedynamics, :FORC, :radiativeforcing, :FORC)
 
 
     # SEA LEVEL RISE COMPONENT
@@ -111,7 +107,7 @@ function construct_dice(params=nothing)
     set_param!(m, :sealevelrise, :aisrate, p[:aisrate])
     set_param!(m, :sealevelrise, :slrthreshold, p[:slrthreshold])
 
-    connect_param!(m, :sealevelrise, :TATM, :climatedynamics, :TATM, offset=0)
+    connect_param!(m, :sealevelrise, :TATM, :climatedynamics, :TATM)
 
 
     #DAMAGES COMPONENT
@@ -136,9 +132,9 @@ function construct_dice(params=nothing)
     set_param!(m, :neteconomy, :S, p[:savebase])
     set_param!(m, :neteconomy, :l, p[:l])
 
-    connect_param!(m, :neteconomy, :YGROSS, :grosseconomy, :YGROSS, offset=0)
+    connect_param!(m, :neteconomy, :YGROSS, :grosseconomy, :YGROSS)
     #connect_param!(m, :neteconomy, :DAMAGES, :damages, :DAMAGES)
-    connect_param!(m, :neteconomy, :DAMFRAC, :damages, :DAMFRAC, offset=0)
+    connect_param!(m, :neteconomy, :DAMFRAC, :damages, :DAMFRAC)
 
 
     #WELFARE COMPONENT
@@ -148,7 +144,7 @@ function construct_dice(params=nothing)
     set_param!(m, :welfare, :scale1, p[:scale1])
     set_param!(m, :welfare, :scale2, p[:scale2])
 
-    connect_param!(m, :welfare, :CPC, :neteconomy, :CPC, offset=0)
+    connect_param!(m, :welfare, :CPC, :neteconomy, :CPC)
 
     return m
 end

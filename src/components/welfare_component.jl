@@ -21,6 +21,7 @@ using Mimi
         v.CEMUTOTPER[t] = v.PERIODU[t] * p.l[t] * p.rr[t]
 
         #Define function for UTILITY
+        #TODO: change to a !is_timestep(t, 40) when porting to 1.0
         if t.t == 40
             v.UTILITY = 10 * p.scale1 * sum([v.CEMUTOTPER[i] for i in 1:40]) + p.scale2
         end

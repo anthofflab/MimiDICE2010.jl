@@ -36,15 +36,17 @@ using Mimi
             prior_mu = v.MU[t-1]
             prior_ml = v.ML[t-1]
 
-            v.MU[t] = mu = v.MAT[t-1] * p.b12 + prior_mu * p.b22 + prior_ml * p.b32
+            v.MU[t] = v.MAT[t-1] * p.b12 + prior_mu * p.b22 + prior_ml * p.b32
 
             v.ML[t] = prior_ml * p.b33 + prior_mu * p.b23
 
+            #TODO: change to a non-t.t access when porting to 1.0
             if t.t < 60
-                v.MAT[t+1] = v.MAT[t] * p.b11 + mu * p.b21 + p.E[t] * 10
-
+                v.MAT[t+1] = v.MAT[t] * p.b11 + v.MU[t] * p.b21 + p.E[t] * 10
+            
+            #TODO: change to is_timestep(t, 60) when porting to 1.0
             elseif t.t == 60
-                v.MAT61 = v.MAT[t] * p.b11 + mu * p.b21 + p.E[t] * 10
+                v.MAT61 = v.MAT[t] * p.b11 + v.MU[t] * p.b21 + p.E[t] * 10
             end
         end
     end

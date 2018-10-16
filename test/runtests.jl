@@ -35,8 +35,6 @@ end #dice2010-components testset
 
 @testset "dice2010-model" begin
 
-Mimi.reset_compdefs
-
 Precision = 1.0e-11
 T = 60
 f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
