@@ -1,5 +1,4 @@
 include("dice2010.jl")
-using dice2010
 
 function getmarginal_dice_models(;emissionyear=2010)
     mm = MarginalModel(DICE)

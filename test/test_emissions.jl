@@ -7,12 +7,12 @@ include("../src/components/emissions_component.jl")
 @testset "emissions" begin
 
 Precision = 1.0e-11
-T = length(dice2010.model_years)
+T = length(model_years)
 f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-set_dimension!(m, :time, dice2010.model_years)
+set_dimension!(m, :time, model_years)
 
 add_comp!(m, emissions, :emissions)
 

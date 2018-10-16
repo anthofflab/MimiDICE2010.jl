@@ -1,5 +1,3 @@
-module dice2010
-
 using Mimi
 using ExcelReaders
 
@@ -148,5 +146,3 @@ function construct_dice(params=nothing)
 
     return m
 end
-
-end #module
