@@ -1,4 +1,5 @@
 include("dice2010.jl")
+using Dice2010
 
 function getmarginal_dice_models(;emissionyear=2010)
 

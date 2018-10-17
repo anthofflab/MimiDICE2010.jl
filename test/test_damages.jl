@@ -7,12 +7,12 @@ include("../src/components/damages_component.jl")
 @testset "damages" begin
 
 Precision = 1.0e-11
-T = length(model_years)
+T = length(Dice2010.model_years)
 f = openxl(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-set_dimension!(m, :time, model_years)
+set_dimension!(m, :time, Dice2010.model_years)
 
 add_comp!(m, damages, :damages)
 
