@@ -1,6 +1,6 @@
 using ExcelReaders
 
-const global datafile = joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx")
+const datafile = joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx")
 
 """
     read_params(f, range::String, count::Int, sheet::String="Base")
