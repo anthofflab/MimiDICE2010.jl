@@ -1,6 +1,10 @@
 include("dice2010.jl")
 
 function getmarginal_dice_models(;emissionyear=2010)
+
+    DICE = construct_dice()
+    run(DICE)
+
     mm = MarginalModel(DICE)
     m1 = mm.base
     m2 = mm.marginal
