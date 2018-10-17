@@ -24,9 +24,6 @@ using Mimi
             v.TOCEAN[t] = p.tocean0
         else
 
-            #TODO: benchmark if using the local vars below would improve performance significantly
-            # prior_tatm = v.TATM[t-1]
-            # prior_tocean = v.TOCEAN[t-1]
             #TODO: change to is_timestep(t, 2) when porting to 1.0
             if t.t == 2
                 v.TATM[t] = p.tatm1

@@ -33,9 +33,6 @@ using Mimi
             v.MAT[2] = p.mat1
 
         else      
-            #TODO: benchmark if using the local vars below would improve performance significantly
-            # prior_mu = v.MU[t-1]
-            # prior_ml = v.ML[t-1]
 
             v.MU[t] = v.MAT[t-1] * p.b12 + v.MU[t-1] * p.b22 + v.ML[t-1] * p.b32
 
