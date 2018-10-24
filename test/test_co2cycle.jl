@@ -1,5 +1,5 @@
 using Mimi
-using Base.Test
+using Test
 using ExcelReaders
 
 include("../src/components/co2cycle_component.jl")

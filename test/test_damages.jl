@@ -1,5 +1,5 @@
 using Mimi
-using Base.Test
+using Test
 using ExcelReaders
 
 include("../src/components/damages_component.jl")
