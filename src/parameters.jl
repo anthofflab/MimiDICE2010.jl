@@ -23,7 +23,7 @@ Examples:
     value = read_params(f, "A27:A27", sheet="Parameters") # same as above
 """
 function read_params(f, range::String, T::Int=60; sheet::String="Base")
-    data = readxl(f, "$sheet\!$range")
+    data = readxl(f, "$(sheet)!$(range)")
     parts = split(range, ":")
     return (length(parts) == 1 || parts[1] == parts[2]) ? data : Vector{Float64}(data[1:T])
 end
