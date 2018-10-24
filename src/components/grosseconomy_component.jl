@@ -12,23 +12,15 @@ using Mimi
     gama    = Parameter()               #Capital elasticity in production function
     k0      = Parameter()               #Initial capital value (trill 2005 USD)
 
-end
+    function run_timestep(p, v, d, t)
+        #Define function for K
+        if is_first(t)
+            v.K[t] = p.k0
+        else
+            v.K[t] = v.K[t-1] * (1 - p.dk) ^ 10  + 10 * p.I[t-1]
+        end
 
-
-function run_timestep(state::grosseconomy, t::Int)
-    v = state.Variables
-    p = state.Parameters
-
-    #Define function for K
-    if t==1
-        v.K[t] = p.k0
-    else
-        v.K[t] = v.K[t-1] * (1 - p.dk) ^ 10  + 10 * p.I[t-1]
+        #Define function for YGROSS
+        v.YGROSS[t] = (p.al[t] * (p.l[t])^(1-p.gama)) * (v.K[t]^p.gama)
     end
-
-    #Define function for YGROSS
-    v.YGROSS[t] = (p.al[t] * (p.l[t])^(1-p.gama)) * (v.K[t]^p.gama)
-
 end
-
-

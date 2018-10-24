@@ -14,14 +14,10 @@ using Mimi
     b1      = Parameter()               # Coefficient on SLR
     b2      = Parameter()               # Coefficient on quadratic SLR term
     b3      = Parameter()               # SLR exponent
-end
 
+    function run_timestep(p, v, d, t)
+        #Define function for DAMFRAC
+        v.DAMFRAC[t] = p.a1 * p.TATM[t] + p.a2 * p.TATM[t] ^ p.a3 + p.b1 * p.TotSLR[t] + p.b2 * p.TotSLR[t] ^ p.b3  
+    end
 
-function run_timestep(state::damages, t::Int)
-    v = state.Variables
-    p = state.Parameters
-
-    #Define function for DAMFRAC
-    v.DAMFRAC[t] = p.a1 * p.TATM[t] + p.a2 * p.TATM[t] ^ p.a3 + p.b1 * p.TotSLR[t] + p.b2 * p.TotSLR[t] ^ p.b3 
-    
 end

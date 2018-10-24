@@ -1,6 +1,10 @@
 using Base.Test
 using Mimi
 using ExcelReaders
+using DataFrames
+
+include("../src/dice2010.jl")
+using Dice2010
 
 @testset "mimi-dice-2010" begin
 
@@ -10,42 +14,41 @@ using ExcelReaders
 
 @testset "dice2010-components" begin
 
+include("../src/parameters.jl")
+
 include("test_climatedynamics.jl")
-include("test_co2cycle.jl")
+include("test_co2cycle.jl") 
 include("test_damages.jl")
 include("test_emissions.jl")
 include("test_grosseconomy.jl")
 include("test_neteconomy.jl")
-include("test_radiativeforcing.jl")
+include("test_radiativeforcing.jl") 
 include("test_sealevelrise.jl")
-include("test_welfare.jl")
+include("test_welfare.jl") 
 
-end 
+end #dice2010-components testset
 
 
 #------------------------------------------------------------------------------
 #   2. Run tests on the whole model
 #------------------------------------------------------------------------------
 
-include("../src/dice2010.jl")
-
 @testset "dice2010-model" begin
 
 Precision = 1.0e-11
-T=60
-f=openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
+T = 60
+f = openxl(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
 
-m = getdiceexcel();
+m = construct_dice()
 run(m)
-
 
 # Climate dynamics tests
 
 TATM    = m[:climatedynamics, :TATM]
 TOCEAN  = m[:climatedynamics, :TOCEAN]
 
-True_TATM   = getparams(f, "B121:BI121", :all, "Base", T)
-True_TOCEAN = getparams(f, "B123:BI123", :all, "Base", T)
+True_TATM   = read_params(f, "B121:BI121", T)
+True_TOCEAN = read_params(f, "B123:BI123", T)
 
 @test maximum(abs, TATM .- True_TATM) ≈ 0. atol = Precision
 @test maximum(abs, TOCEAN .- True_TOCEAN) ≈ 0. atol = Precision
@@ -58,10 +61,10 @@ MAT61   = m[:co2cycle, :MAT61]
 ML      = m[:co2cycle, :ML]
 MU      = m[:co2cycle, :MU]
 
-True_MAT    = getparams(f, "B112:BI112", :all, "Base", T)
-True_MAT61  = getparams(f, "BJ112:BJ112", :single, "Base", 1)
-True_ML     = getparams(f, "B115:BI115", :all, "Base", T)
-True_MU     = getparams(f, "B114:BI114", :all, "Base", T)
+True_MAT    = read_params(f, "B112:BI112", T)
+True_MAT61  = read_params(f, "BJ112")
+True_ML     = read_params(f, "B115:BI115", T)
+True_MU     = read_params(f, "B114:BI114", T)
 
 @test maximum(abs, MAT .- True_MAT) ≈ 0. atol = Precision
 @test abs(MAT61 - True_MAT61) ≈ 0. atol = Precision
@@ -72,7 +75,7 @@ True_MU     = getparams(f, "B114:BI114", :all, "Base", T)
 # Damages test
 
 DAMFRAC = m[:damages, :DAMFRAC]
-True_DAMFRAC    = getparams(f, "B93:BI93", :all, "Base", T)
+True_DAMFRAC    = read_params(f, "B93:BI93", T)
 @test maximum(abs, DAMFRAC .- True_DAMFRAC) ≈ 0. atol = Precision
 
 
@@ -82,9 +85,9 @@ CCA     = m[:emissions, :CCA]
 E       = m[:emissions, :E]
 EIND    = m[:emissions, :EIND]
 
-True_CCA    = getparams(f, "B117:BI117", :all, "Base", T)
-True_E      = getparams(f, "B109:BI109", :all, "Base", T)
-True_EIND   = getparams(f, "B110:BI110", :all, "Base", T)
+True_CCA    = read_params(f, "B117:BI117", T)
+True_E      = read_params(f, "B109:BI109", T)
+True_EIND   = read_params(f, "B110:BI110", T)
 
 @test maximum(abs, CCA .- True_CCA) ≈ 0. atol = Precision
 @test maximum(abs, E .- True_E) ≈ 0. atol = Precision
@@ -96,8 +99,8 @@ True_EIND   = getparams(f, "B110:BI110", :all, "Base", T)
 K       = m[:grosseconomy, :K]
 YGROSS  = m[:grosseconomy, :YGROSS]
 
-True_K      = getparams(f, "B102:BI102", :all, "Base", T)
-True_YGROSS = getparams(f, "B92:BI92", :all, "Base", T)
+True_K      = read_params(f, "B102:BI102", T)
+True_YGROSS = read_params(f, "B92:BI92", T)
 
 @test maximum(abs, K .- True_K) ≈ 0. atol = 3.0e-11 # Relax the precision just for this variable
 @test maximum(abs, YGROSS .- True_YGROSS) ≈ 0. atol = Precision
@@ -113,13 +116,13 @@ I           = m[:neteconomy, :I]
 Y           = m[:neteconomy, :Y]
 YNET        = m[:neteconomy, :YNET]
 
-True_ABATECOST  = getparams(f, "B97:BI97", :all, "Base", T)
-True_C          = getparams(f, "B125:BI125", :all, "Base", T)
-True_CPC        = getparams(f, "B126:BI126", :all, "Base", T)
-True_CPRICE     = getparams(f, "B134:BI134", :all, "Base", T)
-True_I          = getparams(f, "B101:BI101", :all, "Base", T)
-True_Y          = getparams(f, "B98:BI98", :all, "Base", T)
-True_YNET       = getparams(f, "B95:BI95", :all, "Base", T)
+True_ABATECOST  = read_params(f, "B97:BI97", T)
+True_C          = read_params(f, "B125:BI125", T)
+True_CPC        = read_params(f, "B126:BI126", T)
+True_CPRICE     = read_params(f, "B134:BI134", T)
+True_I          = read_params(f, "B101:BI101", T)
+True_Y          = read_params(f, "B98:BI98", T)
+True_YNET       = read_params(f, "B95:BI95", T)
 
 @test maximum(abs, ABATECOST .- True_ABATECOST) ≈ 0. atol = Precision
 @test maximum(abs, C .- True_C) ≈ 0. atol = Precision
@@ -133,7 +136,7 @@ True_YNET       = getparams(f, "B95:BI95", :all, "Base", T)
 # Radiative Forcing test
 
 FORC = m[:radiativeforcing, :FORC]
-True_FORC    = getparams(f, "B122:BI122", :all, "Base", T)
+True_FORC    = read_params(f, "B122:BI122", T)
 @test maximum(abs, FORC .- True_FORC) ≈ 0. atol = Precision
 
 
@@ -145,11 +148,11 @@ GISSLR      = m[:sealevelrise, :GISSLR]
 AISSLR      = m[:sealevelrise, :AISSLR]
 TotSLR      = m[:sealevelrise, :TotSLR]
 
-True_ThermSLR    = getparams(f, "B178:BI178", :all, "Base", T)
-True_GSICSLR    = getparams(f, "B179:BI179", :all, "Base", T)
-True_GISSLR    = getparams(f, "B180:BI180", :all, "Base", T)
-True_AISSLR    = getparams(f, "B181:BI181", :all, "Base", T)
-True_TotSLR    = getparams(f, "B182:BI182", :all, "Base", T)
+True_ThermSLR    = read_params(f, "B178:BI178", T)
+True_GSICSLR    = read_params(f, "B179:BI179", T)
+True_GISSLR    = read_params(f, "B180:BI180", T)
+True_AISSLR    = read_params(f, "B181:BI181", T)
+True_TotSLR    = read_params(f, "B182:BI182", T)
 
 @test maximum(abs, ThermSLR .- True_ThermSLR) ≈ 0. atol = Precision
 @test maximum(abs, GSICSLR .- True_GSICSLR) ≈ 0. atol = Precision
@@ -164,16 +167,58 @@ CEMUTOTPER  = m[:welfare, :CEMUTOTPER]
 PERIODU     = m[:welfare, :PERIODU]
 UTILITY     = m[:welfare, :UTILITY]
 
-True_CEMUTOTPER    = getparams(f, "B129:BI129", :all, "Base", T)
-True_PERIODU    = getparams(f, "B128:BI128", :all, "Base", T)
-True_UTILITY    = getparams(f, "B130:B130", :single, "Base", 1)
+True_CEMUTOTPER    = read_params(f, "B129:BI129", T)
+True_PERIODU    = read_params(f, "B128:BI128", T)
+True_UTILITY    = read_params(f, "B130")
 
 @test maximum(abs, CEMUTOTPER .- True_CEMUTOTPER) ≈ 0. atol = Precision
 @test maximum(abs, PERIODU .- True_PERIODU) ≈ 0. atol = Precision
 @test abs(UTILITY - True_UTILITY) ≈ 0. atol = Precision
 
-end
+end #dice-2010 testset
 
-end
+#------------------------------------------------------------------------------
+#   3. Run tests to make sure integration version (Mimi v0.5.0)
+#   values match Mimi 0.4.0 values
+#------------------------------------------------------------------------------
+
+@testset "dice2010-integration" begin
+
+Precision = 1.0e-11
+nullvalue = -999.999
+T = 60
+
+m = construct_dice()
+run(m)
+
+for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
+    
+    #load data for comparison
+    filepath = joinpath(@__DIR__, "../data/validation_data_v040/$c-$v.csv")        
+    results = m[c, v]
+
+    if typeof(results) <: Number
+        validation_results = readtable(filepath)[1,1]
+        
+    else
+        validation_results = convert(Array, readtable(filepath))
+
+        #match dimensions
+        if size(validation_results,1) == 1
+            validation_results = validation_results'
+        end
+
+        #remove NaNs
+        results[isnan.(results)] = nullvalue
+        validation_results[isnan.(validation_results)] = nullvalue
+        
+    end
+    @test results ≈ validation_results atol = Precision
+    
+end #for loop
+
+end #dice2010-integration testset
+
+end #mimi-dice-2010 testset
 
 nothing

@@ -2,40 +2,38 @@ using Mimi
 using Base.Test
 using ExcelReaders
 
-include("../src/helpers.jl")
-include("../src/parameters.jl")
 include("../src/components/sealevelrise_component.jl")
 
 @testset "sealevelrise" begin
 
 Precision = 1.0e-11
-T = 60
-f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
+T = length(Dice2010.model_years)
+f = openxl(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-setindex(m, :time, collect(2005:10:2595))
+set_dimension!(m, :time, Dice2010.model_years)
 
-addcomponent(m, sealevelrise)
+add_comp!(m, sealevelrise, :sealevelrise)
 
 # Set the parameters that would normally be internal connection from their Excel values
-setparameter(m, :sealevelrise, :TATM, getparams(f, "B121:BI121", :all, "Base", T))
+set_param!(m, :sealevelrise, :TATM, read_params(f, "B121:BI121", T))
 
 # Load the rest of the external parameters
-p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-setparameter(m, :sealevelrise, :therm0, p[:therm0])
-setparameter(m, :sealevelrise, :gsic0, p[:gsic0])
-setparameter(m, :sealevelrise, :gis0, p[:gis0])
-setparameter(m, :sealevelrise, :ais0, p[:ais0])
-setparameter(m, :sealevelrise, :therm_asym, p[:therm_asym])
-setparameter(m, :sealevelrise, :gsic_asym, p[:gsic_asym])
-setparameter(m, :sealevelrise, :gis_asym, p[:gis_asym])
-setparameter(m, :sealevelrise, :ais_asym, p[:ais_asym])
-setparameter(m, :sealevelrise, :thermrate, p[:thermrate])
-setparameter(m, :sealevelrise, :gsicrate, p[:gsicrate])
-setparameter(m, :sealevelrise, :gisrate, p[:gisrate])
-setparameter(m, :sealevelrise, :aisrate, p[:aisrate])
-setparameter(m, :sealevelrise, :slrthreshold, p[:slrthreshold])
+p = dice2010_excel_parameters(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
+set_param!(m, :sealevelrise, :therm0, p[:therm0])
+set_param!(m, :sealevelrise, :gsic0, p[:gsic0])
+set_param!(m, :sealevelrise, :gis0, p[:gis0])
+set_param!(m, :sealevelrise, :ais0, p[:ais0])
+set_param!(m, :sealevelrise, :therm_asym, p[:therm_asym])
+set_param!(m, :sealevelrise, :gsic_asym, p[:gsic_asym])
+set_param!(m, :sealevelrise, :gis_asym, p[:gis_asym])
+set_param!(m, :sealevelrise, :ais_asym, p[:ais_asym])
+set_param!(m, :sealevelrise, :thermrate, p[:thermrate])
+set_param!(m, :sealevelrise, :gsicrate, p[:gsicrate])
+set_param!(m, :sealevelrise, :gisrate, p[:gisrate])
+set_param!(m, :sealevelrise, :aisrate, p[:aisrate])
+set_param!(m, :sealevelrise, :slrthreshold, p[:slrthreshold])
 
 # Run the one-component model
 run(m)
@@ -48,11 +46,11 @@ AISSLR      = m[:sealevelrise, :AISSLR]
 TotSLR      = m[:sealevelrise, :TotSLR]
 
 # Extract the true values
-True_ThermSLR    = getparams(f, "B178:BI178", :all, "Base", T)
-True_GSICSLR    = getparams(f, "B179:BI179", :all, "Base", T)
-True_GISSLR    = getparams(f, "B180:BI180", :all, "Base", T)
-True_AISSLR    = getparams(f, "B181:BI181", :all, "Base", T)
-True_TotSLR    = getparams(f, "B182:BI182", :all, "Base", T)
+True_ThermSLR    = read_params(f, "B178:BI178", T)
+True_GSICSLR    = read_params(f, "B179:BI179", T)
+True_GISSLR    = read_params(f, "B180:BI180", T)
+True_AISSLR    = read_params(f, "B181:BI181", T)
+True_TotSLR    = read_params(f, "B182:BI182", T)
 
 # Test that the values are the same
 @test maximum(abs, ThermSLR .- True_ThermSLR) ≈ 0. atol = Precision

@@ -22,35 +22,30 @@ using Mimi
     b32     = Parameter()               #Carbon cycle transition matrix deep ocean to shallow ocean
     b33     = Parameter()               #Carbon cycle transition matrix deep ocean to deep oceans
 
- end
+    function run_timestep(p, v, d, t)
+        # Define functions for MU, ML, and MAT
+        if is_first(t)
+            v.MU[t] = p.mu0
 
+            v.ML[t] = p.ml0
 
-function run_timestep(state::co2cycle, t::Int)
-    v = state.Variables
-    p = state.Parameters
+            v.MAT[1] = p.mat0
+            v.MAT[2] = p.mat1
 
-    #Define function for MU
-    if t==1
-        v.MU[t] = p.mu0
-    else
-        v.MU[t] = v.MAT[t-1] * p.b12 + v.MU[t-1] * p.b22 + v.ML[t-1] * p.b32
+        else      
+
+            v.MU[t] = v.MAT[t-1] * p.b12 + v.MU[t-1] * p.b22 + v.ML[t-1] * p.b32
+
+            v.ML[t] = v.ML[t-1] * p.b33 + v.MU[t-1] * p.b23
+
+            #TODO: change to a non-t.t access when porting to 1.0
+            if t.t < 60
+                v.MAT[t+1] = v.MAT[t] * p.b11 + v.MU[t] * p.b21 + p.E[t] * 10
+            
+            #TODO: change to is_timestep(t, 60) when porting to 1.0
+            elseif t.t == 60
+                v.MAT61 = v.MAT[t] * p.b11 + v.MU[t] * p.b21 + p.E[t] * 10
+            end
+        end
     end
-
-    #Define function for ML
-    if t==1
-        v.ML[t] = p.ml0
-    else
-        v.ML[t] = v.ML[t-1] * p.b33 + v.MU[t-1] * p.b23
-    end
-
-    #Define function for MAT
-    if t==1
-        v.MAT[1] = p.mat0
-        v.MAT[2] = p.mat1
-    elseif t < 60
-        v.MAT[t+1] = v.MAT[t] * p.b11 + v.MU[t] * p.b21 + p.E[t] * 10
-    elseif t==60
-        v.MAT61 = v.MAT[t] * p.b11 + v.MU[t] * p.b21 + p.E[t] * 10
-    end
-
 end

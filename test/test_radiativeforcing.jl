@@ -2,30 +2,28 @@ using Mimi
 using Base.Test
 using ExcelReaders
 
-include("../src/helpers.jl")
-include("../src/parameters.jl")
 include("../src/components/radiativeforcing_component.jl")
 
 @testset "radiativeforcing" begin
 
 Precision = 1.0e-11
-T = 60
-f = openxl(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
+T = length(Dice2010.model_years)
+f = openxl(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-setindex(m, :time, collect(2005:10:2595))
+set_dimension!(m, :time, Dice2010.model_years)
 
-addcomponent(m, radiativeforcing)
+add_comp!(m, radiativeforcing, :radiativeforcing)
 
 # Set the parameters that would normally be internal connection from their Excel values
-setparameter(m, :radiativeforcing, :MAT, getparams(f, "B112:BI112", :all, "Base", T))
-setparameter(m, :radiativeforcing, :MAT61, getparams(f, "BJ112:BJ112", :single, "Base", 1))
+set_param!(m, :radiativeforcing, :MAT, read_params(f, "B112:BI112", T))
+set_param!(m, :radiativeforcing, :MAT61, read_params(f, "BJ112"))
 
 # Load the rest of the external parameters
-p = getdice2010excelparameters(joinpath(dirname(@__FILE__), "..", "Data", "DICE2010_082710d.xlsx"))
-setparameter(m, :radiativeforcing, :forcoth, p[:forcoth])
-setparameter(m, :radiativeforcing, :fco22x, p[:fco22x])
+p = dice2010_excel_parameters(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
+set_param!(m, :radiativeforcing, :forcoth, p[:forcoth])
+set_param!(m, :radiativeforcing, :fco22x, p[:fco22x])
 
 # Run the one-component model
 run(m)
@@ -34,7 +32,7 @@ run(m)
 FORC = m[:radiativeforcing, :FORC]
 
 # Extract the true values
-True_FORC    = getparams(f, "B122:BI122", :all, "Base", T)
+True_FORC    = read_params(f, "B122:BI122", T)
 
 # Test that the values are the same
 @test maximum(abs, FORC .- True_FORC) ≈ 0. atol = Precision
