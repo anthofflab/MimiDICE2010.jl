@@ -4,7 +4,7 @@ using ExcelReaders
 using DataFrames
 
 include("../src/dice2010.jl")
-using Dice2010
+using .Dice2010
 
 @testset "mimi-dice-2010" begin
 
