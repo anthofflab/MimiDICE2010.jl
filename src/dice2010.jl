@@ -75,7 +75,7 @@ function construct_dice(params=nothing)
     set_param!(m, :radiativeforcing, :fco22x, p[:fco22x])
 
     connect_param!(m, :radiativeforcing, :MAT, :co2cycle, :MAT)
-    connect_param!(m, :radiativeforcing, :MAT61, :co2cycle, :MAT61)
+    connect_param!(m, :radiativeforcing, :MAT_final, :co2cycle, :MAT_final)
 
 
     #CLIMATE DYNAMICS COMPONENT

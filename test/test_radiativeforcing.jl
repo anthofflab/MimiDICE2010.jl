@@ -18,7 +18,7 @@ add_comp!(m, radiativeforcing, :radiativeforcing)
 
 # Set the parameters that would normally be internal connection from their Excel values
 set_param!(m, :radiativeforcing, :MAT, read_params(f, "B112:BI112", T))
-set_param!(m, :radiativeforcing, :MAT61, read_params(f, "BJ112"))
+set_param!(m, :radiativeforcing, :MAT_final, read_params(f, "BJ112"))
 
 # Load the rest of the external parameters
 p = dice2010_excel_parameters(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))

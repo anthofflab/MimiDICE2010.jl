@@ -57,17 +57,17 @@ True_TOCEAN = read_params(f, "B123:BI123", T)
 # CO2 Cycle tests
 
 MAT     = m[:co2cycle, :MAT]
-MAT61   = m[:co2cycle, :MAT61]
+MAT_final   = m[:co2cycle, :MAT_final]
 ML      = m[:co2cycle, :ML]
 MU      = m[:co2cycle, :MU]
 
 True_MAT    = read_params(f, "B112:BI112", T)
-True_MAT61  = read_params(f, "BJ112")
+True_MAT_final  = read_params(f, "BJ112")
 True_ML     = read_params(f, "B115:BI115", T)
 True_MU     = read_params(f, "B114:BI114", T)
 
 @test maximum(abs, MAT .- True_MAT) ≈ 0. atol = Precision
-@test abs(MAT61 - True_MAT61) ≈ 0. atol = Precision
+@test abs(MAT_final - True_MAT_final) ≈ 0. atol = Precision
 @test maximum(abs, ML .- True_ML) ≈ 0. atol = Precision
 @test maximum(abs, MU .- True_MU) ≈ 0. atol = Precision
 
