@@ -3,7 +3,7 @@ using Mimi
 
 @defcomp co2cycle begin
     MAT     = Variable(index=[time])    #Carbon concentration increase in atmosphere (GtC from 1750)
-    MAT61   = Variable()                #MAT calculation one timestep further than the model's index  
+    MAT_final   = Variable()                #MAT calculation one timestep further than the model's index  
     ML      = Variable(index=[time])    #Carbon concentration increase in lower oceans (GtC from 1750)
     MU      = Variable(index=[time])    #Carbon concentration increase in shallow oceans (GtC from 1750)
 
@@ -38,13 +38,11 @@ using Mimi
 
             v.ML[t] = v.ML[t-1] * p.b33 + v.MU[t-1] * p.b23
 
-            #TODO: change to a non-t.t access when porting to 1.0
-            if t.t < 60
+            if ! is_last(t)
                 v.MAT[t+1] = v.MAT[t] * p.b11 + v.MU[t] * p.b21 + p.E[t] * 10
             
-            #TODO: change to is_timestep(t, 60) when porting to 1.0
-            elseif t.t == 60
-                v.MAT61 = v.MAT[t] * p.b11 + v.MU[t] * p.b21 + p.E[t] * 10
+            else # last timestep
+                v.MAT_final = v.MAT[t] * p.b11 + v.MU[t] * p.b21 + p.E[t] * 10
             end
         end
     end
