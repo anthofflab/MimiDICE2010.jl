@@ -1,10 +1,11 @@
-using Base.Test
+using Test
 using Mimi
 using ExcelReaders
 using DataFrames
+using CSV
 
 include("../src/dice2010.jl")
-using Dice2010
+using .Dice2010
 
 @testset "mimi-dice-2010" begin
 
@@ -198,19 +199,20 @@ for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
     results = m[c, v]
 
     if typeof(results) <: Number
-        validation_results = readtable(filepath)[1,1]
+        validation_results = CSV.read(filepath)[1,1]
         
     else
-        validation_results = convert(Array, readtable(filepath))
+        validation_results = convert(Array, CSV.read(filepath))
 
+        #remove NaNs
+        results[ismissing.(results)] .= nullvalue
+        results[isnan.(results)] .= nullvalue
+        validation_results[isnan.(validation_results)] .= nullvalue
+        
         #match dimensions
         if size(validation_results,1) == 1
             validation_results = validation_results'
         end
-
-        #remove NaNs
-        results[isnan.(results)] = nullvalue
-        validation_results[isnan.(validation_results)] = nullvalue
         
     end
     @test results ≈ validation_results atol = Precision
