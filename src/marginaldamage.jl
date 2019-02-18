@@ -1,7 +1,7 @@
 include("dice2010.jl")
 using .Dice2010
 
-function getmarginal_dice_models(;emissionyear=2010)
+function getmarginal_dice_models(;emissionyear=2015)
 
     DICE = construct_dice()
     run(DICE)
@@ -10,9 +10,9 @@ function getmarginal_dice_models(;emissionyear=2010)
     m1 = mm.base
     m2 = mm.marginal
 
-    add_comp!(m2, adder, :marginalemission, before=:co2cycle)
+    add_comp!(m2, Mimi.adder, :marginalemission, before=:co2cycle)
 
-    time = dimension(m1, :time)
+    time = Mimi.dimension(m1, :time)
     addem = zeros(length(time))
     addem[time[emissionyear]] = 1.0
 
