@@ -1,4 +1,4 @@
-module Dice2010
+module MimiDICE2010
 
 using Mimi
 using ExcelReaders
@@ -49,7 +49,7 @@ function construct_dice(params=nothing)
     #EMISSIONS COMPONENT
     set_param!(m, :emissions, :sigma, p[:sigma])
     set_param!(m, :emissions, :MIU, p[:miubase])
-    set_param!(m, :emissions, :etree, p[:etree]) 
+    set_param!(m, :emissions, :etree, p[:etree])
 
     connect_param!(m, :emissions, :YGROSS, :grosseconomy, :YGROSS)
 
