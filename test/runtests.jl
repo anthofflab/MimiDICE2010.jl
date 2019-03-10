@@ -4,8 +4,7 @@ using ExcelReaders
 using DataFrames
 using CSV
 
-include("../src/dice2010.jl")
-using .Dice2010
+using MimiDICE2010: read_params, dice2010_excel_parameters
 
 @testset "mimi-dice-2010" begin
 
@@ -14,8 +13,6 @@ using .Dice2010
 #------------------------------------------------------------------------------
 
 @testset "dice2010-components" begin
-
-include("../src/parameters.jl")
 
 include("test_climatedynamics.jl")
 include("test_co2cycle.jl") 

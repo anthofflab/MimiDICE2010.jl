@@ -1,6 +1,3 @@
-using Mimi
-
-
 @defcomp welfare begin
     CEMUTOTPER      = Variable(index=[time])    #Period utility
     PERIODU         = Variable(index=[time])    #One period utility function

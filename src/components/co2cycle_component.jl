@@ -1,6 +1,3 @@
-using Mimi
-
-
 @defcomp co2cycle begin
     MAT     = Variable(index=[time])    #Carbon concentration increase in atmosphere (GtC from 1750)
     MAT_final   = Variable()                #MAT calculation one timestep further than the model's index  
