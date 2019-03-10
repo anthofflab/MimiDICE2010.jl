@@ -1,5 +1,6 @@
 using Test
 using Mimi
+using MimiDICE2010
 using ExcelReaders
 using DataFrames
 using CSV
