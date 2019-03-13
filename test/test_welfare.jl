@@ -1,7 +1,3 @@
-using Mimi
-using Test
-using ExcelReaders
-
 include("../src/components/welfare_component.jl")
 
 @testset "welfare" begin
@@ -12,7 +8,7 @@ f = openxl(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
-set_dimension!(m, :time, Dice2010.model_years)
+set_dimension!(m, :time, MimiDICE2010.model_years)
 
 add_comp!(m, welfare, :welfare)
 

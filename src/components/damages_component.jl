@@ -1,6 +1,3 @@
-using Mimi
-
-
 @defcomp damages begin
     DAMFRAC = Variable(index=[time])    #Damages (fraction of gross output)
 

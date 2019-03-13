@@ -1,5 +1,3 @@
-using ExcelReaders
-
 const datafile = joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx")
 
 """

@@ -1,6 +1,3 @@
-using Mimi
-
-
 @defcomp sealevelrise begin
 
     ThermSLR    = Variable(index=[time])    # Path of SLR from thermal expansion

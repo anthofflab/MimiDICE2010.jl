@@ -4,6 +4,7 @@ using Mimi
 using ExcelReaders
 
 include("parameters.jl")
+include("marginaldamage.jl")
 
 include("components/grosseconomy_component.jl")
 include("components/emissions_component.jl")
@@ -15,7 +16,7 @@ include("components/damages_component.jl")
 include("components/neteconomy_component.jl")
 include("components/welfare_component.jl")
 
-export getparams, construct_dice, dice2010_excel_parameters
+export construct_dice
 
 # Allow these to be accessed by, e.g., EPA DICE model
 const model_years = 2005:10:2595
