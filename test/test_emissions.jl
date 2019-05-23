@@ -4,7 +4,7 @@ include("../src/components/emissions_component.jl")
 
 Precision = 1.0e-11
 T = length(MimiDICE2010.model_years)
-f = openxl(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
+f = readxlsx(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
