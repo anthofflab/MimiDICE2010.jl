@@ -21,7 +21,7 @@ export construct_dice
 # Allow these to be accessed by, e.g., EPA DICE model
 const model_years = 2005:10:2595
 
-function construct_dice(params=nothing)
+function get_model(params=nothing)
     p = params == nothing ? dice2010_excel_parameters() : params
 
     m = Model()
@@ -148,5 +148,7 @@ function construct_dice(params=nothing)
 
     return m
 end
+
+construct_dice = get_model # still export the old version of the function name
 
 end #module
