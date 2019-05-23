@@ -1,7 +1,7 @@
 using Mimi
 using MimiDICE2010
 
-DICE = construct_dice()
+DICE = MimiDICE2010.get_model()
 run(DICE)
 
 explore(DICE)
