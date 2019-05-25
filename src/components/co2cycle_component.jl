@@ -4,7 +4,7 @@
     ML      = Variable(index=[time])    #Carbon concentration increase in lower oceans (GtC from 1750)
     MU      = Variable(index=[time])    #Carbon concentration increase in shallow oceans (GtC from 1750)
 
-    E       = Parameter(index=[time])   #Total CO2 emissions (GtCO2 per year)
+    E       = Parameter(index=[time])   #Total CO2 emissions (GtC per year)
     mat0    = Parameter()               #Initial Concentration in atmosphere 2000 (GtC)
     mat1    = Parameter()               #Concentration 2010 (GtC)
     ml0     = Parameter()               #Initial Concentration in lower strata (GtC)
