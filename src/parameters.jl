@@ -1,4 +1,4 @@
-const datafile = joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx")
+const datafile = joinpath(@__DIR__, "..", "data", "DICE2010_082710d.xlsx")
 
 """
     read_params(f, range::String, count::Int, sheet::String="Base")
@@ -8,13 +8,13 @@ Get parameters from DICE2010 excel sheet.
 `range` is a single cell or a range of cells in the excel sheet.
   Must be a cell reference of the form "A27" or a range "B56:B77".
 
-`count` is the length of the time dimension; ignored if range 
+`count` is the length of the time dimension; ignored if range
    refers to a single cell.
 
 `sheet` is the name of the worksheet in the Excel file to read from.
   Defaults to "Base".
 
-Examples:   
+Examples:
     values = read_params(f, "B15:BI15", 40)   # read only the first 40 values
 
     value = read_params(f, "A27", sheet="Parameters")
@@ -63,11 +63,11 @@ function dice2010_excel_parameters(filename=datafile; nsteps=nothing)
     p[:b23] = read_params(f, "B67") / 100 # Carbon cycle transition matrix shallow to deep ocean
 
     # Parameters for long-run consistency of carbon cycle
-    p[:b11] = read_params(f, "B62") / 100 # Carbon cycle transition matrix atmosphere to atmosphere 
-    p[:b21] = read_params(f, "B63") / 100 # Carbon cycle transition matrix biosphere/shallow oceans to atmosphere        
-    p[:b22] = read_params(f, "B65") / 100 # Carbon cycle transition matrix shallow ocean to shallow oceans              
-    p[:b32] = read_params(f, "B66") / 100 # Carbon cycle transition matrix deep ocean to shallow ocean                    
-    p[:b33] = read_params(f, "B68") / 100 # Carbon cycle transition matrix deep ocean to deep oceans                  
+    p[:b11] = read_params(f, "B62") / 100 # Carbon cycle transition matrix atmosphere to atmosphere
+    p[:b21] = read_params(f, "B63") / 100 # Carbon cycle transition matrix biosphere/shallow oceans to atmosphere
+    p[:b22] = read_params(f, "B65") / 100 # Carbon cycle transition matrix shallow ocean to shallow oceans
+    p[:b32] = read_params(f, "B66") / 100 # Carbon cycle transition matrix deep ocean to shallow ocean
+    p[:b33] = read_params(f, "B68") / 100 # Carbon cycle transition matrix deep ocean to deep oceans
 
     # Climate model parameters
     p[:t2xco2]  = read_params(f, "B76")   # Equilibrium temp impact (oC per doubling CO2)
@@ -83,11 +83,11 @@ function dice2010_excel_parameters(filename=datafile; nsteps=nothing)
 
     # Climate damage parameters
     p[:a1] = read_params(f, "B33")   # Damage coefficient
-    p[:a2] = read_params(f, "B34")   # Damage quadratic term 
-    p[:a3] = read_params(f, "B35")   # Damage exponent  
+    p[:a2] = read_params(f, "B34")   # Damage quadratic term
+    p[:a3] = read_params(f, "B35")   # Damage exponent
 
     # Abatement cost
-    p[:expcost2]    = read_params(f, "B44")               # Exponent of control cost function 
+    p[:expcost2]    = read_params(f, "B44")               # Exponent of control cost function
     p[:pbacktime]   = read_params(f, "B42:BI42", nsteps)       # backstop price
     # Adjusted cost for backstop (or: "Abatement cost function coefficient")
     p[:cost1]       = read_params(f, "B37:BI37", nsteps)
@@ -98,10 +98,10 @@ function dice2010_excel_parameters(filename=datafile; nsteps=nothing)
 
     # Exogenous forcing for other greenhouse gases
     p[:forcoth] = read_params(f, "B70:BI70", nsteps)
-    
+
     # Fraction of emissions in control regime
     p[:partfract] = read_params(f, "B82:BI82", nsteps)
-  
+
 
     # SLR Parameters
 
