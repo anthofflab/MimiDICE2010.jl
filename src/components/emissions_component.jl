@@ -1,7 +1,7 @@
 @defcomp emissions begin
     CCA     = Variable(index=[time])    #Cumulative indiustrial emissions
-    E       = Variable(index=[time])    #Total CO2 emissions (GtCO2 per year)
-    EIND    = Variable(index=[time])    #Industrial emissions (GtCO2 per year)
+    E       = Variable(index=[time])    #Total CO2 emissions (GtC per year)
+    EIND    = Variable(index=[time])    #Industrial emissions (GtC per year)
 
     etree   = Parameter(index=[time])   #Emissions from deforestation
     MIU     = Parameter(index=[time])   #Emission control rate GHGs
