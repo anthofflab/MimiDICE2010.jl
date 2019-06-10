@@ -19,7 +19,7 @@ include("components/welfare_component.jl")
 include("modules/SocioEconomics.jl")
 include("modules/Climate.jl")
 include("modules/Damages.jl")
-
+include("modules/top.jl")
 
 export construct_dice
 
