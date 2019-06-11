@@ -169,7 +169,22 @@ function get_model_composite(p)
 
     m = Model()
     set_dimension!(m, :time, model_years)
-    add_comp!(m, top, nameof(top))  # top component that holds the SocioEconomics, Climate, and Damages modules defined in src/modules/top.jl
+
+    # Option 1: use a "top" composite component whose definition contains the three modules and all of their internal connections
+    add_comp!(m, top, nameof(top))  # top component that holds the SocioEconomics, Climate, and Damages modules defined in src/modules/top.jl 
+
+    # Option 2: don't use "top"; just add the three composites to the model and make the internal connections here
+    add_comp!(m, SocioEconomics)
+    add_comp!(m, Climate)
+    add_comp!(m, Damages)
+    connect_param!(m, :Climate, :E, :SocioEconomics, :E)    # This option would have to allow making connections like this between exported pars/vars of the composites
+    connect_param!(m, :Damages, :TATM, :Climate, :TATM)
+    connect_param!(m, :Damages, :YGROSS, :SocioEconomics, :YGROSS)
+    connect_param!(m, :Damages, :TotSLR, :Climate, :TotSLR)
+    # connect_param!(m, :neteconomy, :YGROSS, :grosseconomy, :YGROSS)   # shouldn't have to do this one since neteconomy is in the Damages and we already connected YGROSS
+    connect_param!(m, :SocioEconomics, :I, :Damages, :I)
+
+    # Then either option requres setting the external parameters after:
 
     # Just need to set external parameters now (if we're allowed to have already set internal connections in the composite definitions)
     # QUESTION: could we just use set_leftover_params for all of the following?
