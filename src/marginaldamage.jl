@@ -1,14 +1,10 @@
 """
-compute_scc(m::Model=get_model(); year::Int = nothing, last_year::Int = 2595), prtp::Float64 = 0.03)
+compute_scc(m::Model=get_model(); year::Union{Int, Nothing}=nothing, last_year::Int=model_years[end], prtp::Float64=0.015, eta::Float64=1.5, pulse_size=1e10)
 
 Computes the social cost of CO2 for an emissions pulse in `year` for the provided MimiDICE2010 model. 
 If no model is provided, the default model from MimiDICE2010.get_model() is used.
-Constant discounting is used from the specified pure rate of time preference `prtp`.
-
-TODO:
-- do we want to implement interpolation if the ask for an SCC value between the timestep values? currently errors
-- do we want to implement ramsey discounting, i.e. offer the eta keyword argument as well? 
-- should marginal damages be a step function across the ten year timesteps to be used by the SCC? or should I lineraly interpolate to get annual marginal emissions?
+Ramsey discounting is used with a pure rate of time preference of `prtp` and inequality aversion of `eta`.
+`pulse_size` controls the size of the marginal emission pulse.
 """
 function compute_scc(m::Model=get_model(); year::Union{Int, Nothing} = nothing, last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, pulse_size=1e10)
     year === nothing ? error("Must specify an emission year. Try `compute_scc(m, year=2015)`.") : nothing
@@ -21,12 +17,13 @@ function compute_scc(m::Model=get_model(); year::Union{Int, Nothing} = nothing, 
 end
 
 """
-compute_scc_mm(m::Model=get_model(); year::Int = nothing, last_year::Int = 2595, prtp::Float64 = 0.03)
+compute_scc_mm(m::Model=get_model(); year::Union{Int, Nothing} = nothing, last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, pulse_size=1e10)
 
 Returns a NamedTuple (scc=scc, mm=mm) of the social cost of carbon and the MarginalModel used to compute it.
 Computes the social cost of CO2 for an emissions pulse in `year` for the provided MimiDICE2010 model. 
 If no model is provided, the default model from MimiDICE2010.get_model() is used.
-Constant discounting is used from the specified pure rate of time preference `prtp`.
+Ramsey discounting is used with a pure rate of time preference of `prtp` and inequality aversion of `eta`.
+`pulse_size` controls the size of the marginal emission pulse.
 """
 function compute_scc_mm(m::Model=get_model(); year::Union{Int, Nothing} = nothing, last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, pulse_size=1e10)
     year === nothing ? error("Must specify an emission year. Try `compute_scc_mm(m, year=2015)`.") : nothing
@@ -56,10 +53,11 @@ function _compute_scc(mm::MarginalModel; year::Int, last_year::Int, prtp::Float6
 end
 
 """
-get_marginal_model(m::Model = get_model(); year::Int = nothing)
+get_marginal_model(m::Model=get_model(); year::Union{Int, Nothing} = nothing, pulse_size::Float64=1e10)
 
 Creates a Mimi MarginalModel where the provided m is the base model, and the marginal model has additional emissions of CO2 in year `year`.
 If no Model m is provided, the default model from MimiDICE2010.get_model() is used as the base model.
+`pulse_size` controls the size of the marginal emission pulse.
 """
 function get_marginal_model(m::Model=get_model(); year::Union{Int, Nothing} = nothing, pulse_size::Float64=1e10)
     year === nothing ? error("Must specify an emission year. Try `get_marginal_model(m, year=2015)`.") : nothing
@@ -72,14 +70,14 @@ function get_marginal_model(m::Model=get_model(); year::Union{Int, Nothing} = no
 end
 
 """
-Adds a marginal emission component to year m which adds 1Gt of additional C emissions per year for ten years starting in the specified `year`.
+Adds a marginal emission component to `m` which adds `pulse_size` of additional C emissions over ten years starting in the specified `year`.
 """
 function add_marginal_emissions!(m::Model, year::Int, pulse_size::Float64) 
     add_comp!(m, Mimi.adder, :marginalemission, before=:co2cycle)
 
     time = Mimi.dimension(m, :time)
     addem = zeros(length(time))
-    addem[time[year]] = pulse_size / 1e10     # Unit of pulse_size is in GtC, we convert to ton by dividing by 1e9, and then divide by 10 again because that impulse is emitted for ten years
+    addem[time[year]] = pulse_size / 1e10     # Unit of pulse_size is tons, but units of emissions in DICE are GtC, so we convert to GtC by dividing by 1e9, and then divide by 10 again because that pulse is emitted for ten years.
 
     set_param!(m, :marginalemission, :add, addem)
     connect_param!(m, :marginalemission, :input, :emissions, :E)
