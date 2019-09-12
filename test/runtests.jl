@@ -16,14 +16,14 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
 @testset "dice2010-components" begin
 
 include("test_climatedynamics.jl")
-include("test_co2cycle.jl") 
+include("test_co2cycle.jl")
 include("test_damages.jl")
 include("test_emissions.jl")
 include("test_grosseconomy.jl")
 include("test_neteconomy.jl")
-include("test_radiativeforcing.jl") 
+include("test_radiativeforcing.jl")
 include("test_sealevelrise.jl")
-include("test_welfare.jl") 
+include("test_welfare.jl")
 
 end #dice2010-components testset
 
@@ -36,7 +36,7 @@ end #dice2010-components testset
 
 Precision = 1.0e-11
 T = 60
-f = readxlsx(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
+f = readxlsx(joinpath(@__DIR__, "..", "data", "DICE2010_082710d.xlsx"))
 
 m = MimiDICE2010.get_model()
 run(m)
@@ -111,7 +111,7 @@ ABATECOST   = m[:neteconomy, :ABATECOST]
 C           = m[:neteconomy, :C]
 CPC         = m[:neteconomy, :CPC]
 CPRICE      = m[:neteconomy, :CPRICE]
-I           = m[:neteconomy, :I] 
+I           = m[:neteconomy, :I]
 Y           = m[:neteconomy, :Y]
 YNET        = m[:neteconomy, :YNET]
 
@@ -191,15 +191,15 @@ m = MimiDICE2010.get_model()
 run(m)
 
 for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
-    
+
     #load data for comparison
-    filepath = joinpath(@__DIR__, "../data/validation_data_v040/$c-$v.csv")        
+    filepath = joinpath(@__DIR__, "../data/validation_data_v040/$c-$v.csv")
     results = m[c, v]
 
     df = load(filepath) |> DataFrame
     if typeof(results) <: Number
         validation_results = df[1,1]
-        
+
     else
         validation_results = convert(Matrix, df)
 
@@ -208,15 +208,15 @@ for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
         results[isnan.(results)] .= nullvalue
         validation_results[ismissing.(validation_results)] .= nullvalue
         validation_results[isnan.(validation_results)] .= nullvalue
-        
+
         #match dimensions
         if size(validation_results,1) == 1
             validation_results = validation_results'
         end
-        
+
     end
     @test results ≈ validation_results atol = Precision
-    
+
 end #for loop
 
 end #dice2010-integration testset
@@ -225,7 +225,7 @@ end #dice2010-integration testset
 #   4. Test standard api functions and SCC functions
 #------------------------------------------------------------------------------
 
-@testset "Standard API functions" begin 
+@testset "Standard API functions" begin
 
 m = MimiDICE2010.get_model()
 run(m)
@@ -236,7 +236,7 @@ run(m)
 @test_throws ErrorException MimiDICE2010.compute_scc(last_year=2300)  # test that it errors if the last_year isn't in the time index
 @test_throws ErrorException MimiDICE2010.compute_scc(year=2105, last_year=2100)  # test that it errors if the year is after last_year
 
-# Test the SCC 
+# Test the SCC
 scc1 = MimiDICE2010.compute_scc(year=2015)
 @test scc1 isa Float64
 
@@ -244,13 +244,13 @@ scc1 = MimiDICE2010.compute_scc(year=2015)
 scc2 = MimiDICE2010.compute_scc(year=2015, last_year=2295)
 @test scc2 < scc1
 
-# Test that it's larger with a smalle prtp
+# Test that it's smaller with a larger prtp
 scc3 = MimiDICE2010.compute_scc(year=2015, last_year=2295, prtp=0.02)
-@test scc3 > scc2
+@test scc3 < scc2
 
-# Test with a modified model 
+# Test with a modified model
 m = MimiDICE2010.get_model()
-update_param!(m, :t2xco2, 5)    
+update_param!(m, :t2xco2, 5)
 scc4 = MimiDICE2010.compute_scc(m, year=2015)
 @test scc4 > scc1   # Test that a higher value of climate sensitivty makes the SCC bigger
 

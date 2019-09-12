@@ -4,7 +4,7 @@ include("../src/components/co2cycle_component.jl")
 
 Precision = 1.0e-11
 T = length(MimiDICE2010.model_years)
-f = readxlsx(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
+f = readxlsx(joinpath(@__DIR__, "..", "data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
@@ -16,7 +16,7 @@ add_comp!(m, co2cycle, :co2cycle)
 set_param!(m, :co2cycle, :E, read_params(f, "B109:BI109", T))
 
 # Load the rest of the external parameters
-p = dice2010_excel_parameters(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
+p = dice2010_excel_parameters(joinpath(@__DIR__, "..", "data", "DICE2010_082710d.xlsx"))
 set_param!(m, :co2cycle, :mat0, p[:mat0])
 set_param!(m, :co2cycle, :mat1, p[:mat1])
 set_param!(m, :co2cycle, :mu0, p[:mu0])

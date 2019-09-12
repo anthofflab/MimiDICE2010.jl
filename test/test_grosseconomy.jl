@@ -4,7 +4,7 @@ include("../src/components/grosseconomy_component.jl")
 
 Precision = 1.0e-11
 T = length(MimiDICE2010.model_years)
-f = readxlsx(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
+f = readxlsx(joinpath(@__DIR__, "..", "data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 
@@ -16,7 +16,7 @@ add_comp!(m, grosseconomy, :grosseconomy)
 set_param!(m, :grosseconomy, :I, read_params(f, "B101:BI101", T))
 
 # Load the rest of the external parameters
-p = dice2010_excel_parameters(joinpath(@__DIR__, "..", "Data", "DICE2010_082710d.xlsx"))
+p = dice2010_excel_parameters(joinpath(@__DIR__, "..", "data", "DICE2010_082710d.xlsx"))
 set_param!(m, :grosseconomy, :al, p[:al])
 set_param!(m, :grosseconomy, :l, p[:l])
 set_param!(m, :grosseconomy, :gama, p[:gama])
