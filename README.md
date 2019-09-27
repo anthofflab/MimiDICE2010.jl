@@ -28,6 +28,7 @@ You probably also want to install the Mimi package into your julia environment, 
 ```julia
 pkg> add Mimi
 ```
+
 ## Running the model
 
 The model uses the Mimi framework and it is highly recommended to read the Mimi documentation first to understand the code structure. For starter code on running the model just once, see the code in the file `examples/main.jl`.
