@@ -39,7 +39,6 @@ function get_model(params=nothing)
 
     #GROSS ECONOMY COMPONENT
     set_param!(m, :grosseconomy, :al, p[:al])
-    set_param!(m, :grosseconomy, :l, p[:l])
     set_param!(m, :grosseconomy, :gama, p[:gama])
     set_param!(m, :grosseconomy, :dk, p[:dk])
     set_param!(m, :grosseconomy, :k0, p[:k0])
@@ -49,7 +48,6 @@ function get_model(params=nothing)
 
     #EMISSIONS COMPONENT
     set_param!(m, :emissions, :sigma, p[:sigma])
-    set_param!(m, :emissions, :MIU, p[:miubase])
     set_param!(m, :emissions, :etree, p[:etree])
 
     connect_param!(m, :emissions, :YGROSS, :grosseconomy, :YGROSS)
@@ -73,14 +71,12 @@ function get_model(params=nothing)
 
     #RADIATIVE FORCING COMPONENT
     set_param!(m, :radiativeforcing, :forcoth, p[:forcoth])
-    set_param!(m, :radiativeforcing, :fco22x, p[:fco22x])
 
     connect_param!(m, :radiativeforcing, :MAT, :co2cycle, :MAT)
     connect_param!(m, :radiativeforcing, :MAT_final, :co2cycle, :MAT_final)
 
 
     #CLIMATE DYNAMICS COMPONENT
-    set_param!(m, :climatedynamics, :fco22x, p[:fco22x])
     set_param!(m, :climatedynamics, :t2xco2, p[:t2xco2])
     set_param!(m, :climatedynamics, :tatm0, p[:tatm0])
     set_param!(m, :climatedynamics, :tatm1, p[:tatm1])
@@ -125,15 +121,12 @@ function get_model(params=nothing)
 
     #NET ECONOMY COMPONENT
     set_param!(m, :neteconomy, :cost1, p[:cost1])
-    set_param!(m, :neteconomy, :MIU, p[:miubase])
     set_param!(m, :neteconomy, :expcost2, p[:expcost2])
     set_param!(m, :neteconomy, :partfract, p[:partfract])
     set_param!(m, :neteconomy, :pbacktime, p[:pbacktime])
     set_param!(m, :neteconomy, :S, p[:savebase])
-    set_param!(m, :neteconomy, :l, p[:l])
 
     connect_param!(m, :neteconomy, :YGROSS, :grosseconomy, :YGROSS)
-    #connect_param!(m, :neteconomy, :DAMAGES, :damages, :DAMAGES)
     connect_param!(m, :neteconomy, :DAMFRAC, :damages, :DAMFRAC)
 
 
@@ -145,6 +138,11 @@ function get_model(params=nothing)
     set_param!(m, :welfare, :scale2, p[:scale2])
 
     connect_param!(m, :welfare, :CPC, :neteconomy, :CPC)
+
+    # Set parameter values shared by multiple components:
+    set_param!(m, :fco22x, p[:fco22x])
+    set_param!(m, :MIU, p[:miubase])
+    set_param!(m, :l, p[:l])
 
     return m
 end
