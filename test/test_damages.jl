@@ -22,9 +22,9 @@ p = dice2010_excel_parameters(joinpath(@__DIR__, "..", "data", "DICE2010_082710d
 set_param!(m, :damages, :a1, p[:a1])
 set_param!(m, :damages, :a2, p[:a2])
 set_param!(m, :damages, :a3, p[:a3])
-set_param!(m, :damages, :b1, p[:slrcoeff])
-set_param!(m, :damages, :b2, p[:slrcoeffsq])
-set_param!(m, :damages, :b3, p[:slrexp])
+set_param!(m, :damages, :b1, p[:b1])
+set_param!(m, :damages, :b2, p[:b2])
+set_param!(m, :damages, :b3, p[:b3])
 
 # Run the one-component model
 run(m)
