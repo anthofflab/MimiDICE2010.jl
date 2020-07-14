@@ -19,11 +19,11 @@ set_param!(m, :neteconomy, :DAMFRAC, read_params(f, "B93:BI93", T))
 # Load the rest of the external parameters
 p = dice2010_excel_parameters(joinpath(@__DIR__, "..", "data", "DICE2010_082710d.xlsx"))
 set_param!(m, :neteconomy, :cost1, p[:cost1])
-set_param!(m, :neteconomy, :MIU, p[:miubase])
+set_param!(m, :neteconomy, :MIU, p[:MIU])
 set_param!(m, :neteconomy, :expcost2, p[:expcost2])
 set_param!(m, :neteconomy, :partfract, p[:partfract])
 set_param!(m, :neteconomy, :pbacktime, p[:pbacktime])
-set_param!(m, :neteconomy, :S, p[:savebase])
+set_param!(m, :neteconomy, :S, p[:S])
 set_param!(m, :neteconomy, :l, p[:l])
 
 # Run the one-component model
