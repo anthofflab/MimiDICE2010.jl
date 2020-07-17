@@ -21,15 +21,15 @@ export construct_dice
 # Allow these to be accessed by, e.g., EPA DICE model
 const model_years = 2005:10:2595
 
-function get_model(params=nothing)
+function get_model(params = nothing)
     params_dict = params == nothing ? dice2010_excel_parameters() : params
 
     m = Model()
     set_dimension!(m, :time, model_years)
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Add components in order
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
 
     add_comp!(m, grosseconomy)
     add_comp!(m, emissions)
@@ -41,14 +41,14 @@ function get_model(params=nothing)
     add_comp!(m, neteconomy)
     add_comp!(m, welfare)
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Make internal parameter connections
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
 
     # Socioeconomics
     connect_param!(m, :grosseconomy, :I, :neteconomy, :I)
     connect_param!(m, :emissions, :YGROSS, :grosseconomy, :YGROSS)
-    
+
     # Climate
     connect_param!(m, :co2cycle, :E, :emissions, :E)
     connect_param!(m, :radiativeforcing, :MAT, :co2cycle, :MAT)
@@ -64,9 +64,9 @@ function get_model(params=nothing)
     connect_param!(m, :neteconomy, :DAMFRAC, :damages, :DAMFRAC)
     connect_param!(m, :welfare, :CPC, :neteconomy, :CPC)
 
-    #--------------------------------------------------------------------------
-    # Set external parameter values 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
+    # Set external parameter values
+    # --------------------------------------------------------------------------
     for (name, value) in params_dict
         set_param!(m, name, value)
     end
@@ -76,4 +76,4 @@ end
 
 construct_dice = get_model # still export the old version of the function name
 
-end #module
+end # module

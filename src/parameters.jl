@@ -20,19 +20,19 @@ Examples:
     value = read_params(f, "A27", sheet="Parameters")
     value = read_params(f, "A27:A27", sheet="Parameters") # same as above
 """
-function read_params(f, range::String, T::Int=60; sheet::String="Base")
+function read_params(f, range::String, T::Int = 60; sheet::String = "Base")
     data = readxl(f, "$(sheet)!$(range)")
     parts = split(range, ":")
     return (length(parts) == 1 || parts[1] == parts[2]) ? data : Vector{Float64}(data[1:T])
 end
 
-function dice2010_excel_parameters(filename=datafile; nsteps=nothing)
+function dice2010_excel_parameters(filename = datafile; nsteps = nothing)
     p = Dict{Symbol,Any}()
 
     # the number of time-indexed values to read
     nsteps = nsteps == nothing ? length(2005:10:2595) : nsteps
 
-    #Open DICE_2010 Excel file to read parameters
+    # Open DICE_2010 Excel file to read parameters
     f = openxl(filename)
 
     # Preferences
@@ -50,7 +50,7 @@ function dice2010_excel_parameters(filename=datafile; nsteps=nothing)
     p[:sigma]   = read_params(f, "B46:BI46", nsteps)
     p[:etree]   = read_params(f, "B52:BI52", nsteps)
     p[:MIU] = read_params(f, "B133:BI133", nsteps)         # emissions control rate
-    p[:S]= read_params(f, "B132:BI132", nsteps) / 100   # savings rate
+    p[:S] = read_params(f, "B132:BI132", nsteps) / 100   # savings rate
 
     # Carbon cycle
     p[:mat0]    = read_params(f, "B57")   # Initial Concentration in atmosphere 2000 (GtC)
@@ -105,9 +105,9 @@ function dice2010_excel_parameters(filename=datafile; nsteps=nothing)
 
     # SLR Parameters
 
-    p[:b1]    = read_params(f, "B51", sheet="Parameters")
-    p[:b2]  = read_params(f, "B52", sheet="Parameters")
-    p[:b3]      = read_params(f, "B53", sheet="Parameters")
+    p[:b1]    = read_params(f, "B51", sheet = "Parameters")
+    p[:b2]  = read_params(f, "B52", sheet = "Parameters")
+    p[:b3]      = read_params(f, "B53", sheet = "Parameters")
 
     p[:therm0]      = read_params(f, "B178") # meters above 2000
     p[:gsic0]       = read_params(f, "B179")
