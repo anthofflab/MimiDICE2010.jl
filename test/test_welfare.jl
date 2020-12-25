@@ -4,7 +4,7 @@ include("../src/components/welfare_component.jl")
 
 Precision = 1.0e-11
 T = 60
-f = openxl(joinpath(@__DIR__, "..", "data", "DICE2010_082710d.xlsx"))
+f = readxlsx(joinpath(@__DIR__, "..", "data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 

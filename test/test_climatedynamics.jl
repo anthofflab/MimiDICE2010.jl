@@ -4,7 +4,7 @@ include("../src/components/climatedynamics_component.jl")
 
 Precision = 1.0e-11
 T = length(MimiDICE2010.model_years)
-f = openxl(joinpath(@__DIR__, "..", "data", "DICE2010_082710d.xlsx"))
+f = readxlsx(joinpath(@__DIR__, "..", "data", "DICE2010_082710d.xlsx"))
 
 m = Model()
 

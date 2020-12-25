@@ -1,7 +1,7 @@
 using Test
 using Mimi
 using MimiDICE2010
-using ExcelReaders
+using XLSX: readxlsx
 using DataFrames
 using CSVFiles
 
@@ -36,7 +36,7 @@ end #dice2010-components testset
 
 Precision = 1.0e-11
 T = 60
-f = openxl(joinpath(@__DIR__, "..", "data", "DICE2010_082710d.xlsx"))
+f = readxlsx(joinpath(@__DIR__, "..", "data", "DICE2010_082710d.xlsx"))
 
 m = MimiDICE2010.get_model()
 run(m)

@@ -21,7 +21,7 @@ Examples:
     value = read_params(f, "A27:A27", sheet="Parameters") # same as above
 """
 function read_params(f, range::String, T::Int=60; sheet::String="Base")
-    data = readxl(f, "$(sheet)!$(range)")
+    data = f[sheet][range]
     parts = split(range, ":")
     return (length(parts) == 1 || parts[1] == parts[2]) ? data : Vector{Float64}(data[1:T])
 end
@@ -33,7 +33,7 @@ function dice2010_excel_parameters(filename=datafile; nsteps=nothing)
     nsteps = nsteps == nothing ? length(2005:10:2595) : nsteps
 
     #Open DICE_2010 Excel file to read parameters
-    f = openxl(filename)
+    f = readxlsx(filename)
 
     # Preferences
     p[:elasmu]  = read_params(f, "B19")               # Elasticity of marginal utility of consumption
