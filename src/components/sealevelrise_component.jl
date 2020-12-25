@@ -33,13 +33,13 @@
             v.AISSLR[t]   = p.ais0
         else
 
-            v.ThermSLR[t] = v.ThermSLR[t-1] + p.thermrate * p.TATM[t]
-            v.GSICSLR[t]  = v.GSICSLR[t-1] + p.gsicrate * (p.gsic_asym - v.GSICSLR[t-1]) * p.TATM[t]
-            v.GISSLR[t]   = v.GISSLR[t-1]  + p.gisrate  * (p.gis_asym  - v.GISSLR[t-1])  * p.TATM[t]
+            v.ThermSLR[t] = v.ThermSLR[t - 1] + p.thermrate * p.TATM[t]
+            v.GSICSLR[t]  = v.GSICSLR[t - 1] + p.gsicrate * (p.gsic_asym - v.GSICSLR[t - 1]) * p.TATM[t]
+            v.GISSLR[t]   = v.GISSLR[t - 1]  + p.gisrate  * (p.gis_asym  - v.GISSLR[t - 1])  * p.TATM[t]
             v.AISSLR[t]   = 0
 
             if p.TATM[t] > p.slrthreshold
-                v.AISSLR[t] = v.AISSLR[t-1] + p.aisrate * (p.ais_asym - v.AISSLR[t-1]) * p.TATM[t]
+                v.AISSLR[t] = v.AISSLR[t - 1] + p.aisrate * (p.ais_asym - v.AISSLR[t - 1]) * p.TATM[t]
             end 
         end
     
