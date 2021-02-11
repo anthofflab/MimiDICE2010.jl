@@ -27,9 +27,9 @@ function get_model(params=nothing)
     m = Model()
     set_dimension!(m, :time, model_years)
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Add components in order
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
 
     add_comp!(m, grosseconomy)
     add_comp!(m, emissions)
@@ -41,9 +41,9 @@ function get_model(params=nothing)
     add_comp!(m, neteconomy)
     add_comp!(m, welfare)
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Make internal parameter connections
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
 
     # Socioeconomics
     connect_param!(m, :grosseconomy, :I, :neteconomy, :I)
@@ -64,9 +64,9 @@ function get_model(params=nothing)
     connect_param!(m, :neteconomy, :DAMFRAC, :damages, :DAMFRAC)
     connect_param!(m, :welfare, :CPC, :neteconomy, :CPC)
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Set external parameter values 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     for (name, value) in params_dict
         set_param!(m, name, value)
     end
@@ -76,4 +76,4 @@ end
 
 construct_dice = get_model # still export the old version of the function name
 
-end #module
+end # module

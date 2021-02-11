@@ -32,7 +32,7 @@ function dice2010_excel_parameters(filename=datafile; nsteps=nothing)
     # the number of time-indexed values to read
     nsteps = nsteps == nothing ? length(2005:10:2595) : nsteps
 
-    #Open DICE_2010 Excel file to read parameters
+    # Open DICE_2010 Excel file to read parameters
     f = readxlsx(filename)
 
     # Preferences
@@ -50,7 +50,7 @@ function dice2010_excel_parameters(filename=datafile; nsteps=nothing)
     p[:sigma]   = read_params(f, "B46:BI46", nsteps)
     p[:etree]   = read_params(f, "B52:BI52", nsteps)
     p[:MIU] = read_params(f, "B133:BI133", nsteps)         # emissions control rate
-    p[:S]= read_params(f, "B132:BI132", nsteps) / 100   # savings rate
+    p[:S] = read_params(f, "B132:BI132", nsteps) / 100   # savings rate
 
     # Carbon cycle
     p[:mat0]    = read_params(f, "B57")   # Initial Concentration in atmosphere 2000 (GtC)
