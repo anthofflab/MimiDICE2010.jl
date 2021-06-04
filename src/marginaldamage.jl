@@ -1,14 +1,20 @@
 """
-compute_scc(m::Model=get_model(); year::Union{Int, Nothing}=nothing, last_year::Int=model_years[end], prtp::Float64=0.015, eta::Float64=1.5, pulse_size=1e10)
+    compute_scc(m::Model=get_model(); year::Union{Int, Nothing}=nothing, last_year::Int=model_years[end], 
+                prtp::Float64=0.015, eta::Float64=1.5, pulse_size=1e10)
 
-Computes the social cost of CO2 for an emissions pulse in `year` for the provided MimiDICE2010 model. 
-If no model is provided, the default model from MimiDICE2010.get_model() is used.
+Computes the social cost of CO2 for an emissions pulse in `year` for the provided MimiDICE2010
+model from it's start through the `last_year`, which will default to 2595, the last
+year of DICE's default `model_years`. If no model is provided, the default model from MimiDICE2010.get_model() is used.
 Ramsey discounting is used with a pure rate of time preference of `prtp` and inequality aversion of `eta`.
-`pulse_size` controls the size of the marginal emission pulse.
+`pulse_size` controls the size of the marginal emission pulse, which is the aggregate
+pulse of CO2 in metric tonnes that DICE's structure spreads across ten years starting 
+in the specified `year`. Note that regardless of this pulse size, the SCC will be 
+return in units of dollars per metric tonne using the internal machinery of marginal 
+model's `delta` parameter.
 """
 function compute_scc(m::Model=get_model(); year::Union{Int,Nothing}=nothing, last_year::Int=model_years[end], prtp::Float64=0.015, eta::Float64=1.5, pulse_size=1e10)
     year === nothing ? error("Must specify an emission year. Try `compute_scc(m, year=2015)`.") : nothing
-    !(last_year in model_years) ? error("Invlaid value of $last_year for last_year. last_year must be within the model's time index $model_years.") : nothing
+    !(last_year in model_years) ? error("Invalid value of $last_year for last_year. last_year must be within the model's time index $model_years.") : nothing
     !(year in model_years[1]:10:last_year) ? error("Cannot compute the scc for year $year, year must be within the model's time index $(model_years[1]):10:$last_year.") : nothing
 
     mm = get_marginal_model(m; year=year, pulse_size=pulse_size)
@@ -20,16 +26,25 @@ end
 compute_scc_mm(m::Model=get_model(); year::Union{Int, Nothing} = nothing, last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, pulse_size=1e10)
 
 Returns a NamedTuple (scc=scc, mm=mm) of the social cost of carbon and the MarginalModel used to compute it.
-Computes the social cost of CO2 for an emissions pulse in `year` for the provided MimiDICE2010 model. 
-If no model is provided, the default model from MimiDICE2010.get_model() is used.
-Ramsey discounting is used with a pure rate of time preference of `prtp` and inequality aversion of `eta`.
-`pulse_size` controls the size of the marginal emission pulse.
+Computes the social cost of CO2 for an emissions pulse in `year` for the provided MimiDICE2010 model 
+from it's start through the `last_year`, which will default to 2595, the last
+year of DICE's default `model_years`. If no model is provided, the default model 
+from MimiDICE2010.get_model() is used. Ramsey discounting is used with a pure rate of 
+time preference of `prtp` and inequality aversion of `eta`. `pulse_size` controls the 
+size of the marginal emission pulse, which is the aggregate pulse of CO2 in metric tonnes 
+that DICE's structure spreads across ten years starting  in the specified `year`. Note that 
+regardless of this absolute pulse size, the SCC will be returned in units of dollars per
+metric tonne as long as the `pulse_size` is in metric tonnes) using the internal machinery 
+of `MarginalModel`s `delta` parameter.
 """
 function compute_scc_mm(m::Model=get_model(); year::Union{Int,Nothing}=nothing, last_year::Int=model_years[end], prtp::Float64=0.015, eta::Float64=1.5, pulse_size=1e10)
     year === nothing ? error("Must specify an emission year. Try `compute_scc_mm(m, year=2015)`.") : nothing
-    !(last_year in model_years) ? error("Invlaid value of $last_year for last_year. last_year must be within the model's time index $model_years.") : nothing
+    !(last_year in model_years) ? error("Invalid value of $last_year for last_year. last_year must be within the model's time index $model_years.") : nothing
     !(year in model_years[1]:10:last_year) ? error("Cannot compute the scc for year $year, year must be within the model's time index $(model_years[1]):10:$last_year.") : nothing
 
+    # note here that the pulse size will be used as the `delta` parameter for 
+    # the `MarginalModel` and thus allow computation of the SCC to return units of
+    # dollars per metric tonne, as long as `pulse_size` is in metric tonnes
     mm = get_marginal_model(m; year=year, pulse_size=pulse_size)
     scc = _compute_scc(mm; year=year, last_year=last_year, prtp=prtp, eta=eta)
     
@@ -57,20 +72,35 @@ get_marginal_model(m::Model=get_model(); year::Union{Int, Nothing} = nothing, pu
 
 Creates a Mimi MarginalModel where the provided m is the base model, and the marginal model has additional emissions of CO2 in year `year`.
 If no Model m is provided, the default model from MimiDICE2010.get_model() is used as the base model.
-`pulse_size` controls the size of the marginal emission pulse.
+`pulse_size` controls the size of the marginal emission pulse, which is the aggregate
+pulse of CO2 in metric tonnes that DICE's structure spreads across ten years starting 
+in the specified `year`. Note that regardless of this absolute pulse size, the SCC will be 
+returned in units of dollars per metric tonne as long as the `pulse_size` is in metric 
+tonnes) using the internal machinery of `MarginalModel`s `delta` parameter.
 """
 function get_marginal_model(m::Model=get_model(); year::Union{Int,Nothing}=nothing, pulse_size::Float64=1e10)
     year === nothing ? error("Must specify an emission year. Try `get_marginal_model(m, year=2015)`.") : nothing
     !(year in model_years) ? error("Cannot add marginal emissions in $year, year must be within the model's time index $(model_years[1]):10:$last_year.") : nothing
 
-    mm = create_marginal_model(m, pulse_size) # Pulse has a value of 1GtC per year for ten years
+    # note here that the pulse size will be used as the `delta` parameter for 
+    # the `MarginalModel` and thus allow computation of the SCC to return units of
+    # dollars per metric tonne, as long as `pulse_size` is in metric tonnes
+
+    # Pulse has a value of 1GtC per year for ten years
+    mm = create_marginal_model(m, pulse_size) 
+    
+    # Add a marginal emission component to `m` which adds `pulse_size` of additional C 
+    # emissions over ten years starting in the specified `year`.
     add_marginal_emissions!(mm.modified, year, pulse_size)
 
     return mm
 end
 
 """
-Adds a marginal emission component to `m` which adds `pulse_size` of additional C emissions over ten years starting in the specified `year`.
+    add_marginal_emissions!(m::Model, year::Int, pulse_size::Float64) 
+
+Adds a marginal emission component to `m` which adds `pulse_size` of additional C 
+emissions over ten years starting in the specified `year`.
 """
 function add_marginal_emissions!(m::Model, year::Int, pulse_size::Float64) 
     add_comp!(m, Mimi.adder, :marginalemission, before=:co2cycle)
