@@ -1,3 +1,9 @@
+# A general note here that some of this functionality may appear confusing because
+# we do not convert from GtC to GtCO2 until the end in the `_compute_scc` function,
+# so while the `pulse_size` argument should be interpreted as GtCO2, in practice it is used
+# as GtC through the climate system and not converted to GtCO2 until the final 
+# computations of marginal damages
+
 """
     compute_scc(m::Model=get_model(); year::Union{Int, Nothing}=nothing, last_year::Int=model_years[end], 
                 prtp::Float64=0.015, eta::Float64=1.5, pulse_size=1e10)
@@ -44,7 +50,7 @@ function compute_scc_mm(m::Model=get_model(); year::Union{Int,Nothing}=nothing, 
 
     # note here that the pulse size will be used as the `delta` parameter for 
     # the `MarginalModel` and thus allow computation of the SCC to return units of
-    # dollars per ton, as long as `pulse_size` is in tons.
+    # dollars per ton, as long as `pulse_size` is in tons
     mm = get_marginal_model(m; year=year, pulse_size=pulse_size)
     scc = _compute_scc(mm; year=year, last_year=last_year, prtp=prtp, eta=eta)
     
@@ -56,6 +62,7 @@ function _compute_scc(mm::MarginalModel; year::Int, last_year::Int, prtp::Float6
     ntimesteps = findfirst(isequal(last_year), model_years)     # Will run through the timestep of the specified last_year 
     run(mm, ntimesteps=ntimesteps)
 
+    # below we convert from $ per GtC to $ per GtCO2 with 12/44
     marginal_damages = -1 * mm[:neteconomy, :C][1:ntimesteps] * 1e12 * 12 / 44 # convert from trillion $/ton C to $/ton CO2; multiply by -1 to get positive value for damages
 
     cpc = mm.base[:neteconomy, :CPC]
@@ -86,7 +93,9 @@ function get_marginal_model(m::Model=get_model(); year::Union{Int,Nothing}=nothi
     # the `MarginalModel` and thus allow computation of the SCC to return units of
     # dollars per ton, as long as `pulse_size` is in tons.
 
-    # Pulse has a value of 1GtC per year for ten years
+    # Pulse has a value of 1GtC per year for ten model_years
+    # Pulse is interpreted here as units of GtC and will be converted to 
+    # GtCO2 in marginal damages computation
     mm = create_marginal_model(m, pulse_size) 
     
     # Add a marginal emission component to `m` which adds `pulse_size` of additional C 
@@ -99,7 +108,7 @@ end
 """
     add_marginal_emissions!(m::Model, year::Int, pulse_size::Float64) 
 
-Adds a marginal emission component to `m` which adds `pulse_size` of additional C 
+Adds a marginal emission component to `m` which adds `pulse_size` of additional CO2 
 emissions over ten years starting in the specified `year`.
 """
 function add_marginal_emissions!(m::Model, year::Int, pulse_size::Float64) 
@@ -107,7 +116,14 @@ function add_marginal_emissions!(m::Model, year::Int, pulse_size::Float64)
 
     time = Mimi.dimension(m, :time)
     addem = zeros(length(time))
-    addem[time[year]] = pulse_size / 1e10     # Unit of pulse_size is tons, but units of emissions in DICE are GtC, so we convert to GtC by dividing by 1e9, and then divide by 10 again because that pulse is emitted for ten years.
+
+    # Unit of pulse_size is tons, but units of emissions in DICE are GtC, so we 
+    # convert to GtC by dividing by 1e9, and then divide by 10 again because that 
+    # pulse is emitted for ten years.     
+    
+    # Pulse is interpreted here as units of GtC and will be converted to 
+    # GtCO2 in marginal damages computation
+    addem[time[year]] = pulse_size / 1e10
 
     set_param!(m, :marginalemission, :add, addem)
     connect_param!(m, :marginalemission, :input, :emissions, :E)
