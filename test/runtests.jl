@@ -201,7 +201,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
                 validation_results = df[1,1]
 
             else
-                validation_results = convert(Matrix, df)
+                validation_results = Matrix(df)
 
         # remove NaNs
                 results[ismissing.(results)] .= nullvalue
