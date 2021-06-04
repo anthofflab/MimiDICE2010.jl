@@ -6,8 +6,8 @@
 
 """
     compute_scc(m::Model=get_model(); year::Union{Int,Nothing}=nothing, 
-                last_year::Int=model_years[end], prtp::Float64=0.015, eta::Float64=1.5, 
-                pulse_size=1e10)
+                last_year::Int=model_years[end], prtp::Float64=0.015, 
+                eta::Float64=1.5, pulse_size=1e10)
 
 Computes the social cost of CO2 for an emissions pulse in `year` for the provided MimiDICE2010
 model from it's start through the `last_year`, which will default to 2595, the last
@@ -29,7 +29,9 @@ function compute_scc(m::Model=get_model(); year::Union{Int,Nothing}=nothing, las
 end
 
 """
-compute_scc_mm(m::Model=get_model(); year::Union{Int, Nothing} = nothing, last_year::Int = model_years[end], prtp::Float64 = 0.015, eta::Float64=1.5, pulse_size=1e10)
+    compute_scc_mm(m::Model=get_model(); year::Union{Int,Nothing}=nothing, 
+                    last_year::Int=model_years[end], prtp::Float64=0.015, 
+                    eta::Float64=1.5, pulse_size=1e10)
 
 Returns a NamedTuple (scc=scc, mm=mm) of the social cost of carbon and the MarginalModel used to compute it.
 Computes the social cost of CO2 for an emissions pulse in `year` for the provided MimiDICE2010 model 
@@ -74,7 +76,7 @@ function _compute_scc(mm::MarginalModel; year::Int, last_year::Int, prtp::Float6
 end
 
 """
-get_marginal_model(m::Model=get_model(); year::Union{Int, Nothing} = nothing, pulse_size::Float64=1e10)
+    get_marginal_model(m::Model=get_model(); year::Union{Int,Nothing}=nothing, pulse_size::Float64=1e10)
 
 Creates a Mimi MarginalModel where the provided m is the base model, and the marginal model has additional emissions of CO2 in year `year`.
 If no Model m is provided, the default model from MimiDICE2010.get_model() is used as the base model.
