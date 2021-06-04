@@ -80,7 +80,7 @@ marginal_temp = result.mm[:climatedynamics, :TATM]  # marginal results from the 
 ```
 ### Pulse Size Details
 
-By default, MimiDICE2010 will calculate the SCC using a marginal emissions pulse of 10 GtC spread over ten years, or 1 GtC per year.  Regardless of this pulse size, the SCC will be returned in units of dollars per metric tonne.  This choice of pulse size and duration is a decision made based on experiments with stability of results and moving from continuous to discretized equations, and can be found described further in the literature around DICE.
+By default, MimiDICE2010 will calculate the SCC using a marginal emissions pulse of 10 GtC spread over ten years, or 1 GtC per year.  Regardless of this pulse size, the SCC will be returned in units of dollars per ton.  This choice of pulse size and duration is a decision made based on experiments with stability of results and moving from continuous to discretized equations, and can be found described further in the literature around DICE.
 
 If you wish to alter this pulse size, it is an optional keyword argument to the  `compute_scc` function which has a full signature of
 

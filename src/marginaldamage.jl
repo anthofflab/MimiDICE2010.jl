@@ -7,9 +7,9 @@ model from it's start through the `last_year`, which will default to 2595, the l
 year of DICE's default `model_years`. If no model is provided, the default model from MimiDICE2010.get_model() is used.
 Ramsey discounting is used with a pure rate of time preference of `prtp` and inequality aversion of `eta`.
 `pulse_size` controls the size of the marginal emission pulse, which is the aggregate
-pulse of CO2 in metric tonnes that DICE's structure spreads across ten years starting 
+pulse of CO2 in tons that DICE's structure spreads across ten years starting 
 in the specified `year`. Note that regardless of this pulse size, the SCC will be 
-return in units of dollars per metric tonne using the internal machinery of marginal 
+return in units of dollars per ton using the internal machinery of marginal 
 model's `delta` parameter.
 """
 function compute_scc(m::Model=get_model(); year::Union{Int,Nothing}=nothing, last_year::Int=model_years[end], prtp::Float64=0.015, eta::Float64=1.5, pulse_size=1e10)
@@ -31,10 +31,10 @@ from it's start through the `last_year`, which will default to 2595, the last
 year of DICE's default `model_years`. If no model is provided, the default model 
 from MimiDICE2010.get_model() is used. Ramsey discounting is used with a pure rate of 
 time preference of `prtp` and inequality aversion of `eta`. `pulse_size` controls the 
-size of the marginal emission pulse, which is the aggregate pulse of CO2 in metric tonnes 
+size of the marginal emission pulse, which is the aggregate pulse of CO2 in tons 
 that DICE's structure spreads across ten years starting  in the specified `year`. Note that 
 regardless of this absolute pulse size, the SCC will be returned in units of dollars per
-metric tonne as long as the `pulse_size` is in metric tonnes) using the internal machinery 
+ton as long as the `pulse_size` is in tons) using the internal machinery 
 of `MarginalModel`s `delta` parameter.
 """
 function compute_scc_mm(m::Model=get_model(); year::Union{Int,Nothing}=nothing, last_year::Int=model_years[end], prtp::Float64=0.015, eta::Float64=1.5, pulse_size=1e10)
@@ -44,7 +44,7 @@ function compute_scc_mm(m::Model=get_model(); year::Union{Int,Nothing}=nothing, 
 
     # note here that the pulse size will be used as the `delta` parameter for 
     # the `MarginalModel` and thus allow computation of the SCC to return units of
-    # dollars per metric tonne, as long as `pulse_size` is in metric tonnes
+    # dollars per ton, as long as `pulse_size` is in tons.
     mm = get_marginal_model(m; year=year, pulse_size=pulse_size)
     scc = _compute_scc(mm; year=year, last_year=last_year, prtp=prtp, eta=eta)
     
@@ -73,10 +73,10 @@ get_marginal_model(m::Model=get_model(); year::Union{Int, Nothing} = nothing, pu
 Creates a Mimi MarginalModel where the provided m is the base model, and the marginal model has additional emissions of CO2 in year `year`.
 If no Model m is provided, the default model from MimiDICE2010.get_model() is used as the base model.
 `pulse_size` controls the size of the marginal emission pulse, which is the aggregate
-pulse of CO2 in metric tonnes that DICE's structure spreads across ten years starting 
+pulse of CO2 in tons that DICE's structure spreads across ten years starting 
 in the specified `year`. Note that regardless of this absolute pulse size, the SCC will be 
-returned in units of dollars per metric tonne as long as the `pulse_size` is in metric 
-tonnes) using the internal machinery of `MarginalModel`s `delta` parameter.
+returned in units of dollars per tonas long as the `pulse_size` is in metric 
+tons) using the internal machinery of `MarginalModel`s `delta` parameter.
 """
 function get_marginal_model(m::Model=get_model(); year::Union{Int,Nothing}=nothing, pulse_size::Float64=1e10)
     year === nothing ? error("Must specify an emission year. Try `get_marginal_model(m, year=2015)`.") : nothing
@@ -84,7 +84,7 @@ function get_marginal_model(m::Model=get_model(); year::Union{Int,Nothing}=nothi
 
     # note here that the pulse size will be used as the `delta` parameter for 
     # the `MarginalModel` and thus allow computation of the SCC to return units of
-    # dollars per metric tonne, as long as `pulse_size` is in metric tonnes
+    # dollars per ton, as long as `pulse_size` is in tons.
 
     # Pulse has a value of 1GtC per year for ten years
     mm = create_marginal_model(m, pulse_size) 
