@@ -91,4 +91,4 @@ compute_scc(m::Model=get_model(); year::Union{Int, Nothing}=nothing, last_year::
 ```
 where `pulse_size` controls the size of the marginal emission pulse in GtCO2.
 
-For a deeper dive into the machinery of this function, see the forum conversation [here](https://forum.mimiframework.org/t/mimifund-emissions-pulse/153/9), which is focused on FUND but has symmetric internal machinery, and the docstrings in `marginaldamage.jl`.
+For a deeper dive into the machinery of this function, see the forum conversation [here](https://forum.mimiframework.org/t/mimifund-emissions-pulse/153/9), which is focused on MimiFUND but has similar internal machinery to MimiDICE2010, and the docstrings in `marginaldamage.jl`.

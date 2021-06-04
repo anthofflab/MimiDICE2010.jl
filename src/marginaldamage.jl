@@ -2,7 +2,7 @@
 # we do not convert from GtC to GtCO2 until the end in the `_compute_scc` function,
 # so while the `pulse_size` argument should be interpreted as GtCO2, in practice it is used
 # as GtC through the climate system perturbation steps and not converted to GtCO2 
-# until the final  post-processing omputations of marginal damages
+# until the final  post-processing computation of marginal damages
 
 """
     compute_scc(m::Model=get_model(); year::Union{Int,Nothing}=nothing, 
