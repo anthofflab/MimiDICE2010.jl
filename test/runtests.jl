@@ -258,7 +258,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
 
         atol = 1e-6 # TODO what is a reasonable tolerance given we test on a few different machines etc.
 
-        # Test several validation configurations against the pre-saved values from MimiDICE2010 v1.0.1
+        # Test several validation configurations against the pre-saved values
         specs = Dict([
             :year => [2015, 2055],
             :eta => [0, 1.5],
@@ -282,10 +282,12 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
             end
         end
             
-        validation_results = load(joinpath(@__DIR__, "SC validation data", "deterministic_sc_values_v1-0-1.csv")) |> DataFrame
-        println("MAXIMUM DIFF IS $(maximum(results[!, :SC] - validation_results[!, :SC]))")
+        validation_results = load(joinpath(@__DIR__, "..", "data", "SC validation data", "deterministic_sc_values_v1-0-1.csv")) |> DataFrame
+        # println("MAXIMUM DIFF IS $(maximum(results[!, :SC] - validation_results[!, :SC]))")
         @test all(isapprox.(results[!, :SC], validation_results[!, :SC], atol = atol))
 
     end # SCC values testset
 
 end # mimi-dice-2010 testset
+
+nothing
