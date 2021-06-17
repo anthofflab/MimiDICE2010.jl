@@ -256,7 +256,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
     # ------------------------------------------------------------------------------
     @testset "SCC values" begin
 
-        atol = 1e-7 # TODO what is a reasonable tolerance given we test on a few different machines etc.
+        atol = 1e-6 # TODO what is a reasonable tolerance given we test on a few different machines etc.
 
         # Test several validation configurations against the pre-saved values from MimiDICE2010 v1.0.1
         specs = Dict([
