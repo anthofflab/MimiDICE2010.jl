@@ -256,7 +256,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
     # ------------------------------------------------------------------------------
     @testset "SCC values" begin
 
-        atol = 1e-6 # TODO what is a reasonable tolerance given we test on a few different machines etc.
+        atol = 1e-4 # TODO what is a reasonable tolerance given we test on a few different machines etc.
 
         # Test several validation configurations against the pre-saved values
         specs = Dict([
@@ -283,8 +283,8 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
         end
             
         validation_results = load(joinpath(@__DIR__, "..", "data", "SC validation data", "deterministic_sc_values_v1-0-1.csv")) |> DataFrame
-        diffs = sort(results[!, :SC] - validation_results[!, :SC], rev = true)
-        println(diffs)
+        # diffs = sort(results[!, :SC] - validation_results[!, :SC], rev = true)
+        # println(diffs)
         @test all(isapprox.(results[!, :SC], validation_results[!, :SC], atol = atol))
 
     end # SCC values testset
