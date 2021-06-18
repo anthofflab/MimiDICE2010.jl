@@ -283,8 +283,9 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
         end
             
         validation_results = load(joinpath(@__DIR__, "..", "data", "SC validation data", "deterministic_sc_values_v1-0-1.csv")) |> DataFrame
-        # println("MAXIMUM DIFF IS $(maximum(results[!, :SC] - validation_results[!, :SC]))")
-        @test all(isapprox.(results[!, :SC], validation_results[!, :SC], atol = 10))
+        diffs = sort(results[!, :SC] - validation_results[!, :SC], rev = true)
+        println(diffs)
+        @test all(isapprox.(results[!, :SC], validation_results[!, :SC], atol = atol))
 
     end # SCC values testset
 
