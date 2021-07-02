@@ -1,7 +1,7 @@
 using Test
 using Mimi
 using MimiDICE2010
-using XLSX: readxlsx
+using XLSX:readxlsx
 using DataFrames
 using CSVFiles
 
@@ -172,7 +172,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
     #   3. Run tests to make sure integration version (Mimi v0.5.0)
     #   values match Mimi 0.4.0 values
     # ------------------------------------------------------------------------------
-
+                
     @testset "dice2010-integration" begin
 
         Precision = 1.0e-11
@@ -267,7 +267,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
             :pulse_size => [1e3, 1e7, 1e10]
         ])
         
-        results = DataFrame(year = [], eta = [], prtp = [], last_year = [], pulse_size = [], SC = [])
+        results = DataFrame(year=[], eta=[], prtp=[], last_year=[], pulse_size=[], SC=[])
         
         for year in specs[:year]
             for eta in specs[:eta]
@@ -285,7 +285,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
         validation_results = load(joinpath(@__DIR__, "..", "data", "SC validation data", "deterministic_sc_values_v1-0-1.csv")) |> DataFrame
         # diffs = sort(results[!, :SC] - validation_results[!, :SC], rev = true)
         # println(diffs)
-        @test all(isapprox.(results[!, :SC], validation_results[!, :SC], atol = atol))
+        @test all(isapprox.(results[!, :SC], validation_results[!, :SC], atol=atol))
 
     end # SCC values testset
 
