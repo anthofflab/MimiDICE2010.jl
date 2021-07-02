@@ -1,7 +1,7 @@
 module MimiDICE2010
 
 using Mimi
-using XLSX: readxlsx
+using XLSX:readxlsx
 
 include("parameters.jl")
 include("marginaldamage.jl")
