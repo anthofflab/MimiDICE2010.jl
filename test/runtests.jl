@@ -9,9 +9,9 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
 
 @testset "mimi-dice-2010" begin
 
-# ------------------------------------------------------------------------------
-#   1. Run the independent component tests
-# ------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
+    #   1. Run the independent component tests
+    # ------------------------------------------------------------------------------
 
     @testset "dice2010-components" begin
 
@@ -27,10 +27,9 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
 
     end # dice2010-components testset
 
-
-# ------------------------------------------------------------------------------
-#   2. Run tests on the whole model
-# ------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
+    #   2. Run tests on the whole model
+    # ------------------------------------------------------------------------------
 
     @testset "dice2010-model" begin
 
@@ -41,7 +40,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
         m = MimiDICE2010.get_model()
         run(m)
 
-# Climate dynamics tests
+        # Climate dynamics tests
 
         TATM    = m[:climatedynamics, :TATM]
         TOCEAN  = m[:climatedynamics, :TOCEAN]
@@ -52,8 +51,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
         @test maximum(abs, TATM .- True_TATM) ≈ 0. atol = Precision
         @test maximum(abs, TOCEAN .- True_TOCEAN) ≈ 0. atol = Precision
 
-
-# CO2 Cycle tests
+        # CO2 Cycle tests
 
         MAT     = m[:co2cycle, :MAT]
         MAT_final   = m[:co2cycle, :MAT_final]
@@ -71,14 +69,13 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
         @test maximum(abs, MU .- True_MU) ≈ 0. atol = Precision
 
 
-# Damages test
+        # Damages test
 
         DAMFRAC = m[:damages, :DAMFRAC]
         True_DAMFRAC    = read_params(f, "B93:BI93", T)
         @test maximum(abs, DAMFRAC .- True_DAMFRAC) ≈ 0. atol = Precision
 
-
-# Emissions tests
+        # Emissions tests
 
         CCA     = m[:emissions, :CCA]
         E       = m[:emissions, :E]
@@ -92,8 +89,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
         @test maximum(abs, E .- True_E) ≈ 0. atol = Precision
         @test maximum(abs, EIND .- True_EIND) ≈ 0. atol = Precision
 
-
-# Gross Economy tests
+        # Gross Economy tests
 
         K       = m[:grosseconomy, :K]
         YGROSS  = m[:grosseconomy, :YGROSS]
@@ -104,8 +100,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
         @test maximum(abs, K .- True_K) ≈ 0. atol = 3.0e-11 # Relax the precision just for this variable
         @test maximum(abs, YGROSS .- True_YGROSS) ≈ 0. atol = Precision
 
-
-# Net Economy tests
+        # Net Economy tests
 
         ABATECOST   = m[:neteconomy, :ABATECOST]
         C           = m[:neteconomy, :C]
@@ -131,15 +126,13 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
         @test maximum(abs, Y .- True_Y) ≈ 0. atol = Precision
         @test maximum(abs, YNET .- True_YNET) ≈ 0. atol = Precision
 
-
-# Radiative Forcing test
+        # Radiative Forcing test
 
         FORC = m[:radiativeforcing, :FORC]
         True_FORC    = read_params(f, "B122:BI122", T)
         @test maximum(abs, FORC .- True_FORC) ≈ 0. atol = Precision
 
-
-# Sea Level Rise tests
+        # Sea Level Rise tests
 
         ThermSLR    = m[:sealevelrise, :ThermSLR]
         GSICSLR     = m[:sealevelrise, :GSICSLR]
@@ -159,8 +152,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
         @test maximum(abs, AISSLR .- True_AISSLR) ≈ 0. atol = Precision
         @test maximum(abs, TotSLR .- True_TotSLR) ≈ 0. atol = Precision
 
-
-# Welfare tests
+        # Welfare tests
 
         CEMUTOTPER  = m[:welfare, :CEMUTOTPER]
         PERIODU     = m[:welfare, :PERIODU]
@@ -176,10 +168,10 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
 
     end # dice-2010 testset
 
-# ------------------------------------------------------------------------------
-#   3. Run tests to make sure integration version (Mimi v0.5.0)
-#   values match Mimi 0.4.0 values
-# ------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
+    #   3. Run tests to make sure integration version (Mimi v0.5.0)
+    #   values match Mimi 0.4.0 values
+    # ------------------------------------------------------------------------------
 
     @testset "dice2010-integration" begin
 
@@ -192,7 +184,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
 
         for c in map(nameof, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
 
-    # load data for comparison
+            # load data for comparison
             filepath = joinpath(@__DIR__, "../data/validation_data_v040/$c-$v.csv")
             results = m[c, v]
 
@@ -203,64 +195,99 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
             else
                 validation_results = Matrix(df)
 
-        # remove NaNs
+                # remove NaNs
                 results[ismissing.(results)] .= nullvalue
                 results[isnan.(results)] .= nullvalue
                 validation_results[ismissing.(validation_results)] .= nullvalue
                 validation_results[isnan.(validation_results)] .= nullvalue
 
-        # match dimensions
+                # match dimensions
                 if size(validation_results, 1) == 1
                     validation_results = validation_results'
                 end
-
             end
             @test results ≈ validation_results atol = Precision
 
         end # for loop
-
     end # dice2010-integration testset
 
-# ------------------------------------------------------------------------------
-#   4. Test standard api functions and SCC functions
-# ------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------
+    #   4. Test standard api functions and SCC functions
+    # ------------------------------------------------------------------------------
 
     @testset "Standard API functions" begin
 
         m = MimiDICE2010.get_model()
         run(m)
 
-# Test the errors
+        # Test the errors
         @test_throws ErrorException MimiDICE2010.compute_scc()  # test that it errors if you don't specify a year
         @test_throws ErrorException MimiDICE2010.compute_scc(year=2020)  # test that it errors if the year isn't in the time index
         @test_throws ErrorException MimiDICE2010.compute_scc(last_year=2300)  # test that it errors if the last_year isn't in the time index
         @test_throws ErrorException MimiDICE2010.compute_scc(year=2105, last_year=2100)  # test that it errors if the year is after last_year
 
-# Test the SCC
+        # Test the SCC
         scc1 = MimiDICE2010.compute_scc(year=2015)
         @test scc1 isa Float64
 
-# Test that it's smaller with a shorter horizon
+        # Test that it's smaller with a shorter horizon
         scc2 = MimiDICE2010.compute_scc(year=2015, last_year=2295)
         @test scc2 < scc1
 
-# Test that it's smaller with a larger prtp
+        # Test that it's smaller with a larger prtp
         scc3 = MimiDICE2010.compute_scc(year=2015, last_year=2295, prtp=0.02)
         @test scc3 < scc2
 
-# Test with a modified model
+        # Test with a modified model
         m = MimiDICE2010.get_model()
         update_param!(m, :t2xco2, 5)
         scc4 = MimiDICE2010.compute_scc(m, year=2015)
         @test scc4 > scc1   # Test that a higher value of climate sensitivty makes the SCC bigger
 
-# Test compute_scc_mm
+        # Test compute_scc_mm
         result = MimiDICE2010.compute_scc_mm(year=2035)
         @test result.scc isa Float64
         @test result.mm isa Mimi.MarginalModel
 
-
     end
+
+    # ------------------------------------------------------------------------------
+    #   4. Test Deterministic SCC values
+    # ------------------------------------------------------------------------------
+    @testset "SCC values" begin
+
+        atol = 1e-4 # TODO what is a reasonable tolerance given we test on a few different machines etc.
+
+        # Test several validation configurations against the pre-saved values
+        specs = Dict([
+            :year => [2015, 2055],
+            :eta => [0, 1.5],
+            :prtp => [0.015, 0.03],
+            :last_year => [2295, 2595],
+            :pulse_size => [1e3, 1e7, 1e10]
+        ])
+        
+        results = DataFrame(year = [], eta = [], prtp = [], last_year = [], pulse_size = [], SC = [])
+        
+        for year in specs[:year]
+            for eta in specs[:eta]
+                for prtp in specs[:prtp]
+                    for last_year in specs[:last_year]
+                        for pulse_size in specs[:pulse_size]
+                            sc = MimiDICE2010.compute_scc(year=Int(year), eta=eta, prtp=prtp, last_year=Int(last_year), pulse_size=pulse_size)
+                            push!(results, (year, eta, prtp, last_year, pulse_size, sc))
+                        end
+                    end
+                end
+            end
+        end
+            
+        validation_results = load(joinpath(@__DIR__, "..", "data", "SC validation data", "deterministic_sc_values_v1-0-1.csv")) |> DataFrame
+        # diffs = sort(results[!, :SC] - validation_results[!, :SC], rev = true)
+        # println(diffs)
+        @test all(isapprox.(results[!, :SC], validation_results[!, :SC], atol = atol))
+
+    end # SCC values testset
 
 end # mimi-dice-2010 testset
 
