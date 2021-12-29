@@ -16,7 +16,7 @@ specs = Dict([
     :pulse_size => [1e3, 1e7, 1e10]
 ])
 
-results = DataFrame(year = [], eta = [], prtp = [], last_year = [], pulse_size = [], SC = [])
+results = DataFrame(year=[], eta=[], prtp=[], last_year=[], pulse_size=[], SC=[])
 
 for year in specs[:year]
     for eta in specs[:eta]
