@@ -79,7 +79,7 @@ function add_marginal_emissions!(m::Model, year::Int, pulse_size::Float64)
     addem = zeros(length(time))
     addem[time[year]] = pulse_size / 1e10     # Unit of pulse_size is tons, but units of emissions in DICE are GtC, so we convert to GtC by dividing by 1e9, and then divide by 10 again because that pulse is emitted for ten years.
 
-    set_param!(m, :marginalemission, :add, addem)
+    update_param!(m, :marginalemission, :add, addem)
     connect_param!(m, :marginalemission, :input, :emissions, :E)
     connect_param!(m, :co2cycle, :E, :marginalemission, :output)
 end
@@ -102,7 +102,7 @@ function getmarginal_dice_models(;emissionyear=2015)
     addem = zeros(length(time))
     addem[time[emissionyear]] = 1.0
 
-    set_param!(m2, :marginalemission, :add, addem)
+    update_param!(m2, :marginalemission, :add, addem)
     connect_param!(m2, :marginalemission, :input, :emissions, :E)
     connect_param!(m2, :co2cycle, :E, :marginalemission, :output)
 

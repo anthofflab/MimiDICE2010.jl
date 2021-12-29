@@ -240,7 +240,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
 
         # Test with a modified model
         m = MimiDICE2010.get_model()
-        update_param!(m, :t2xco2, 5)
+        update_param!(m, :climatedynamics, :t2xco2, 5)
         scc4 = MimiDICE2010.compute_scc(m, year=2015)
         @test scc4 > scc1   # Test that a higher value of climate sensitivty makes the SCC bigger
 
