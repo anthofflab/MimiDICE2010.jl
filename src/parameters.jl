@@ -3,9 +3,7 @@ const datafile = joinpath(@__DIR__, "..", "data", "DICE2010_082710d.xlsx")
 """
     read_params(f, range::String, count::Int, sheet::String="Base")
 
-Get parameters from DICE2010 excel sheet. Returns a Dictionary with two keys,
-:shared and :unshared, each holding a dictionary of shared (keys are a Tuple of 
-(component, parameter) and unshared (keys are parameter_name) parameter values.
+Get parameters from DICE2010 excel sheet.
 
 `range` is a single cell or a range of cells in the excel sheet.
   Must be a cell reference of the form "A27" or a range "B56:B77".
@@ -28,6 +26,12 @@ function read_params(f, range::String, T::Int=60; sheet::String="Base")
     return (length(parts) == 1 || parts[1] == parts[2]) ? data : Vector{Float64}(data[1:T])
 end
 
+"""
+Get DICE2010 default Excel parameters. Returns a Dictionary with two keys,
+:shared and :unshared, each holding a Dictionary of shared (keys are a Tuple of 
+(component_name, parameter_name) and unshared (keys are parameter_name) parameter 
+values.
+"""
 function dice2010_excel_parameters(filename=datafile; nsteps=nothing)
     p_unshared = Dict{Tuple{Symbol, Symbol},Any}()
     p_shared = Dict{Symbol, Any}()

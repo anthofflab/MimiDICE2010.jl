@@ -68,12 +68,14 @@ function get_model(params=nothing)
     # Set external parameter values 
     # --------------------------------------------------------------------------
 
-    # Set unshared parameters - name is a Tuple{Symbol, Symbol} representing (component_name, param_name)
+    # Set unshared parameters - name is a Tuple{Symbol, Symbol} of (component_name, param_name)
     for (name, value) in params_dict[:unshared]
         update_param!(m, name[1], name[2], value)
     end
 
-    # Set shared parameters
+    # Set shared parameters - name is a Symbol representing the param_name, here
+    # we will create a shared model parameter with the same name as the component
+    # parameter and then connect our component parameters to this shared model parameter
     add_shared_param!(m, :fco22x, params_dict[:shared][:fco22x])
     connect_param!(m, :climatedynamics, :fco22x, :fco22x)
     connect_param!(m, :radiativeforcing, :fco22x, :fco22x)
