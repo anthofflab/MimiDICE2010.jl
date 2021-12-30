@@ -73,18 +73,18 @@ function get_model(params=nothing)
     end
 
     # set shared parameters
-    add_shared_param!(m, :model_fco22x, params_dict[:shared][:fco22x])
-    connect_param!(m, :climatedynamics, :fco22x, :model_fco22x)
-    connect_param!(m, :radiativeforcing, :fco22x, :model_fco22x)
+    add_shared_param!(m, :fco22x, params_dict[:shared][:fco22x])
+    connect_param!(m, :climatedynamics, :fco22x, :fco22x)
+    connect_param!(m, :radiativeforcing, :fco22x, :fco22x)
 
-    add_shared_param!(m, :model_MIU, params_dict[:shared][:MIU], dims = [:time])
-    connect_param!(m, :neteconomy, :MIU, :model_MIU)
-    connect_param!(m, :emissions, :MIU, :model_MIU)
+    add_shared_param!(m, :MIU, params_dict[:shared][:MIU], dims = [:time])
+    connect_param!(m, :neteconomy, :MIU, :MIU)
+    connect_param!(m, :emissions, :MIU, :MIU)
 
-    add_shared_param!(m, :model_l, params_dict[:shared][:l], dims = [:time])
-    connect_param!(m, :neteconomy, :l, :model_l)
-    connect_param!(m, :grosseconomy, :l, :model_l)
-    connect_param!(m, :welfare, :l, :model_l)
+    add_shared_param!(m, :l, params_dict[:shared][:l], dims = [:time])
+    connect_param!(m, :neteconomy, :l, :l)
+    connect_param!(m, :grosseconomy, :l, :l)
+    connect_param!(m, :welfare, :l, :l)
 
     return m
 end
