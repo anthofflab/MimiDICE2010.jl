@@ -76,6 +76,10 @@ function get_model(params=nothing)
     # Set shared parameters - name is a Symbol representing the param_name, here
     # we will create a shared model parameter with the same name as the component
     # parameter and then connect our component parameters to this shared model parameter
+
+    # * for convenience later, name shared model parameter same as the component 
+    # parameters, but this is not required could give a unique name *
+
     add_shared_param!(m, :fco22x, params_dict[:shared][:fco22x])
     connect_param!(m, :climatedynamics, :fco22x, :fco22x)
     connect_param!(m, :radiativeforcing, :fco22x, :fco22x)
