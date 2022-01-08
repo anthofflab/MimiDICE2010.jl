@@ -27,10 +27,9 @@ function read_params(f, range::String, T::Int=60; sheet::String="Base")
 end
 
 """
-Get DICE2010 default Excel parameters. Returns a Dictionary with two keys,
-:shared and :unshared, each holding a Dictionary of shared (keys are a Tuple of 
-(component_name, parameter_name) and unshared (keys are parameter_name) parameter 
-values.
+Get DICE2010 default Excel parameters. Returns a Dictionary with two keys:
+* :shared => (parameter_name => default_value) for parameters shared in the model.
+* :unshared => ((component_name, parameter_name) => default_value) for component specific parameters that are not shared values.
 """
 function dice2010_excel_parameters(filename=datafile; nsteps=nothing)
     p_unshared = Dict{Tuple{Symbol, Symbol},Any}()
