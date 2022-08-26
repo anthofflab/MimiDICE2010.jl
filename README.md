@@ -1,12 +1,12 @@
 # Mimi-DICE-2010.jl
 
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-![](https://github.com/anthofflab/MimiDICE2010.jl/workflows/Run%20tests/badge.svg)
+![](https://github.com/anthofflab/MimiDICE2010.jl/actions/workflows/jlpkgbutler-ci-master-workflow.yml/badge.svg)
 [![codecov](https://codecov.io/gh/anthofflab/MimiDICE2010.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/anthofflab/MimiDICE2010.jl)
 
 ## Software Requirements
 
-You need to install [Julia 1.1.0](https://julialang.org) or newer to run this model. You can download Julia from http://julialang.org/downloads/.
+You need to install [Julia 1.6.0](https://julialang.org) or newer to run this model. You can download Julia from http://julialang.org/downloads/.
 
 ## Preparing the Software Environment
 
