@@ -78,3 +78,17 @@ result.mm   # returns the Mimi MarginalModel
 
 marginal_temp = result.mm[:climatedynamics, :TATM]  # marginal results from the marginal model can be accessed like this
 ```
+
+### Pulse Size Details
+
+By default, MimiDICE2010 will calculate the SCC using a marginal emissions pulse of 10 GtC spread over ten years, or 1 GtC per year for ten years.  The SCC will always be returned in $ per ton CO2, regardless of the pulse size. This choice of pulse size and duration is a decision made based on experiments with stability of results and moving from continuous to discretized equations, and can be found described further in the literature around DICE.
+
+If you wish to alter this pulse size, you may use the optional keyword argument `pulse_size` in the  `compute_scc` function which has a full signature of
+
+```julia 
+compute_scc(m::Model=get_model(); year::Union{Int, Nothing}=nothing, last_year::Int=model_years[end], 
+    prtp::Float64=0.015, eta::Float64=1.5, pulse_size=1e10)
+```
+where `pulse_size` controls the size of the marginal emission pulse in GtC.
+
+For a deeper dive into the machinery of this function, see the forum conversation [here](https://forum.mimiframework.org/t/mimifund-emissions-pulse/153/9), which is focused on MimiFUND but has similar internal machinery to MimiDICE2010, and the docstrings in `marginaldamage.jl`.
