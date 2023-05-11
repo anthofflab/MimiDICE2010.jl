@@ -1,14 +1,14 @@
 @defcomp welfare begin
-    CEMUTOTPER      = Variable(index=[time])    # Period utility
-    PERIODU         = Variable(index=[time])    # One period utility function
-    UTILITY         = Variable()                # Welfare Function
+    CEMUTOTPER = Variable(index=[time])    # Period utility
+    PERIODU = Variable(index=[time])    # One period utility function
+    UTILITY = Variable()                # Welfare Function
 
-    CPC             = Parameter(index=[time])   # Per capita consumption (thousands 2005 USD per year)
-    l               = Parameter(index=[time])   # Level of population and labor
-    rr              = Parameter(index=[time])   # Average utility social discount rate
-    elasmu          = Parameter()               # Elasticity of marginal utility of consumption
-    scale1          = Parameter()               # Multiplicative scaling coefficient
-    scale2          = Parameter()               # Additive scaling coefficient
+    CPC = Parameter(index=[time])   # Per capita consumption (thousands 2005 USD per year)
+    l = Parameter(index=[time])   # Level of population and labor
+    rr = Parameter(index=[time])   # Average utility social discount rate
+    elasmu = Parameter()               # Elasticity of marginal utility of consumption
+    scale1 = Parameter()               # Multiplicative scaling coefficient
+    scale2 = Parameter()               # Additive scaling coefficient
 
     function run_timestep(p, v, d, t)
         # Define function for PERIODU
