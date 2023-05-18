@@ -36,27 +36,27 @@ function dice2010_excel_parameters(filename=datafile; nsteps=nothing)
     f = readxlsx(filename)
 
     # Preferences
-    p[:elasmu]  = read_params(f, "B19")               # Elasticity of marginal utility of consumption
-    p[:rr]      = read_params(f, "B18:BI18", nsteps)       # Social time preference factor
+    p[:elasmu] = read_params(f, "B19")               # Elasticity of marginal utility of consumption
+    p[:rr] = read_params(f, "B18:BI18", nsteps)       # Social time preference factor
 
     # Population and technology
-    p[:gama]    = read_params(f, "B9")                # Capital elasticity in production function
-    p[:l]       = read_params(f, "B27:BI27", nsteps)       # Population (millions)
-    p[:dk]      = read_params(f, "B10")               # Depreciation rate on capital (per year)
-    p[:k0]      = read_params(f, "B13")               # Initial capital value (trill 2005 USD)
-    p[:al]      = read_params(f, "B21:BI21", nsteps)       # Level of total factor productivity
+    p[:gama] = read_params(f, "B9")                # Capital elasticity in production function
+    p[:l] = read_params(f, "B27:BI27", nsteps)       # Population (millions)
+    p[:dk] = read_params(f, "B10")               # Depreciation rate on capital (per year)
+    p[:k0] = read_params(f, "B13")               # Initial capital value (trill 2005 USD)
+    p[:al] = read_params(f, "B21:BI21", nsteps)       # Level of total factor productivity
 
     # Emissions parameters
-    p[:sigma]   = read_params(f, "B46:BI46", nsteps)
-    p[:etree]   = read_params(f, "B52:BI52", nsteps)
+    p[:sigma] = read_params(f, "B46:BI46", nsteps)
+    p[:etree] = read_params(f, "B52:BI52", nsteps)
     p[:MIU] = read_params(f, "B133:BI133", nsteps)         # emissions control rate
     p[:S] = read_params(f, "B132:BI132", nsteps) / 100   # savings rate
 
     # Carbon cycle
-    p[:mat0]    = read_params(f, "B57")   # Initial Concentration in atmosphere 2000 (GtC)
-    p[:mat1]    = read_params(f, "B58")   # Initial Concentration in atmosphere 2010 (GtC)
-    p[:mu0]     = read_params(f, "B59")   # Initial Concentration in biosphere/shallow oceans (GtC)
-    p[:ml0]     = read_params(f, "B60")   # Initial Concentration in deep oceans (GtC)
+    p[:mat0] = read_params(f, "B57")   # Initial Concentration in atmosphere 2000 (GtC)
+    p[:mat1] = read_params(f, "B58")   # Initial Concentration in atmosphere 2010 (GtC)
+    p[:mu0] = read_params(f, "B59")   # Initial Concentration in biosphere/shallow oceans (GtC)
+    p[:ml0] = read_params(f, "B60")   # Initial Concentration in deep oceans (GtC)
 
     # Flow parameters
     p[:b12] = read_params(f, "B64") / 100 # Carbon cycle transition matrix atmosphere to shallow ocean
@@ -70,16 +70,16 @@ function dice2010_excel_parameters(filename=datafile; nsteps=nothing)
     p[:b33] = read_params(f, "B68") / 100 # Carbon cycle transition matrix deep ocean to deep oceans
 
     # Climate model parameters
-    p[:t2xco2]  = read_params(f, "B76")   # Equilibrium temp impact (oC per doubling CO2)
-    p[:tatm0]   = read_params(f, "B73")   # Initial lower stratum temp change (C from 1900)
-    p[:tatm1]   = read_params(f, "C73")   # Initial atmospheric temp change 2015 (C from 1900)
+    p[:t2xco2] = read_params(f, "B76")   # Equilibrium temp impact (oC per doubling CO2)
+    p[:tatm0] = read_params(f, "B73")   # Initial lower stratum temp change (C from 1900)
+    p[:tatm1] = read_params(f, "C73")   # Initial atmospheric temp change 2015 (C from 1900)
     p[:tocean0] = read_params(f, "B74")   # Initial lower stratum temp change (C from 1900)
 
     # Transient TSC Correction ("Speed of Adjustment Parameter")
-    p[:c1]      = read_params(f, "B75")   # Climate equation coefficient for upper level
-    p[:c3]      = read_params(f, "B78")   # Transfer coefficient upper to lower stratum
-    p[:c4]      = read_params(f, "B79")   # Transfer coefficient for lower level
-    p[:fco22x]  = read_params(f, "B77")   # Forcings of equilibrium CO2 doubling (Wm-2)
+    p[:c1] = read_params(f, "B75")   # Climate equation coefficient for upper level
+    p[:c3] = read_params(f, "B78")   # Transfer coefficient upper to lower stratum
+    p[:c4] = read_params(f, "B79")   # Transfer coefficient for lower level
+    p[:fco22x] = read_params(f, "B77")   # Forcings of equilibrium CO2 doubling (Wm-2)
 
     # Climate damage parameters
     p[:a1] = read_params(f, "B33")   # Damage coefficient
@@ -87,10 +87,10 @@ function dice2010_excel_parameters(filename=datafile; nsteps=nothing)
     p[:a3] = read_params(f, "B35")   # Damage exponent
 
     # Abatement cost
-    p[:expcost2]    = read_params(f, "B44")               # Exponent of control cost function
-    p[:pbacktime]   = read_params(f, "B42:BI42", nsteps)       # backstop price
+    p[:expcost2] = read_params(f, "B44")               # Exponent of control cost function
+    p[:pbacktime] = read_params(f, "B42:BI42", nsteps)       # backstop price
     # Adjusted cost for backstop (or: "Abatement cost function coefficient")
-    p[:cost1]       = read_params(f, "B37:BI37", nsteps)
+    p[:cost1] = read_params(f, "B37:BI37", nsteps)
 
     # Scaling and inessential parameters
     p[:scale1] = read_params(f, "B88")    # Multiplicative scaling coefficient
@@ -105,24 +105,24 @@ function dice2010_excel_parameters(filename=datafile; nsteps=nothing)
 
     # SLR Parameters
 
-    p[:b1]    = read_params(f, "B51", sheet="Parameters")
-    p[:b2]  = read_params(f, "B52", sheet="Parameters")
-    p[:b3]      = read_params(f, "B53", sheet="Parameters")
+    p[:b1] = read_params(f, "B51", sheet="Parameters")
+    p[:b2] = read_params(f, "B52", sheet="Parameters")
+    p[:b3] = read_params(f, "B53", sheet="Parameters")
 
-    p[:therm0]      = read_params(f, "B178") # meters above 2000
-    p[:gsic0]       = read_params(f, "B179")
-    p[:gis0]        = read_params(f, "B180")
-    p[:ais0]        = read_params(f, "B181")
+    p[:therm0] = read_params(f, "B178") # meters above 2000
+    p[:gsic0] = read_params(f, "B179")
+    p[:gis0] = read_params(f, "B180")
+    p[:ais0] = read_params(f, "B181")
 
-    p[:therm_asym]  = read_params(f, "B173")
-    p[:gsic_asym]   = read_params(f, "B174")
-    p[:gis_asym]    = read_params(f, "B175")
-    p[:ais_asym]    = read_params(f, "B176")
+    p[:therm_asym] = read_params(f, "B173")
+    p[:gsic_asym] = read_params(f, "B174")
+    p[:gis_asym] = read_params(f, "B175")
+    p[:ais_asym] = read_params(f, "B176")
 
-    p[:thermrate]   = read_params(f, "C173")
-    p[:gsicrate]    = read_params(f, "C174")
-    p[:gisrate]     = read_params(f, "C175")
-    p[:aisrate]     = read_params(f, "C176")
+    p[:thermrate] = read_params(f, "C173")
+    p[:gsicrate] = read_params(f, "C174")
+    p[:gisrate] = read_params(f, "C175")
+    p[:aisrate] = read_params(f, "C176")
 
     p[:slrthreshold] = read_params(f, "D176")
 
