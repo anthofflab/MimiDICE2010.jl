@@ -12,10 +12,10 @@ include("../src/components/sealevelrise_component.jl")
 
     add_comp!(m, sealevelrise, :sealevelrise)
 
-# Set the parameters that would normally be internal connection from their Excel values
+    # Set the parameters that would normally be internal connection from their Excel values
     set_param!(m, :sealevelrise, :TATM, read_params(f, "B121:BI121", T))
 
-# Load the rest of the external parameters
+    # Load the rest of the external parameters
     p = dice2010_excel_parameters(joinpath(@__DIR__, "..", "data", "DICE2010_082710d.xlsx"))
     set_param!(m, :sealevelrise, :therm0, p[:therm0])
     set_param!(m, :sealevelrise, :gsic0, p[:gsic0])
@@ -31,24 +31,24 @@ include("../src/components/sealevelrise_component.jl")
     set_param!(m, :sealevelrise, :aisrate, p[:aisrate])
     set_param!(m, :sealevelrise, :slrthreshold, p[:slrthreshold])
 
-# Run the one-component model
+    # Run the one-component model
     run(m)
 
-# Extract the generated variables
-    ThermSLR    = m[:sealevelrise, :ThermSLR]
-    GSICSLR     = m[:sealevelrise, :GSICSLR]
-    GISSLR      = m[:sealevelrise, :GISSLR]
-    AISSLR      = m[:sealevelrise, :AISSLR]
-    TotSLR      = m[:sealevelrise, :TotSLR]
+    # Extract the generated variables
+    ThermSLR = m[:sealevelrise, :ThermSLR]
+    GSICSLR = m[:sealevelrise, :GSICSLR]
+    GISSLR = m[:sealevelrise, :GISSLR]
+    AISSLR = m[:sealevelrise, :AISSLR]
+    TotSLR = m[:sealevelrise, :TotSLR]
 
-# Extract the true values
-    True_ThermSLR    = read_params(f, "B178:BI178", T)
-    True_GSICSLR    = read_params(f, "B179:BI179", T)
-    True_GISSLR    = read_params(f, "B180:BI180", T)
-    True_AISSLR    = read_params(f, "B181:BI181", T)
-    True_TotSLR    = read_params(f, "B182:BI182", T)
+    # Extract the true values
+    True_ThermSLR = read_params(f, "B178:BI178", T)
+    True_GSICSLR = read_params(f, "B179:BI179", T)
+    True_GISSLR = read_params(f, "B180:BI180", T)
+    True_AISSLR = read_params(f, "B181:BI181", T)
+    True_TotSLR = read_params(f, "B182:BI182", T)
 
-# Test that the values are the same
+    # Test that the values are the same
     @test maximum(abs, ThermSLR .- True_ThermSLR) ≈ 0. atol = Precision
     @test maximum(abs, GSICSLR .- True_GSICSLR) ≈ 0. atol = Precision
     @test maximum(abs, GISSLR .- True_GISSLR) ≈ 0. atol = Precision

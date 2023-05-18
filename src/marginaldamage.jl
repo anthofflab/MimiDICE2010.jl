@@ -32,8 +32,8 @@ function compute_scc_mm(m::Model=get_model(); year::Union{Int,Nothing}=nothing, 
 
     mm = get_marginal_model(m; year=year, pulse_size=pulse_size)
     scc = _compute_scc(mm; year=year, last_year=last_year, prtp=prtp, eta=eta)
-    
-    return (scc = scc, mm = mm)
+
+    return (scc=scc, mm=mm)
 end
 
 # helper function for computing SCC from a MarginalModel, not to be exported or advertised to users
@@ -72,7 +72,7 @@ end
 """
 Adds a marginal emission component to `m` which adds `pulse_size` of additional C emissions over ten years starting in the specified `year`.
 """
-function add_marginal_emissions!(m::Model, year::Int, pulse_size::Float64) 
+function add_marginal_emissions!(m::Model, year::Int, pulse_size::Float64)
     add_comp!(m, Mimi.adder, :marginalemission, before=:co2cycle)
 
     time = Mimi.dimension(m, :time)
@@ -87,7 +87,7 @@ end
 
 
 # Old available function
-function getmarginal_dice_models(;emissionyear=2015)
+function getmarginal_dice_models(; emissionyear=2015)
 
     DICE = get_model()
     run(DICE)
