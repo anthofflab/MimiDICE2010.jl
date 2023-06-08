@@ -24,7 +24,7 @@ include("../src/components/emissions_component.jl")
     # Run the one-component model
     run(m)
 
-        # Extract the generated variables
+    # Extract the generated variables
     CCA     = m[:emissions, :CCA]
     E       = m[:emissions, :E]
     EIND    = m[:emissions, :EIND]

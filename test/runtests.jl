@@ -1,7 +1,7 @@
 using Test
 using Mimi
 using MimiDICE2010
-using XLSX:readxlsx
+using XLSX: readxlsx
 using DataFrames
 using CSVFiles
 
@@ -42,10 +42,10 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
 
         # Climate dynamics tests
 
-        TATM    = m[:climatedynamics, :TATM]
-        TOCEAN  = m[:climatedynamics, :TOCEAN]
+        TATM = m[:climatedynamics, :TATM]
+        TOCEAN = m[:climatedynamics, :TOCEAN]
 
-        True_TATM   = read_params(f, "B121:BI121", T)
+        True_TATM = read_params(f, "B121:BI121", T)
         True_TOCEAN = read_params(f, "B123:BI123", T)
 
         @test maximum(abs, TATM .- True_TATM) ≈ 0. atol = Precision
@@ -53,15 +53,15 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
 
         # CO2 Cycle tests
 
-        MAT     = m[:co2cycle, :MAT]
-        MAT_final   = m[:co2cycle, :MAT_final]
-        ML      = m[:co2cycle, :ML]
-        MU      = m[:co2cycle, :MU]
+        MAT = m[:co2cycle, :MAT]
+        MAT_final = m[:co2cycle, :MAT_final]
+        ML = m[:co2cycle, :ML]
+        MU = m[:co2cycle, :MU]
 
-        True_MAT    = read_params(f, "B112:BI112", T)
-        True_MAT_final  = read_params(f, "BJ112")
-        True_ML     = read_params(f, "B115:BI115", T)
-        True_MU     = read_params(f, "B114:BI114", T)
+        True_MAT = read_params(f, "B112:BI112", T)
+        True_MAT_final = read_params(f, "BJ112")
+        True_ML = read_params(f, "B115:BI115", T)
+        True_MU = read_params(f, "B114:BI114", T)
 
         @test maximum(abs, MAT .- True_MAT) ≈ 0. atol = Precision
         @test abs(MAT_final - True_MAT_final) ≈ 0. atol = Precision
@@ -72,18 +72,18 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
         # Damages test
 
         DAMFRAC = m[:damages, :DAMFRAC]
-        True_DAMFRAC    = read_params(f, "B93:BI93", T)
+        True_DAMFRAC = read_params(f, "B93:BI93", T)
         @test maximum(abs, DAMFRAC .- True_DAMFRAC) ≈ 0. atol = Precision
 
         # Emissions tests
 
-        CCA     = m[:emissions, :CCA]
-        E       = m[:emissions, :E]
-        EIND    = m[:emissions, :EIND]
+        CCA = m[:emissions, :CCA]
+        E = m[:emissions, :E]
+        EIND = m[:emissions, :EIND]
 
-        True_CCA    = read_params(f, "B117:BI117", T)
-        True_E      = read_params(f, "B109:BI109", T)
-        True_EIND   = read_params(f, "B110:BI110", T)
+        True_CCA = read_params(f, "B117:BI117", T)
+        True_E = read_params(f, "B109:BI109", T)
+        True_EIND = read_params(f, "B110:BI110", T)
 
         @test maximum(abs, CCA .- True_CCA) ≈ 0. atol = Precision
         @test maximum(abs, E .- True_E) ≈ 0. atol = Precision
@@ -91,10 +91,10 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
 
         # Gross Economy tests
 
-        K       = m[:grosseconomy, :K]
-        YGROSS  = m[:grosseconomy, :YGROSS]
+        K = m[:grosseconomy, :K]
+        YGROSS = m[:grosseconomy, :YGROSS]
 
-        True_K      = read_params(f, "B102:BI102", T)
+        True_K = read_params(f, "B102:BI102", T)
         True_YGROSS = read_params(f, "B92:BI92", T)
 
         @test maximum(abs, K .- True_K) ≈ 0. atol = 3.0e-11 # Relax the precision just for this variable
@@ -102,21 +102,21 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
 
         # Net Economy tests
 
-        ABATECOST   = m[:neteconomy, :ABATECOST]
-        C           = m[:neteconomy, :C]
-        CPC         = m[:neteconomy, :CPC]
-        CPRICE      = m[:neteconomy, :CPRICE]
-        I           = m[:neteconomy, :I]
-        Y           = m[:neteconomy, :Y]
-        YNET        = m[:neteconomy, :YNET]
+        ABATECOST = m[:neteconomy, :ABATECOST]
+        C = m[:neteconomy, :C]
+        CPC = m[:neteconomy, :CPC]
+        CPRICE = m[:neteconomy, :CPRICE]
+        I = m[:neteconomy, :I]
+        Y = m[:neteconomy, :Y]
+        YNET = m[:neteconomy, :YNET]
 
-        True_ABATECOST  = read_params(f, "B97:BI97", T)
-        True_C          = read_params(f, "B125:BI125", T)
-        True_CPC        = read_params(f, "B126:BI126", T)
-        True_CPRICE     = read_params(f, "B134:BI134", T)
-        True_I          = read_params(f, "B101:BI101", T)
-        True_Y          = read_params(f, "B98:BI98", T)
-        True_YNET       = read_params(f, "B95:BI95", T)
+        True_ABATECOST = read_params(f, "B97:BI97", T)
+        True_C = read_params(f, "B125:BI125", T)
+        True_CPC = read_params(f, "B126:BI126", T)
+        True_CPRICE = read_params(f, "B134:BI134", T)
+        True_I = read_params(f, "B101:BI101", T)
+        True_Y = read_params(f, "B98:BI98", T)
+        True_YNET = read_params(f, "B95:BI95", T)
 
         @test maximum(abs, ABATECOST .- True_ABATECOST) ≈ 0. atol = Precision
         @test maximum(abs, C .- True_C) ≈ 0. atol = Precision
@@ -129,22 +129,22 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
         # Radiative Forcing test
 
         FORC = m[:radiativeforcing, :FORC]
-        True_FORC    = read_params(f, "B122:BI122", T)
+        True_FORC = read_params(f, "B122:BI122", T)
         @test maximum(abs, FORC .- True_FORC) ≈ 0. atol = Precision
 
         # Sea Level Rise tests
 
-        ThermSLR    = m[:sealevelrise, :ThermSLR]
-        GSICSLR     = m[:sealevelrise, :GSICSLR]
-        GISSLR      = m[:sealevelrise, :GISSLR]
-        AISSLR      = m[:sealevelrise, :AISSLR]
-        TotSLR      = m[:sealevelrise, :TotSLR]
+        ThermSLR = m[:sealevelrise, :ThermSLR]
+        GSICSLR = m[:sealevelrise, :GSICSLR]
+        GISSLR = m[:sealevelrise, :GISSLR]
+        AISSLR = m[:sealevelrise, :AISSLR]
+        TotSLR = m[:sealevelrise, :TotSLR]
 
-        True_ThermSLR    = read_params(f, "B178:BI178", T)
-        True_GSICSLR    = read_params(f, "B179:BI179", T)
-        True_GISSLR    = read_params(f, "B180:BI180", T)
-        True_AISSLR    = read_params(f, "B181:BI181", T)
-        True_TotSLR    = read_params(f, "B182:BI182", T)
+        True_ThermSLR = read_params(f, "B178:BI178", T)
+        True_GSICSLR = read_params(f, "B179:BI179", T)
+        True_GISSLR = read_params(f, "B180:BI180", T)
+        True_AISSLR = read_params(f, "B181:BI181", T)
+        True_TotSLR = read_params(f, "B182:BI182", T)
 
         @test maximum(abs, ThermSLR .- True_ThermSLR) ≈ 0. atol = Precision
         @test maximum(abs, GSICSLR .- True_GSICSLR) ≈ 0. atol = Precision
@@ -154,13 +154,13 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
 
         # Welfare tests
 
-        CEMUTOTPER  = m[:welfare, :CEMUTOTPER]
-        PERIODU     = m[:welfare, :PERIODU]
-        UTILITY     = m[:welfare, :UTILITY]
+        CEMUTOTPER = m[:welfare, :CEMUTOTPER]
+        PERIODU = m[:welfare, :PERIODU]
+        UTILITY = m[:welfare, :UTILITY]
 
-        True_CEMUTOTPER    = read_params(f, "B129:BI129", T)
-        True_PERIODU    = read_params(f, "B128:BI128", T)
-        True_UTILITY    = read_params(f, "B130")
+        True_CEMUTOTPER = read_params(f, "B129:BI129", T)
+        True_PERIODU = read_params(f, "B128:BI128", T)
+        True_UTILITY = read_params(f, "B130")
 
         @test maximum(abs, CEMUTOTPER .- True_CEMUTOTPER) ≈ 0. atol = Precision
         @test maximum(abs, PERIODU .- True_PERIODU) ≈ 0. atol = Precision
@@ -172,7 +172,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
     #   3. Run tests to make sure integration version (Mimi v0.5.0)
     #   values match Mimi 0.4.0 values
     # ------------------------------------------------------------------------------
-                
+
     @testset "dice2010-integration" begin
 
         Precision = 1.0e-11
@@ -190,7 +190,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
 
             df = load(filepath) |> DataFrame
             if typeof(results) <: Number
-                validation_results = df[1,1]
+                validation_results = df[1, 1]
 
             else
                 validation_results = Matrix(df)
@@ -266,9 +266,9 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
             :last_year => [2295, 2595],
             :pulse_size => [1e3, 1e7, 1e10]
         ])
-        
+
         results = DataFrame(year=[], eta=[], prtp=[], last_year=[], pulse_size=[], SC=[])
-        
+
         for year in specs[:year]
             for eta in specs[:eta]
                 for prtp in specs[:prtp]
@@ -281,7 +281,7 @@ using MimiDICE2010: read_params, dice2010_excel_parameters
                 end
             end
         end
-            
+
         validation_results = load(joinpath(@__DIR__, "..", "data", "SC validation data", "deterministic_sc_values_v1-0-1.csv")) |> DataFrame
         # diffs = sort(results[!, :SC] - validation_results[!, :SC], rev = true)
         # println(diffs)

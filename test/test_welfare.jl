@@ -33,8 +33,8 @@ include("../src/components/welfare_component.jl")
 
     # Extract the true values
     True_CEMUTOTPER = read_params(f, "B129:BI129", T)
-    True_PERIODU    = read_params(f, "B128:BI128", T)
-    True_UTILITY    = read_params(f, "B130")
+    True_PERIODU = read_params(f, "B128:BI128", T)
+    True_UTILITY = read_params(f, "B130")
 
     # Test that the values are the same
     @test maximum(abs, CEMUTOTPER .- True_CEMUTOTPER) ≈ 0. atol = Precision

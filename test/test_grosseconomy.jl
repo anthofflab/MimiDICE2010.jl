@@ -27,6 +27,7 @@ include("../src/components/grosseconomy_component.jl")
     run(m)
 
     # Extract the generated variables
+
     K       = m[:grosseconomy, :K]
     YGROSS  = m[:grosseconomy, :YGROSS]
 

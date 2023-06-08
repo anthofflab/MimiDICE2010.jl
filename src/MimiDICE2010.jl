@@ -1,7 +1,7 @@
 module MimiDICE2010
 
 using Mimi
-using XLSX:readxlsx
+using XLSX: readxlsx
 
 include("parameters.jl")
 include("marginaldamage.jl")
@@ -48,7 +48,7 @@ function get_model(params=nothing)
     # Socioeconomics
     connect_param!(m, :grosseconomy, :I, :neteconomy, :I)
     connect_param!(m, :emissions, :YGROSS, :grosseconomy, :YGROSS)
-    
+
     # Climate
     connect_param!(m, :co2cycle, :E, :emissions, :E)
     connect_param!(m, :radiativeforcing, :MAT, :co2cycle, :MAT)

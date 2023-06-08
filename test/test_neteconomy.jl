@@ -47,6 +47,7 @@ include("../src/components/neteconomy_component.jl")
     True_Y          = read_params(f, "B98:BI98", T)
     True_YNET       = read_params(f, "B95:BI95", T)
 
+
     # Test that the values are the same
     @test maximum(abs, ABATECOST .- True_ABATECOST) ≈ 0. atol = Precision
     @test maximum(abs, C .- True_C) ≈ 0. atol = Precision
